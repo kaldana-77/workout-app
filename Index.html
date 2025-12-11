@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Daily Workout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #f7f7f7;
+      --card: #ffffff;
+      --accent: #2c7be5;
+      --accent-soft: #e1edff;
+      --text: #222222;
+      --muted: #777777;
+      --border: #dddddd;
+      --danger: #e55353;
+      --success: #28a745;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      padding: 10px;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      margin: 0 0 4px 0;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .date-label {
+      margin-top: 4px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .day-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 6px;
+      margin: 10px 0 8px 0;
+      padding-bottom: 4px;
+    }
+
+    .day-tab {
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      background: #fff;
+      white-space: nowrap;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .day-tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 12px;
+    }
+
+    .workout-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid var(--border);
+    }
+
+    .badge-complete {
+      color: var(--success);
+      border-color: var(--success);
+    }
+
+    .badge-incomplete {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .exercise {
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 8px;
+      margin-bottom: 8px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .exercise-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .exercise-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .exercise-info {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .exercise-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 100px;
+    }
+
+    .form-group label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      font-size: 0.8rem;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      width: 100%;
+    }
+
+    .form-group textarea {
+      min-height: 40px;
+      resize: vertical;
+    }
+
+    .done-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .done-toggle input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .reset-btn {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      background: none;
+      border: none;
+      color: var(--danger);
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* Scrollbar styling for day tabs (mobile-safe) */
+    .day-tabs::-webkit-scrollbar {
+      height: 4px;
+    }
+    .day-tabs::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>My Daily Workout</h1>
+      <p>Check off today’s lifts and track notes.</p>
+      <div class="date-label" id="currentDateLabel"></div>
+    </header>
+
+    <div class="day-tabs" id="dayTabs"></div>
+
+    <div class="card">
+      <div class="workout-summary">
+        <span id="currentDayLabel"></span>
+        <span class="badge" id="completionBadge"></span>
+      </div>
+      <div id="exerciseList"></div>
+      <button class="reset-btn" id="resetDayBtn" type="button">
+        Reset this day’s progress
+      </button>
+    </div>
+
+    <div class="footer-note">
+      Tip: Edit exercises by opening this file on your computer and changing the workout plan in the code.
+    </div>
+  </div>
+
+  <script>
+    // ==== 1. Define your weekly workout plan here ====
+    // You can customize exercises, sets, reps, etc.
+    const workoutPlan = {
+      Monday: [
+        { name: "Incline Dumbbell Press", sets: 3, reps: "10–12" },
+        { name: "Lat Pulldown", sets: 3, reps: "10–12" },
+        { name: "Dumbbell Shoulder Press", sets: 3, reps: "10–12" },
+        { name: "Triceps Rope Pushdown", sets: 3, reps: "12–15" },
+        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+      ],
+      Tuesday: [
+        { name: "Goblet Squat", sets: 3, reps: "10–12" },
+        { name: "Romanian Deadlift", sets: 3, reps: "10–12" },
+        { name: "Glute Bridge/Hip Thrust", sets: 3, reps: "12–15" },
+        { name: "Calf Raises", sets: 3, reps: "15–20" },
+        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+      ],
+      Wednesday: [
+        { name: "Push-Ups / Incline Push-Ups", sets: 3, reps: "As many as possible" },
+        { name: "Dumbbell Row", sets: 3, reps: "10–12" },
+        { name: "Lateral Raises", sets: 3, reps: "12–15" },
+        { name: "Biceps Curls", sets: 3, reps: "10–12" },
+        { name: "Core Circuit", sets: 3, reps: "3–4 exercises" }
+      ],
+      Thursday: [
+        { name: "Leg Press or Step-Ups", sets: 3, reps: "10–12" },
+        { name: "Lunges (or split squats)", sets: 3, reps: "10–12/leg" },
+        { name: "Hamstring Curl", sets: 3, reps: "10–12" },
+        { name: "Core Circuit", sets: 3, reps: "3–4 exercises" },
+        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+      ],
+      Friday: [
+        { name: "Full-Body Circuit", sets: 3, reps: "8–10 exercises" },
+        { name: "Extra Arms / Glutes", sets: 2, reps: "Choose your favs" },
+        { name: "Stretching / Mobility", sets: 1, reps: "10–15 min" },
+        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+      ],
+      Saturday: [
+        { name: "Optional: Light Walk", sets: 1, reps: "20–40 min" },
+        { name: "Stretching / Yoga", sets: 1, reps: "10–20 min" }
+      ],
+      Sunday: [
+        { name: "Rest / Mobility", sets: 1, reps: "10–20 min" }
+      ]
+    };
+
+    // ==== 2. State & helpers ====
+    const days = Object.keys(workoutPlan);
+    const today = new Date();
+    const todayDateStr = today.toISOString().slice(0, 10); // e.g. "2025-12-11"
+
+    const dayTabsEl = document.getElementById("dayTabs");
+    const currentDayLabelEl = document.getElementById("currentDayLabel");
+    const currentDateLabelEl = document.getElementById("currentDateLabel");
+    const exerciseListEl = document.getElementById("exerciseList");
+    const completionBadgeEl = document.getElementById("completionBadge");
+    const resetDayBtn = document.getElementById("resetDayBtn");
+
+    let currentDay = getDefaultDay();
+
+    function getDefaultDay() {
+      // Monday = 1, Sunday = 0
+      const weekday = today.getDay();
+      const map = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+      return map[weekday] || "Monday";
+    }
+
+    function getStorageKey(day) {
+      return "workoutProgress_" + day + "_" + todayDateStr;
+    }
+
+    function loadProgress(day) {
+      const key = getStorageKey(day);
+      const raw = localStorage.getItem(key);
+      if (!raw) return {};
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return {};
+      }
+    }
+
+    function saveProgress(day, progress) {
+      const key = getStorageKey(day);
+      localStorage.setItem(key, JSON.stringify(progress));
+    }
+
+    // ==== 3. Render UI ====
+    function renderDateLabel() {
+      const opts = { weekday: "long", year: "numeric", month: "short", day: "numeric" };
+      currentDateLabelEl.textContent = today.toLocaleDateString(undefined, opts);
+    }
+
+    function renderDayTabs() {
+      dayTabsEl.innerHTML = "";
+      days.forEach(day => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = day.slice(0, 3); // Mon, Tue...
+        btn.className = "day-tab" + (day === currentDay ? " active" : "");
+        btn.addEventListener("click", () => {
+          currentDay = day;
+          render();
+        });
+        dayTabsEl.appendChild(btn);
+      });
+    }
+
+    function renderExercises() {
+      const exercises = workoutPlan[currentDay] || [];
+      const progress = loadProgress(currentDay);
+      exerciseListEl.innerHTML = "";
+
+      let completedCount = 0;
+
+      exercises.forEach((ex, index) => {
+        const exKey = String(index);
+        const exState = progress[exKey] || { done: false, weight: "", notes: "" };
+        if (exState.done) completedCount++;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "exercise";
+
+        const header = document.createElement("div");
+        header.className = "exercise-header";
+
+        const nameDiv = document.createElement("div");
+        nameDiv.innerHTML = `
+          <div class="exercise-name">${ex.name}</div>
+          <div class="exercise-info">${ex.sets} sets • ${ex.reps}</div>
+        `;
+
+        const doneDiv = document.createElement("label");
+        doneDiv.className = "done-toggle";
+        const doneCheckbox = document.createElement("input");
+        doneCheckbox.type = "checkbox";
+        doneCheckbox.checked = !!exState.done;
+        const doneSpan = document.createElement("span");
+        doneSpan.textContent = "Done";
+
+        doneDiv.appendChild(doneCheckbox);
+        doneDiv.appendChild(doneSpan);
+
+        header.appendChild(nameDiv);
+        header.appendChild(doneDiv);
+
+        const controls = document.createElement("div");
+        controls.className = "exercise-controls";
+
+        const weightGroup = document.createElement("div");
+        weightGroup.className = "form-group";
+        const weightLabel = document.createElement("label");
+        weightLabel.textContent = "Weight / Level";
+        const weightInput = document.createElement("input");
+        weightInput.type = "text";
+        weightInput.value = exState.weight || "";
+        weightInput.placeholder = "e.g. 15 lb DBs";
+
+        weightGroup.appendChild(weightLabel);
+        weightGroup.appendChild(weightInput);
+
+        const notesGroup = document.createElement("div");
+        notesGroup.className = "form-group";
+        const notesLabel = document.createElement("label");
+        notesLabel.textContent = "Notes";
+        const notesInput = document.createElement("textarea");
+        notesInput.value = exState.notes || "";
+        notesInput.placeholder = "How it felt, tweaks, etc.";
+
+        notesGroup.appendChild(notesLabel);
+        notesGroup.appendChild(notesInput);
+
+        controls.appendChild(weightGroup);
+        controls.appendChild(notesGroup);
+
+        // Wire up events
+        function updateState() {
+          const newState = loadProgress(currentDay);
+          newState[exKey] = {
+            done: doneCheckbox.checked,
+            weight: weightInput.value || "",
+            notes: notesInput.value || ""
+          };
+          saveProgress(currentDay, newState);
+          updateCompletionBadge(exercises.length, countCompleted(exercises.length, newState));
+        }
+
+        doneCheckbox.addEventListener("change", updateState);
+        weightInput.addEventListener("change", updateState);
+        notesInput.addEventListener("change", updateState);
+        notesInput.addEventListener("blur", updateState);
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(controls);
+        exerciseListEl.appendChild(wrapper);
+      });
+
+      updateCompletionBadge(exercises.length, completedCount);
+    }
+
+    function countCompleted(total, progressObj) {
+      let c = 0;
+      for (let i = 0; i < total; i++) {
+        const st = progressObj[String(i)];
+        if (st && st.done) c++;
+      }
+      return c;
+    }
+
+    function updateCompletionBadge(total, completed) {
+      if (total === 0) {
+        completionBadgeEl.textContent = "No workout set";
+        completionBadgeEl.className = "badge badge-incomplete";
+        return;
+      }
+      if (completed >= total) {
+        completionBadgeEl.textContent = "All done ✔";
+        completionBadgeEl.className = "badge badge-complete";
+      } else {
+        completionBadgeEl.textContent = `${completed}/${total} done`;
+        completionBadgeEl.className = "badge badge-incomplete";
+      }
+    }
+
+    function render() {
+      renderDayTabs();
+      currentDayLabelEl.textContent = currentDay + " workout";
+      renderExercises();
+    }
+
+    // Reset button
+    resetDayBtn.addEventListener("click", () => {
+      if (!confirm(`Reset all progress for ${currentDay} (today only)?`)) return;
+      saveProgress(currentDay, {});
+      renderExercises();
+    });
+
+    // Initial render
+    renderDateLabel();
+    render();
+  </script>
+</body>
+</html>
