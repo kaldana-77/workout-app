@@ -1,56 +1,58 @@
 body {
   font-family: system-ui, sans-serif;
-  margin: 2rem;
   background-color: #f9f9f9;
   color: #111;
+  padding: 2rem;
+  max-width: 700px;
+  margin: auto;
+  line-height: 1.6;
 }
 
 h1 {
-  font-size: 1.75rem;
-  margin-bottom: 0.25rem;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 h2 {
-  font-size: 1.2rem;
-  margin: 1rem 0 0.5rem;
+  font-size: 1.4rem;
+  margin-top: 2rem;
 }
 
 button {
-  padding: 0.4rem 1rem;
-  margin: 0.5rem 0.3rem;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0.25rem;
+  border-radius: 8px;
+  background-color: #007aff;
   border: none;
-  border-radius: 6px;
-  background-color: #007bff;
   color: white;
-  cursor: pointer;
+  font-weight: 500;
   font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #005fce;
+}
+
+#workoutList {
+  list-style: none;
+  padding-left: 0;
+}
+
+#workoutList li {
+  background: white;
+  padding: 1rem;
+  margin: 0.75rem 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .exercise-name {
-  font-weight: 600;
+  font-weight: bold;
   text-decoration: underline dotted;
   cursor: help;
+  display: inline-block;
 }
 
-.container {
-  background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
-  max-width: 650px;
-  margin: auto;
-}
-
-.day-buttons button {
-  background-color: #e0e0e0;
-  color: black;
-}
-
-.day-buttons button.active {
-  background-color: #007bff;
-  color: white;
-}
