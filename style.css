@@ -1,0 +1,56 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 2rem;
+  background-color: #f9f9f9;
+  color: #111;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin: 1rem 0 0.5rem;
+}
+
+button {
+  padding: 0.4rem 1rem;
+  margin: 0.5rem 0.3rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.exercise-name {
+  font-weight: 600;
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+.container {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  max-width: 650px;
+  margin: auto;
+}
+
+.day-buttons button {
+  background-color: #e0e0e0;
+  color: black;
+}
+
+.day-buttons button.active {
+  background-color: #007bff;
+  color: white;
+}
