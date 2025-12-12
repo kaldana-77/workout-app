@@ -2,137 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>My Daily Workout</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Daily Workout</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
-  <style>
-    /* Your existing CSS stays the same. For brevity, it's not repeated here. */
-    .exercise-name[title] {
-      cursor: help;
-      text-decoration: dotted underline;
-    }
-  </style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <h1>My Daily Workout</h1>
-      <p>Check off today’s lifts and track notes.</p>
-      <div class="date-label" id="currentDateLabel"></div>
-    </header>
+  <h1>My Daily Workout</h1>
+  <p>Check off today’s lifts and track notes.</p>
+  <div id="dateDisplay"></div>
+  <div id="dayButtons"></div>
 
-    <div class="day-tabs" id="dayTabs"></div>
+  <h2 id="dayTitle"></h2>
+  <ul id="workoutList"></ul>
 
-    <div class="card">
-      <div class="workout-summary">
-        <span id="currentDayLabel"></span>
-        <span class="badge" id="completionBadge"></span>
-      </div>
-      <div id="exerciseList"></div>
-      <button class="reset-btn" id="resetDayBtn" type="button">
-        Reset this day’s progress
-      </button>
-      <button class="reset-btn" id="markCompleteBtn" type="button">
-        Mark Day Complete
-      </button>
-    </div>
-
-    <div class="footer-note">
-      Tip: Edit exercises by updating <code>workouts.js</code>.
-    </div>
+  <div>
+    <button onclick="resetProgressForDay()">Reset this day's progress</button>
+    <button onclick="markTodayComplete()">Mark Day Complete</button>
   </div>
-
-  <script>
-    // Set today label
-    const today = new Date();
-    const todayDateStr = today.toISOString().slice(0, 10);
-    const currentDateLabelEl = document.getElementById("currentDateLabel");
-    currentDateLabelEl.textContent = today.toDateString();
-    window.currentDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][today.getDay()];
-  </script>
+  <p>Tip: Edit exercises by updating <code>workouts.js</code>.</p>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="workouts.js?v=1"></script>
+  <script src="workouts.js"></script>
   <script>
-    // === App Renderer ===
-    const dayTabsEl = document.getElementById("dayTabs");
-    const currentDayLabelEl = document.getElementById("currentDayLabel");
-    const exerciseListEl = document.getElementById("exerciseList");
-    const badgeEl = document.getElementById("completionBadge");
-    const resetDayBtn = document.getElementById("resetDayBtn");
-    const markCompleteBtn = document.getElementById("markCompleteBtn");
+    const currentDate = new Date();
+    let currentDay = currentDate.toLocaleDateString("en-US", { weekday: "long" });
+    document.getElementById("dateDisplay").textContent = currentDate.toDateString();
+    window.currentDay = currentDay;
 
-    function renderDayTabs() {
-      dayTabsEl.innerHTML = "";
-      Object.keys(workoutPlan).forEach(day => {
+    function renderDayButtons() {
+      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+      const container = document.getElementById("dayButtons");
+      container.innerHTML = "";
+      days.forEach(day => {
         const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "day-tab" + (day === window.currentDay ? " active" : "");
         btn.textContent = day.slice(0, 3);
         btn.onclick = () => {
+          currentDay = day;
           window.currentDay = day;
-          render();
+          renderWorkoutView();
         };
-        dayTabsEl.appendChild(btn);
+        container.appendChild(btn);
       });
     }
 
-    function renderExercises() {
-      const exercises = workoutPlan[window.currentDay] || [];
-      exerciseListEl.innerHTML = "";
-      let completed = 0;
+    function renderWorkoutView() {
+      const list = document.getElementById("workoutList");
+      const title = document.getElementById("dayTitle");
+      const todayPlan = workoutPlan[currentDay] || [];
 
-      exercises.forEach((ex, i) => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "exercise";
+      const completedDays = getCompletedDays();
+      const todayStr = new Date().toISOString().split("T")[0];
+      const isDone = completedDays.includes(todayStr);
+      title.textContent = `${currentDay} Workout ${isDone ? "Complete" : "Incomplete"}`;
 
-        const header = document.createElement("div");
-        header.className = "exercise-header";
-
-        const nameDiv = document.createElement("div");
-        nameDiv.className = "exercise-name";
-        nameDiv.textContent = ex.name;
-        if (ex.description) nameDiv.title = ex.description;
-
-        const infoDiv = document.createElement("div");
-        infoDiv.className = "exercise-info";
-        infoDiv.textContent = `${ex.sets} sets • ${ex.reps}`;
-
-        header.appendChild(nameDiv);
-        header.appendChild(infoDiv);
-
-        wrapper.appendChild(header);
-        exerciseListEl.appendChild(wrapper);
+      list.innerHTML = "";
+      todayPlan.forEach(item => {
+        const li = document.createElement("li");
+        const exercise = document.createElement("span");
+        exercise.className = "exercise-name";
+        exercise.title = item.description || "";
+        exercise.innerHTML = `<strong>${item.name}</strong><br>${item.sets} sets • ${item.reps}`;
+        li.appendChild(exercise);
+        list.appendChild(li);
       });
     }
 
-    function renderCompletionBadge() {
-      const completed = getCompletedDays().includes(todayDateStr);
-      badgeEl.className = "badge " + (completed ? "badge-complete" : "badge-incomplete");
-      badgeEl.textContent = completed ? "Done for today ✔" : "Incomplete";
-    }
-
-    resetDayBtn.onclick = () => {
-      localStorage.removeItem("completedDays");
-      renderCompletionBadge();
-    };
-
-    markCompleteBtn.onclick = () => {
-      markDayComplete(todayDateStr);
-      renderCompletionBadge();
+    function markTodayComplete() {
+      const dateStr = new Date().toISOString().split("T")[0];
+      const completed = getCompletedDays();
+      if (!completed.includes(dateStr)) {
+        completed.push(dateStr);
+        localStorage.setItem("completedDays", JSON.stringify(completed));
+      }
+      renderWorkoutView();
       showConfettiIfMonthComplete();
-    };
-
-    function render() {
-      renderDayTabs();
-      currentDayLabelEl.textContent = window.currentDay + " Workout";
-      renderExercises();
-      attachExerciseDescriptions();
-      renderCompletionBadge();
     }
 
-    render();
+    function resetProgressForDay() {
+      const dateStr = new Date().toISOString().split("T")[0];
+      const days = getCompletedDays().filter(d => d !== dateStr);
+      localStorage.setItem("completedDays", JSON.stringify(days));
+      renderWorkoutView();
+    }
+
+    function getCompletedDays() {
+      return JSON.parse(localStorage.getItem("completedDays") || "[]");
+    }
+
+    function showConfettiIfMonthComplete() {
+      const completed = getCompletedDays();
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const daysInMonth = new Date(now.getFullYear(), currentMonth + 1, 0).getDate();
+      let count = 0;
+
+      for (let i = 1; i <= daysInMonth; i++) {
+        const date = new Date(now.getFullYear(), currentMonth, i);
+        const dateStr = date.toISOString().split("T")[0];
+        if (completed.includes(dateStr)) count++;
+      }
+
+      if (count >= daysInMonth) {
+        confetti({
+          particleCount: 200,
+          spread: 100,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    renderDayButtons();
+    renderWorkoutView();
   </script>
 </body>
 </html>
