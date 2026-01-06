@@ -524,9 +524,9 @@
    * LocalStorage keys
    *************************/
   const LS = {
-    workoutProgress: "mdw_v2_progress",     // { dayName: { exIndex: {done, weight, notes} } }
-    resetChecks: "mdw_v2_resetChecks",      // { "YYYY-MM-DD": { key: true } }
-    planOverride: "mdw_v2_planOverride"     // full PLAN object override
+    workoutProgress: "mdw_v2_progress",
+    resetChecks: "mdw_v2_resetChecks",
+    planOverride: "mdw_v2_planOverride"
   };
 
   /*************************
@@ -593,7 +593,10 @@
 
   function setTab(name){
     tabEls.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
-    Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none";
+
+    Object.keys(sections).forEach(k => {
+      sections[k].style.display = (k === name) ? "" : "none";
+    });
 
     if(name === "workout") renderWorkout();
     if(name === "progress") renderProgress();
@@ -832,10 +835,14 @@
   const addExerciseBtn = document.getElementById("addExerciseBtn");
   const restoreDefaultsBtn = document.getElementById("restoreDefaultsBtn");
 
-  let draftPlan = null; // working copy while editing
+  let draftPlan = null;
+
+  function deepCopy(obj){
+    return JSON.parse(JSON.stringify(obj));
+  }
 
   function openEditor(){
-    draftPlan = structuredClone(getPlan());
+    draftPlan = deepCopy(getPlan());
     renderEditorRows();
     modalBack.style.display = "flex";
   }
@@ -917,7 +924,7 @@
 
   restoreDefaultsBtn.addEventListener("click", () => {
     if(!confirm("Restore your original default plan for ALL days? (This does not erase your workout notes.)")) return;
-    setPlan(structuredClone(DEFAULT_PLAN));
+    setPlan(deepCopy(DEFAULT_PLAN));
     closeEditor();
     renderWorkout();
     renderProgress();
@@ -926,7 +933,6 @@
   });
 
   saveEditBtn.addEventListener("click", () => {
-    // basic cleanup
     const list = draftPlan[selectedDay] || [];
     for(const ex of list){
       ex.name = String(ex.name || "").trim() || "Unnamed Exercise";
