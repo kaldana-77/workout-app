@@ -45,4 +45,700 @@
     .tabbar{
       margin-top:16px;
       background:#fff;
-      border:1px solid var(--line)
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px;
+      display:flex;
+      gap:6px;
+      box-shadow:0 6px 16px rgba(16,24,40,.06);
+    }
+    .tab{
+      flex:1 1 0;
+      text-align:center;
+      font-weight:800;
+      padding:12px 10px;
+      border-radius:999px;
+      cursor:pointer;
+      user-select:none;
+      color:var(--muted);
+    }
+    .tab.active{
+      background:var(--brand);
+      color:#fff;
+      box-shadow:0 10px 22px rgba(44,123,229,.25);
+    }
+
+    /* Cards */
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:16px;
+      margin-top:14px;
+    }
+    .card h2{
+      margin:0;
+      font-size:22px;
+      font-weight:900;
+    }
+    .hint{margin:6px 0 0; color:var(--muted); font-weight:600}
+
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:6px;
+      flex-wrap:wrap;
+    }
+    .allDone{
+      border:1px solid rgba(18,183,106,.25);
+      background:rgba(18,183,106,.10);
+      color:var(--ok);
+      padding:6px 12px;
+      border-radius:999px;
+      font-weight:900;
+      display:none;
+      white-space:nowrap;
+    }
+
+    /* Day chips */
+    .days{
+      display:flex;
+      gap:8px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:9px 14px;
+      border-radius:999px;
+      font-weight:800;
+      cursor:pointer;
+      color:var(--muted);
+      user-select:none;
+    }
+    .chip.active{
+      border-color: rgba(44,123,229,.25);
+      background: rgba(44,123,229,.12);
+      color: var(--brand);
+    }
+
+    /* Exercise cards */
+    .ex{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      margin-top:12px;
+    }
+    .exHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .exName{font-weight:950; font-size:18px; margin:0;}
+    .exMeta{margin:4px 0 0; color:var(--muted); font-weight:700}
+    .doneBtn{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .doneBtn.checked{
+      border-color: rgba(44,123,229,.25);
+      background: rgba(44,123,229,.12);
+      color: var(--brand);
+    }
+    .doneBox{
+      width:20px; height:20px;
+      border-radius:6px;
+      border:2px solid #98A2B3;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      color:#fff;
+      background:#fff;
+    }
+    .doneBtn.checked .doneBox{
+      background: var(--brand);
+      border-color: var(--brand);
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width:720px){
+      .grid2{grid-template-columns:1fr;}
+    }
+    label{
+      display:block;
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    input, textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 12px;
+      font-size:14px;
+      font-weight:650;
+      outline:none;
+    }
+    textarea{min-height:48px; resize:vertical;}
+
+    .resetLink{
+      margin-top:14px;
+      color:#e11d48;
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:underline;
+      display:inline-block;
+    }
+
+    /* Progress / week summary */
+    .statGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    @media (max-width:720px){
+      .statGrid{grid-template-columns:1fr;}
+    }
+    .stat{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+      background:#fff;
+    }
+    .stat .k{color:var(--muted); font-weight:800; font-size:12px;}
+    .stat .v{font-weight:950; font-size:20px; margin-top:4px;}
+
+    .footerNote{
+      text-align:center;
+      color:var(--muted);
+      font-weight:650;
+      margin-top:18px;
+    }
+
+    /* Health Reset checklist */
+    .check{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      margin-top:10px;
+    }
+    .check input{
+      width:18px; height:18px; margin-top:2px;
+      accent-color: var(--brand);
+    }
+    .check .t{font-weight:850;}
+    .check .s{margin-top:4px; color:var(--muted); font-weight:650; font-size:13px; line-height:1.35;}
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>My Daily Workout</h1>
+    <div class="sub">Your simple, focused workout + progress tracker.</div>
+    <div class="dateLine" id="dateLine"></div>
+
+    <div class="tabbar" role="tablist">
+      <div class="tab active" data-tab="workout">Workout</div>
+      <div class="tab" data-tab="progress">Progress</div>
+      <div class="tab" data-tab="week">Week Summary</div>
+      <div class="tab" data-tab="reset">Health Reset</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- WORKOUT TAB -->
+    <section id="tab-workout">
+      <div class="card">
+        <div class="topRow">
+          <div>
+            <h2 id="dayTitle">Monday workout</h2>
+            <div class="hint">Tap a day, check off sets, and jot quick notes.</div>
+          </div>
+          <div class="allDone" id="allDonePill">All done ✓</div>
+        </div>
+
+        <div class="days" id="dayChips"></div>
+        <div id="exerciseList"></div>
+
+        <div class="resetLink" id="resetTodayLink">Reset this day's progress (today only).</div>
+      </div>
+
+      <div class="footerNote">All data is stored locally in your browser on this device only.</div>
+    </section>
+
+    <!-- PROGRESS TAB -->
+    <section id="tab-progress" style="display:none;">
+      <div class="card">
+        <h2>Progress</h2>
+        <div class="hint">This shows today's completion and your week-to-date trend.</div>
+
+        <div class="statGrid">
+          <div class="stat">
+            <div class="k">Today</div>
+            <div class="v" id="statToday">0%</div>
+          </div>
+          <div class="stat">
+            <div class="k">Completed exercises (today)</div>
+            <div class="v" id="statTodayCount">0 / 0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Days completed this week</div>
+            <div class="v" id="statWeekDays">0</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WEEK SUMMARY TAB -->
+    <section id="tab-week" style="display:none;">
+      <div class="card">
+        <h2>Week Summary</h2>
+        <div class="hint">A simple overview of how many workouts you completed each day.</div>
+
+        <div id="weekSummary"></div>
+      </div>
+    </section>
+
+    <!-- HEALTH RESET TAB -->
+    <section id="tab-reset" style="display:none;">
+      <div class="card">
+        <h2>Morning Thyroid Routine</h2>
+        <div class="hint">Daily checklist (resets automatically each day).</div>
+
+        <div id="resetMorning"></div>
+
+        <div style="margin-top:14px;">
+          <h2 style="font-size:20px; margin-top:8px;">Supplements Schedule</h2>
+          <div class="hint">Simplified, thyroid-friendly timing.</div>
+          <div id="resetSupps"></div>
+        </div>
+
+        <div style="margin-top:14px;">
+          <h2 style="font-size:20px; margin-top:8px;">2-Week Thyroid-Friendly Reset</h2>
+          <div class="hint">No tracking. Focus on consistency + lower inflammation.</div>
+          <div id="resetRules"></div>
+        </div>
+      </div>
+
+      <div class="footerNote">These checkmarks reset daily by date (so they won’t carry over to tomorrow).</div>
+    </section>
+  </main>
+
+<script>
+  /*************************
+   * Your Weekly Plan (as requested)
+   *************************/
+  const PLAN = {
+    Monday: [
+      { name: "Incline Dumbbell Press", sets: 3, reps: "10–12" },
+      { name: "Lat Pulldown", sets: 3, reps: "10–12" },
+      { name: "Dumbbell Shoulder Press", sets: 3, reps: "10–12" },
+      { name: "Triceps Rope Pushdown", sets: 3, reps: "12–15" },
+      { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+    ],
+    Tuesday: [
+      { name: "Goblet Squat", sets: 3, reps: "10–12" },
+      { name: "Romanian Deadlift", sets: 3, reps: "10–12" },
+      { name: "Glute Bridge/Hip Thrust", sets: 3, reps: "12–15" },
+      { name: "Calf Raises", sets: 3, reps: "15–20" },
+      { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+    ],
+    Wednesday: [
+      { name: "Push-Ups / Incline Push-Ups", sets: 3, reps: "As many as possible" },
+      { name: "Dumbbell Row", sets: 3, reps: "10–12" },
+      { name: "Lateral Raises", sets: 3, reps: "12–15" },
+      { name: "Biceps Curls", sets: 3, reps: "10–12" },
+      { name: "Core Circuit", sets: 3, reps: "3–4 exercises" }
+    ],
+    Thursday: [
+      { name: "Leg Press or Step-Ups", sets: 3, reps: "10–12" },
+      { name: "Lunges (or split squats)", sets: 3, reps: "10–12/leg" },
+      { name: "Hamstring Curl", sets: 3, reps: "10–12" },
+      { name: "Core Circuit", sets: 3, reps: "3–4 exercises" },
+      { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+    ],
+    Friday: [
+      { name: "Full-Body Circuit", sets: 3, reps: "8–10 exercises" },
+      { name: "Extra Arms / Glutes", sets: 2, reps: "Choose your favs" },
+      { name: "Stretching / Mobility", sets: 1, reps: "10–15 min" },
+      { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+    ],
+    Saturday: [
+      { name: "Optional: Light Walk", sets: 1, reps: "20–40 min" },
+      { name: "Stretching / Yoga", sets: 1, reps: "10–20 min" }
+    ],
+    Sunday: [
+      { name: "Rest / Mobility", sets: 1, reps: "10–20 min" }
+    ]
+  };
+
+  /*************************
+   * Health Reset (daily by date)
+   *************************/
+  const RESET_MORNING = [
+    { key:"synthroid", title:"6:30 AM: Synthroid (empty stomach)", sub:"Water is fine. Avoid supplements/minerals/fiber for 45–60 minutes." },
+    { key:"lemon", title:"Warm lemon water at work is OK", sub:"No minerals in lemon = fine with Synthroid timing." },
+    { key:"coffee", title:"Coffee + collagen after your wait window", sub:"Aim for 45–60 minutes after Synthroid." },
+    { key:"salt", title:"Finish Baja Gold salt water after coffee", sub:"Small sips earlier are fine; finishing later is the cleanest." }
+  ];
+  const RESET_SUPPS = [
+    { key:"am_nad", title:"Morning or lunch (not late): NAD+ (if keeping it)", sub:"Avoid late-day dosing if it revs your system." },
+    { key:"lunch_probiotic", title:"Lunch: Good Girl Probiotic", sub:"Keep consistent." },
+    { key:"lunch_omega", title:"Lunch: Omega-3", sub:"With food." },
+    { key:"dinner_multi", title:"Dinner: MultiComplete", sub:"Keeps minerals away from Synthroid." },
+    { key:"dinner_chromium", title:"Dinner: Chromium picolinate 200 mcg", sub:"Best with your higher-carb meal." },
+    { key:"dinner_citrucel", title:"Dinner: Citrucel", sub:"Helps keep fiber away from Synthroid window." },
+    { key:"bed_mag", title:"Bedtime: Magnesium", sub:"Supports sleep + insulin sensitivity." },
+    { key:"asneeded_hum", title:"As needed: HUM Flatter Me", sub:"With the FIRST bite of heavy/carb meals." }
+  ];
+  const RESET_RULES = [
+    { key:"protein", title:"Protein first at every meal", sub:"This stabilizes insulin and reduces cravings." },
+    { key:"carb_once", title:"Carbs once per day", sub:"Pick the meal you want them most." },
+    { key:"portion", title:"Heavy-carb meals: cut portion in half", sub:"Eat protein first, then carbs. Stop at satisfied." },
+    { key:"walk", title:"Walk 10–15 minutes after carb meals", sub:"This is a game-changer for glucose control." },
+    { key:"no_hiit", title:"No punishment HIIT", sub:"Keep cortisol lower for better fat loss." }
+  ];
+
+  /*************************
+   * LocalStorage keys
+   *************************/
+  const LS = {
+    workoutProgress: "mdw_v2_progress", // { dayName: { exIndex: {done, weight, notes} } }
+    resetChecks: "mdw_v2_resetChecks"   // { "YYYY-MM-DD": { key: true } }
+  };
+
+  /*************************
+   * Date helpers
+   *************************/
+  const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  function pad(n){ return String(n).padStart(2,"0"); }
+  function isoDate(d){
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+  function prettyDate(d){
+    return d.toLocaleDateString(undefined, { weekday:"long", month:"short", day:"numeric", year:"numeric" });
+  }
+  function currentDayName(){
+    return new Date().toLocaleDateString(undefined, { weekday:"long" });
+  }
+
+  /*************************
+   * Storage helpers
+   *************************/
+  function load(key, fallback){
+    try{
+      const v = JSON.parse(localStorage.getItem(key));
+      return (v === null || v === undefined) ? fallback : v;
+    }catch{
+      return fallback;
+    }
+  }
+  function save(key, val){
+    localStorage.setItem(key, JSON.stringify(val));
+  }
+
+  /*************************
+   * App state
+   *************************/
+  const today = new Date();
+  const todayISO = isoDate(today);
+  const defaultSelected = DAYS.includes(currentDayName()) ? currentDayName() : "Monday";
+  let selectedDay = defaultSelected;
+
+  /*************************
+   * Tabs
+   *************************/
+  const tabEls = Array.from(document.querySelectorAll(".tab"));
+  const sections = {
+    workout: document.getElementById("tab-workout"),
+    progress: document.getElementById("tab-progress"),
+    week: document.getElementById("tab-week"),
+    reset: document.getElementById("tab-reset")
+  };
+  tabEls.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
+
+  function setTab(name){
+    tabEls.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+    Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none");
+
+    if(name === "workout") renderWorkout();
+    if(name === "progress") renderProgress();
+    if(name === "week") renderWeekSummary();
+    if(name === "reset") renderReset();
+  }
+
+  /*************************
+   * Workout rendering
+   *************************/
+  const dayTitle = document.getElementById("dayTitle");
+  const allDonePill = document.getElementById("allDonePill");
+  const dayChips = document.getElementById("dayChips");
+  const exerciseList = document.getElementById("exerciseList");
+  const resetTodayLink = document.getElementById("resetTodayLink");
+
+  function getProgress(){
+    return load(LS.workoutProgress, {});
+  }
+  function setExerciseField(day, idx, field, value){
+    const p = getProgress();
+    p[day] = p[day] || {};
+    p[day][idx] = p[day][idx] || { done:false, weight:"", notes:"" };
+    p[day][idx][field] = value;
+    save(LS.workoutProgress, p);
+  }
+  function getExerciseState(day, idx){
+    const p = getProgress();
+    return (p[day] && p[day][idx]) ? p[day][idx] : { done:false, weight:"", notes:"" };
+  }
+  function resetDayProgress(day){
+    const p = getProgress();
+    delete p[day];
+    save(LS.workoutProgress, p);
+  }
+
+  function renderDayChips(){
+    dayChips.innerHTML = "";
+    DAYS.forEach(d => {
+      const c = document.createElement("div");
+      c.className = "chip" + (d === selectedDay ? " active" : "");
+      c.textContent = d.slice(0,3);
+      c.title = d;
+      c.addEventListener("click", () => {
+        selectedDay = d;
+        renderWorkout();
+      });
+      dayChips.appendChild(c);
+    });
+  }
+
+  function renderWorkout(){
+    renderDayChips();
+    dayTitle.textContent = `${selectedDay} workout`;
+
+    const exercises = PLAN[selectedDay] || [];
+    exerciseList.innerHTML = "";
+
+    let doneCount = 0;
+    exercises.forEach((ex, idx) => {
+      const st = getExerciseState(selectedDay, idx);
+      if(st.done) doneCount++;
+
+      const wrap = document.createElement("div");
+      wrap.className = "ex";
+      wrap.innerHTML = `
+        <div class="exHead">
+          <div>
+            <p class="exName">${escapeHtml(ex.name)}</p>
+            <div class="exMeta">${ex.sets} sets • ${escapeHtml(ex.reps)}</div>
+          </div>
+
+          <button class="doneBtn ${st.done ? "checked" : ""}" type="button">
+            <span class="doneBox">${st.done ? "✓" : ""}</span>
+            Done
+          </button>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label>Weight / Level</label>
+            <input type="text" placeholder="e.g. 15 lb DBs" value="${escapeAttr(st.weight || "")}" />
+          </div>
+          <div>
+            <label>Notes</label>
+            <textarea placeholder="How it felt, tweaks, etc.">${escapeHtml(st.notes || "")}</textarea>
+          </div>
+        </div>
+      `;
+
+      const doneBtn = wrap.querySelector(".doneBtn");
+      const weightInput = wrap.querySelector("input");
+      const notesArea = wrap.querySelector("textarea");
+
+      doneBtn.addEventListener("click", () => {
+        const cur = getExerciseState(selectedDay, idx);
+        const next = !cur.done;
+        setExerciseField(selectedDay, idx, "done", next);
+        renderWorkout();
+      });
+
+      weightInput.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "weight", e.target.value));
+      notesArea.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "notes", e.target.value));
+
+      exerciseList.appendChild(wrap);
+    });
+
+    const allDone = exercises.length > 0 && doneCount === exercises.length;
+    allDonePill.style.display = allDone ? "inline-block" : "none";
+
+    resetTodayLink.textContent = "Reset this day's progress (today only).";
+  }
+
+  resetTodayLink.addEventListener("click", () => {
+    // "today only" means: only allow reset if the selected day is today's weekday
+    const todayName = currentDayName();
+    if(selectedDay !== todayName){
+      alert("This reset link is for today's day only. Tap today's day to reset it.");
+      return;
+    }
+    if(confirm("Reset today's progress? This will clear Done/Weight/Notes for today.")){
+      resetDayProgress(selectedDay);
+      renderWorkout();
+      renderProgress();
+      renderWeekSummary();
+    }
+  });
+
+  /*************************
+   * Progress + Week summary
+   *************************/
+  const statToday = document.getElementById("statToday");
+  const statTodayCount = document.getElementById("statTodayCount");
+  const statWeekDays = document.getElementById("statWeekDays");
+  const weekSummary = document.getElementById("weekSummary");
+
+  function dayCompletion(day){
+    const exercises = PLAN[day] || [];
+    if(exercises.length === 0) return { done:0, total:0, pct:0 };
+    let done = 0;
+    exercises.forEach((_, idx) => {
+      if(getExerciseState(day, idx).done) done++;
+    });
+    const pct = Math.round((done / exercises.length) * 100);
+    return { done, total: exercises.length, pct };
+  }
+
+  function renderProgress(){
+    const todayName = currentDayName();
+    const c = dayCompletion(todayName);
+    statToday.textContent = `${c.pct}%`;
+    statTodayCount.textContent = `${c.done} / ${c.total}`;
+
+    // week days completed = days with 100%
+    let completedDays = 0;
+    DAYS.forEach(d => {
+      const dc = dayCompletion(d);
+      if(dc.total > 0 && dc.done === dc.total) completedDays++;
+    });
+    statWeekDays.textContent = String(completedDays);
+  }
+
+  function renderWeekSummary(){
+    weekSummary.innerHTML = "";
+    DAYS.forEach(d => {
+      const c = dayCompletion(d);
+      const row = document.createElement("div");
+      row.className = "ex";
+      row.style.padding = "12px 14px";
+      row.innerHTML = `
+        <div class="exHead">
+          <div>
+            <p class="exName" style="font-size:16px; margin:0;">${d}</p>
+            <div class="exMeta">${c.done} / ${c.total} completed • ${c.pct}%</div>
+          </div>
+          <div class="allDone" style="display:${(c.total>0 && c.done===c.total) ? "inline-block" : "none"};">All done ✓</div>
+        </div>
+      `;
+      weekSummary.appendChild(row);
+    });
+  }
+
+  /*************************
+   * Health Reset (daily checks by date)
+   *************************/
+  const resetMorningEl = document.getElementById("resetMorning");
+  const resetSuppsEl = document.getElementById("resetSupps");
+  const resetRulesEl = document.getElementById("resetRules");
+
+  function getResetChecks(){
+    return load(LS.resetChecks, {});
+  }
+  function getChecksForToday(){
+    const all = getResetChecks();
+    return all[todayISO] || {};
+  }
+  function setCheck(key, val){
+    const all = getResetChecks();
+    const day = all[todayISO] || {};
+    day[key] = !!val;
+    all[todayISO] = day;
+    save(LS.resetChecks, all);
+  }
+
+  function renderResetSection(container, items){
+    container.innerHTML = "";
+    const checks = getChecksForToday();
+
+    items.forEach(it => {
+      const row = document.createElement("div");
+      row.className = "check";
+      row.innerHTML = `
+        <input type="checkbox" ${checks[it.key] ? "checked" : ""} />
+        <div>
+          <div class="t">${escapeHtml(it.title)}</div>
+          <div class="s">${escapeHtml(it.sub)}</div>
+        </div>
+      `;
+      row.querySelector("input").addEventListener("change", (e) => setCheck(it.key, e.target.checked));
+      container.appendChild(row);
+    });
+  }
+
+  function renderReset(){
+    renderResetSection(resetMorningEl, RESET_MORNING);
+    renderResetSection(resetSuppsEl, RESET_SUPPS);
+    renderResetSection(resetRulesEl, RESET_RULES);
+  }
+
+  /*************************
+   * Escapes
+   *************************/
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+  function escapeAttr(str){
+    return escapeHtml(str).replaceAll("\n"," ");
+  }
+
+  /*************************
+   * Boot
+   *************************/
+  document.getElementById("dateLine").textContent = prettyDate(today);
+  // initial render
+  renderWorkout();
+  renderProgress();
+  renderWeekSummary();
+  renderReset();
+  setTab("workout");
+</script>
+</body>
+</html>
