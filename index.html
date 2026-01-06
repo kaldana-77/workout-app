@@ -410,6 +410,16 @@
       margin-top:10px;
     }
   </style>
+  @keyframes pulseSoft {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.03); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.mondayPulse {
+  animation: pulseSoft 2.5s ease-in-out infinite;
+}
+
 </head>
 
 <body>
@@ -1424,9 +1434,20 @@ If knees are cranky: do hip + upper body stretches more, less deep knee bending.
   renderReset();
   renderMeasurements();
   setTab("workout");
+
+  // Monday-only soft pulse on title
+const isMonday = new Date().getDay() === 1; // Monday = 1
+if(isMonday){
+  const titleEl = document.querySelector("h1");
+  if(titleEl){
+    titleEl.classList.add("mondayPulse");
+  }
+}
+
 </script>
 </body>
 </html>
+
 
 
 
