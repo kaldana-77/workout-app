@@ -50,9 +50,11 @@
       display:flex;
       gap:6px;
       box-shadow:0 6px 16px rgba(16,24,40,.06);
+      flex-wrap:wrap;
     }
     .tab{
       flex:1 1 0;
+      min-width:118px;
       text-align:center;
       font-weight:800;
       padding:12px 10px;
@@ -203,8 +205,14 @@
       gap:12px;
       margin-top:12px;
     }
+    .grid3{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
     @media (max-width:720px){
-      .grid2{grid-template-columns:1fr;}
+      .grid2,.grid3{grid-template-columns:1fr;}
     }
     label{
       display:block;
@@ -327,6 +335,38 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
+
+    /* Table for measurements */
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      margin-top:12px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+    }
+    th, td{
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      font-size:13px;
+      text-align:left;
+      vertical-align:top;
+      white-space:nowrap;
+    }
+    th{
+      color:var(--muted);
+      font-weight:900;
+      background:#fafafa;
+    }
+    tr:last-child td{border-bottom:none;}
+    .tableWrap{
+      overflow:auto;
+      border-radius:18px;
+      border:1px solid var(--line);
+      margin-top:12px;
+    }
   </style>
 </head>
 
@@ -341,6 +381,7 @@
       <div class="tab" data-tab="progress">Progress</div>
       <div class="tab" data-tab="week">Week Summary</div>
       <div class="tab" data-tab="reset">Health Reset</div>
+      <div class="tab" data-tab="measurements">Measurements</div>
     </div>
   </header>
 
@@ -418,6 +459,87 @@
       </div>
 
       <div class="footerNote">These checkmarks reset daily by date (so they won’t carry over to tomorrow).</div>
+    </section>
+
+    <!-- Measurements -->
+    <section id="tab-measurements" style="display:none;">
+      <div class="card">
+        <div class="topRow">
+          <div>
+            <h2>Measurements (Weekly)</h2>
+            <div class="hint">Log once per week. Tip: do it the same day/time each week (morning is best).</div>
+          </div>
+          <div class="rightTools">
+            <button class="btn danger" id="measClearBtn">Clear all</button>
+          </div>
+        </div>
+
+        <div class="grid3">
+          <div>
+            <label>Week of (Monday)</label>
+            <input id="measWeekOf" type="date" />
+          </div>
+          <div>
+            <label>Weight</label>
+            <input id="measWeight" type="text" placeholder="e.g. 160" />
+          </div>
+          <div>
+            <label>Waist</label>
+            <input id="measWaist" type="text" placeholder="inches" />
+          </div>
+        </div>
+
+        <div class="grid3">
+          <div>
+            <label>Hips</label>
+            <input id="measHips" type="text" placeholder="inches" />
+          </div>
+          <div>
+            <label>Bust</label>
+            <input id="measBust" type="text" placeholder="inches" />
+          </div>
+          <div>
+            <label>Thigh (L / R)</label>
+            <input id="measThigh" type="text" placeholder='e.g. 22 / 22.5' />
+          </div>
+        </div>
+
+        <div class="grid3">
+          <div>
+            <label>Arm (L / R)</label>
+            <input id="measArm" type="text" placeholder='e.g. 12 / 12' />
+          </div>
+          <div style="grid-column: span 2;">
+            <label>Notes</label>
+            <input id="measNotes" type="text" placeholder="energy, cycle/hormones, sleep, bloat, etc." />
+          </div>
+        </div>
+
+        <div class="rowBtns" style="justify-content:flex-start;">
+          <button class="btn primary" id="measSaveBtn">Save weekly entry</button>
+        </div>
+
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Week of</th>
+                <th>Weight</th>
+                <th>Waist</th>
+                <th>Hips</th>
+                <th>Bust</th>
+                <th>Thigh</th>
+                <th>Arm</th>
+                <th>Notes</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="measTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="footerNote">Measurements are stored locally in your browser on this device only.</div>
     </section>
   </main>
 
@@ -526,7 +648,8 @@
   const LS = {
     workoutProgress: "mdw_v2_progress",
     resetChecks: "mdw_v2_resetChecks",
-    planOverride: "mdw_v2_planOverride"
+    planOverride: "mdw_v2_planOverride",
+    measurements: "mdw_v2_measurements" // array of weekly entries
   };
 
   /*************************
@@ -542,6 +665,14 @@
   }
   function currentDayName(){
     return new Date().toLocaleDateString(undefined, { weekday:"long" });
+  }
+  function startOfWeekMonday(d){
+    const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const day = x.getDay(); // 0 Sun ... 6 Sat
+    const diff = (day === 0) ? -6 : (1 - day); // move to Monday
+    x.setDate(x.getDate() + diff);
+    x.setHours(0,0,0,0);
+    return x;
   }
 
   /*************************
@@ -587,13 +718,13 @@
     workout: document.getElementById("tab-workout"),
     progress: document.getElementById("tab-progress"),
     week: document.getElementById("tab-week"),
-    reset: document.getElementById("tab-reset")
+    reset: document.getElementById("tab-reset"),
+    measurements: document.getElementById("tab-measurements")
   };
   tabEls.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
 
   function setTab(name){
     tabEls.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
-
     Object.keys(sections).forEach(k => {
       sections[k].style.display = (k === name) ? "" : "none";
     });
@@ -602,6 +733,7 @@
     if(name === "progress") renderProgress();
     if(name === "week") renderWeekSummary();
     if(name === "reset") renderReset();
+    if(name === "measurements") renderMeasurements();
   }
 
   /*************************
@@ -824,6 +956,126 @@
   }
 
   /*************************
+   * Measurements (Weekly)
+   *************************/
+  const measWeekOf = document.getElementById("measWeekOf");
+  const measWeight = document.getElementById("measWeight");
+  const measWaist = document.getElementById("measWaist");
+  const measHips = document.getElementById("measHips");
+  const measBust = document.getElementById("measBust");
+  const measThigh = document.getElementById("measThigh");
+  const measArm = document.getElementById("measArm");
+  const measNotes = document.getElementById("measNotes");
+  const measSaveBtn = document.getElementById("measSaveBtn");
+  const measClearBtn = document.getElementById("measClearBtn");
+  const measTableBody = document.getElementById("measTableBody");
+
+  function getMeasurements(){
+    return load(LS.measurements, []);
+  }
+  function saveMeasurements(arr){
+    save(LS.measurements, arr);
+  }
+
+  function mondayISOFor(dateStr){
+    if(dateStr){
+      const d = new Date(dateStr + "T00:00:00");
+      return isoDate(startOfWeekMonday(d));
+    }
+    return isoDate(startOfWeekMonday(new Date()));
+  }
+
+  function fillMeasDefaultWeek(){
+    const mon = startOfWeekMonday(new Date());
+    measWeekOf.value = isoDate(mon);
+  }
+
+  function renderMeasurements(){
+    fillMeasDefaultWeek();
+    renderMeasTable();
+  }
+
+  function renderMeasTable(){
+    const rows = getMeasurements().slice().sort((a,b) => (a.weekOf < b.weekOf ? 1 : -1));
+    measTableBody.innerHTML = "";
+
+    if(rows.length === 0){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="9" style="color:var(--muted);font-weight:650;">No entries yet. Add your first weekly check-in above.</td>`;
+      measTableBody.appendChild(tr);
+      return;
+    }
+
+    rows.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${escapeHtml(r.weekOf)}</td>
+        <td>${escapeHtml(r.weight || "")}</td>
+        <td>${escapeHtml(r.waist || "")}</td>
+        <td>${escapeHtml(r.hips || "")}</td>
+        <td>${escapeHtml(r.bust || "")}</td>
+        <td>${escapeHtml(r.thigh || "")}</td>
+        <td>${escapeHtml(r.arm || "")}</td>
+        <td style="white-space:normal; max-width:320px;">${escapeHtml(r.notes || "")}</td>
+        <td><button class="btn danger" data-del="${escapeAttr(r.weekOf)}">Delete</button></td>
+      `;
+      measTableBody.appendChild(tr);
+    });
+
+    measTableBody.querySelectorAll("button[data-del]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const weekOf = btn.getAttribute("data-del");
+        if(!confirm(`Delete measurements for week of ${weekOf}?`)) return;
+        const arr = getMeasurements().filter(x => x.weekOf !== weekOf);
+        saveMeasurements(arr);
+        renderMeasTable();
+      });
+    });
+  }
+
+  measSaveBtn.addEventListener("click", () => {
+    const weekOf = mondayISOFor(measWeekOf.value);
+    const entry = {
+      weekOf,
+      weight: (measWeight.value || "").trim(),
+      waist: (measWaist.value || "").trim(),
+      hips: (measHips.value || "").trim(),
+      bust: (measBust.value || "").trim(),
+      thigh: (measThigh.value || "").trim(),
+      arm: (measArm.value || "").trim(),
+      notes: (measNotes.value || "").trim(),
+      savedAt: new Date().toISOString()
+    };
+
+    let arr = getMeasurements();
+    const idx = arr.findIndex(x => x.weekOf === weekOf);
+    if(idx >= 0){
+      if(!confirm(`You already have an entry for week of ${weekOf}. Replace it?`)) return;
+      arr[idx] = entry;
+    }else{
+      arr.push(entry);
+    }
+    saveMeasurements(arr);
+
+    measWeight.value = "";
+    measWaist.value = "";
+    measHips.value = "";
+    measBust.value = "";
+    measThigh.value = "";
+    measArm.value = "";
+    measNotes.value = "";
+
+    renderMeasTable();
+    alert("Saved!");
+  });
+
+  measClearBtn.addEventListener("click", () => {
+    if(!confirm("Clear ALL measurement entries?")) return;
+    saveMeasurements([]);
+    renderMeasTable();
+  });
+
+  /*************************
    * Edit Plan Modal
    *************************/
   const editPlanBtn = document.getElementById("editPlanBtn");
@@ -971,6 +1223,7 @@
   renderProgress();
   renderWeekSummary();
   renderReset();
+  renderMeasurements();
   setTab("workout");
 </script>
 </body>
