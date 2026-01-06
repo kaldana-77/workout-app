@@ -19,6 +19,25 @@ h2 {
   margin-top: 2rem;
 }
 
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 12px;
+  border-radius:999px;
+  border:1px solid rgba(44,123,229,.35);
+  background:rgba(44,123,229,.08);
+  color:var(--brand);
+  font-weight:900;
+  font-size:12px;
+  letter-spacing:.3px;
+  white-space:nowrap;
+}
+.badge .icon{
+  font-size:14px;
+  line-height:1;
+}
+
 button {
   padding: 0.5rem 1rem;
   margin: 0.5rem 0.25rem;
@@ -55,4 +74,5 @@ button:hover {
   cursor: help;
   display: inline-block;
 }
+
 
