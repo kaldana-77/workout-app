@@ -38,15 +38,6 @@ h2 {
   line-height:1;
 }
 
-@keyframes pulseSoft {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.03); opacity: 0.9; }
-  100% { transform: scale(1); opacity: 1; }
-}
-.mondayPulse {
-  animation: pulseSoft 2.5s ease-in-out infinite;
-}
-
 button {
   padding: 0.5rem 1rem;
   margin: 0.5rem 0.25rem;
@@ -83,6 +74,7 @@ button:hover {
   cursor: help;
   display: inline-block;
 }
+
 
 
 
