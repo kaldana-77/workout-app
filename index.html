@@ -367,6 +367,48 @@
       border:1px solid var(--line);
       margin-top:12px;
     }
+
+    /* Tap-to-open details link */
+    .detailLink{
+      color:var(--brand);
+      font-weight:900;
+      cursor:pointer;
+      text-decoration:underline;
+      user-select:none;
+      display:inline-block;
+    }
+
+    /* Info modal (Core/Full-body/Stretching) */
+    .infoBody{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+      background:#fff;
+    }
+    .infoBody h4{
+      margin:0;
+      font-size:16px;
+      font-weight:950;
+    }
+    .infoBody .p{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-weight:650;
+      line-height:1.45;
+      white-space:pre-wrap;
+    }
+    .pill{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(44,123,229,.25);
+      background:rgba(44,123,229,.12);
+      color:var(--brand);
+      font-weight:900;
+      font-size:12px;
+      margin-top:10px;
+    }
   </style>
 </head>
 
@@ -567,6 +609,26 @@
     </div>
   </div>
 
+  <!-- Info Modal (Core / Full-Body / Stretching) -->
+  <div class="modalBack" id="infoBack">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modalTop">
+        <div>
+          <h3 id="infoTitle">Details</h3>
+          <p id="infoSub">Quick guide.</p>
+        </div>
+        <div class="rowBtns" style="justify-content:flex-start;">
+          <button class="btn" id="closeInfoBtn">Close</button>
+        </div>
+      </div>
+
+      <div class="infoBody">
+        <div class="pill" id="infoPill" style="display:none;"></div>
+        <div class="p" id="infoText"></div>
+      </div>
+    </div>
+  </div>
+
 <script>
   /*************************
    * Default Weekly Plan (your original)
@@ -616,6 +678,93 @@
   };
 
   /*************************
+   * Info content (popup)
+   *************************/
+  const INFO_MAP = {
+    "Core Circuit": {
+      title: "Core Circuit (10–15 min)",
+      pill: "Pick 3–4 moves • loop",
+      text:
+`Pick 3–4 moves below. Do them in a loop.
+Rest 30–45 seconds between moves.
+Rest 60–90 seconds between rounds.
+Total time: 10–15 minutes
+
+Option A (best overall)
+• Dead Bug – 8–10/side
+• Bird Dog – 8–10/side
+• Side Plank – 20–30 sec/side
+• Glute Bridge – 12–15
+
+Option B (more “tight waist” feel)
+• Pallof Press (band/cable) – 10–12/side
+• Plank – 30–45 sec
+• Suitcase Carry (one dumbbell) – 30–45 sec/side
+• Reverse Crunch – 10–12 (slow)
+
+👉 Rule: if anything hurts your low back, swap it.`
+    },
+    "Full-Body Circuit": {
+      title: "Full-Body Circuit (3 sets • 8–10 exercises)",
+      pill: "Moderate pace • not HIIT",
+      text:
+`This is a moderate pace circuit, not HIIT.
+Pick 8 exercises (or use my ready-made one below).
+Work 35–45 sec, rest 15–25 sec between exercises.
+Rest 90 sec between rounds.
+Total time: 20–30 minutes
+
+Ready-made Full-Body Circuit (my favorite for fat loss + strength)
+• Goblet Squat
+• Dumbbell Row
+• Incline Dumbbell Press (or push-ups)
+• Romanian Deadlift (light–moderate)
+• Shoulder Press
+• Lateral Raise
+• Glute Bridge / Hip Thrust
+• Pallof Press or Dead Bug
+
+Optional 9–10:
+• Biceps Curl
+• Triceps Rope Pushdown
+
+👉 Keep weights where you can maintain good form. The goal is “sweaty but controlled.”`
+    },
+    "Stretching / Mobility": {
+      title: "Stretching / Mobility (10–15 min)",
+      pill: "Feel-better-tomorrow block",
+      text:
+`This is your “feel better tomorrow” block.
+
+Quick 10–12 minute mobility flow
+• Chest opener stretch (doorway) – 45 sec
+• Child’s pose – 45 sec
+• Hip flexor stretch – 45 sec/side
+• Figure-4 glute stretch – 45 sec/side
+• Hamstring stretch – 45 sec/side
+• Thoracic rotation (“open books”) – 8 reps/side
+• Calf stretch – 30–45 sec/side
+
+If knees are cranky: do hip + upper body stretches more, less deep knee bending.`
+    },
+    "Stretching / Yoga": {
+      title: "Stretching / Yoga (10–20 min)",
+      pill: "Gentle recovery",
+      text:
+`Quick 10–12 minute mobility flow
+• Chest opener stretch (doorway) – 45 sec
+• Child’s pose – 45 sec
+• Hip flexor stretch – 45 sec/side
+• Figure-4 glute stretch – 45 sec/side
+• Hamstring stretch – 45 sec/side
+• Thoracic rotation (“open books”) – 8 reps/side
+• Calf stretch – 30–45 sec/side
+
+If knees are cranky: do hip + upper body stretches more, less deep knee bending.`
+    }
+  };
+
+  /*************************
    * Health Reset (daily by date)
    *************************/
   const RESET_MORNING = [
@@ -649,7 +798,7 @@
     workoutProgress: "mdw_v2_progress",
     resetChecks: "mdw_v2_resetChecks",
     planOverride: "mdw_v2_planOverride",
-    measurements: "mdw_v2_measurements" // array of weekly entries
+    measurements: "mdw_v2_measurements"
   };
 
   /*************************
@@ -668,8 +817,8 @@
   }
   function startOfWeekMonday(d){
     const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    const day = x.getDay(); // 0 Sun ... 6 Sat
-    const diff = (day === 0) ? -6 : (1 - day); // move to Monday
+    const day = x.getDay();
+    const diff = (day === 0) ? -6 : (1 - day);
     x.setDate(x.getDate() + diff);
     x.setHours(0,0,0,0);
     return x;
@@ -737,6 +886,37 @@
   }
 
   /*************************
+   * Info modal (Core/Full-body/Stretching)
+   *************************/
+  const infoBack = document.getElementById("infoBack");
+  const infoTitle = document.getElementById("infoTitle");
+  const infoSub = document.getElementById("infoSub");
+  const infoPill = document.getElementById("infoPill");
+  const infoText = document.getElementById("infoText");
+  const closeInfoBtn = document.getElementById("closeInfoBtn");
+
+  function openInfo(key){
+    const item = INFO_MAP[key];
+    if(!item) return;
+    infoTitle.textContent = item.title || "Details";
+    infoSub.textContent = "Tap Close when you’re done.";
+    if(item.pill){
+      infoPill.style.display = "inline-block";
+      infoPill.textContent = item.pill;
+    }else{
+      infoPill.style.display = "none";
+      infoPill.textContent = "";
+    }
+    infoText.textContent = item.text || "";
+    infoBack.style.display = "flex";
+  }
+  function closeInfo(){
+    infoBack.style.display = "none";
+  }
+  closeInfoBtn.addEventListener("click", closeInfo);
+  infoBack.addEventListener("click", (e) => { if(e.target === infoBack) closeInfo(); });
+
+  /*************************
    * Workout rendering
    *************************/
   const dayTitle = document.getElementById("dayTitle");
@@ -780,6 +960,14 @@
     });
   }
 
+  function makeExerciseTitleHtml(name){
+    const safe = escapeHtml(name);
+    if(INFO_MAP[name]){
+      return `${safe} <span class="detailLink" data-info="${escapeAttr(name)}">(details)</span>`;
+    }
+    return safe;
+  }
+
   function renderWorkout(){
     renderDayChips();
     dayTitle.textContent = `${selectedDay} workout`;
@@ -798,7 +986,7 @@
       wrap.innerHTML = `
         <div class="exHead">
           <div>
-            <p class="exName">${escapeHtml(ex.name)}</p>
+            <p class="exName">${makeExerciseTitleHtml(ex.name)}</p>
             <div class="exMeta">${ex.sets} sets • ${escapeHtml(ex.reps)}</div>
           </div>
 
@@ -823,6 +1011,15 @@
       const doneBtn = wrap.querySelector(".doneBtn");
       const weightInput = wrap.querySelector("input");
       const notesArea = wrap.querySelector("textarea");
+
+      // Details link (Core Circuit / Full-Body Circuit / Stretching)
+      const details = wrap.querySelector(".detailLink");
+      if(details){
+        details.addEventListener("click", (e) => {
+          const key = e.target.getAttribute("data-info");
+          openInfo(key);
+        });
+      }
 
       doneBtn.addEventListener("click", () => {
         const cur = getExerciseState(selectedDay, idx);
