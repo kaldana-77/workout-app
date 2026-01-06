@@ -5,7 +5,6 @@
   <title>My Daily Workout</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- PWA (keep if you use them) -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#2c7be5" />
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -21,6 +20,7 @@
       --line:#EAECF0;
       --brand:#2c7be5;
       --ok:#12B76A;
+      --danger:#e11d48;
       --shadow:0 12px 34px rgba(16,24,40,.10);
       --radius:18px;
     }
@@ -41,7 +41,6 @@
     .sub{margin:4px 0 6px; color:var(--muted); font-weight:600}
     .dateLine{color:var(--muted); font-weight:600}
 
-    /* Tabs */
     .tabbar{
       margin-top:16px;
       background:#fff;
@@ -68,7 +67,6 @@
       box-shadow:0 10px 22px rgba(44,123,229,.25);
     }
 
-    /* Cards */
     .card{
       background:var(--card);
       border:1px solid var(--line);
@@ -92,6 +90,13 @@
       margin-top:6px;
       flex-wrap:wrap;
     }
+    .rightTools{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
     .allDone{
       border:1px solid rgba(18,183,106,.25);
       background:rgba(18,183,106,.10);
@@ -103,7 +108,26 @@
       white-space:nowrap;
     }
 
-    /* Day chips */
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn.primary{
+      background:var(--brand);
+      border-color:var(--brand);
+      color:#fff;
+    }
+    .btn.danger{
+      background:rgba(225,29,72,.10);
+      border-color:rgba(225,29,72,.25);
+      color:var(--danger);
+    }
+
     .days{
       display:flex;
       gap:8px;
@@ -126,7 +150,6 @@
       color: var(--brand);
     }
 
-    /* Exercise cards */
     .ex{
       border:1px solid var(--line);
       border-radius:18px;
@@ -203,14 +226,13 @@
 
     .resetLink{
       margin-top:14px;
-      color:#e11d48;
+      color:var(--danger);
       font-weight:800;
       cursor:pointer;
       text-decoration:underline;
       display:inline-block;
     }
 
-    /* Progress / week summary */
     .statGrid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -236,7 +258,6 @@
       margin-top:18px;
     }
 
-    /* Health Reset checklist */
     .check{
       display:flex;
       align-items:flex-start;
@@ -253,6 +274,59 @@
     }
     .check .t{font-weight:850;}
     .check .s{margin-top:4px; color:var(--muted); font-weight:650; font-size:13px; line-height:1.35;}
+
+    /* Modal editor */
+    .modalBack{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.35);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:50;
+    }
+    .modal{
+      width:min(860px, 100%);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:0 30px 80px rgba(0,0,0,.22);
+      padding:14px;
+      max-height:85vh;
+      overflow:auto;
+    }
+    .modalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .modal h3{margin:0; font-size:18px; font-weight:950;}
+    .modal p{margin:6px 0 0; color:var(--muted); font-weight:650;}
+    .editRow{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      margin-top:10px;
+      background:#fff;
+    }
+    .editGrid{
+      display:grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width:720px){
+      .editGrid{grid-template-columns:1fr;}
+    }
+    .rowBtns{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
   </style>
 </head>
 
@@ -271,7 +345,6 @@
   </header>
 
   <main class="wrap">
-    <!-- WORKOUT TAB -->
     <section id="tab-workout">
       <div class="card">
         <div class="topRow">
@@ -279,7 +352,11 @@
             <h2 id="dayTitle">Monday workout</h2>
             <div class="hint">Tap a day, check off sets, and jot quick notes.</div>
           </div>
-          <div class="allDone" id="allDonePill">All done ✓</div>
+
+          <div class="rightTools">
+            <button class="btn" id="editPlanBtn">Edit plan</button>
+            <div class="allDone" id="allDonePill">All done ✓</div>
+          </div>
         </div>
 
         <div class="days" id="dayChips"></div>
@@ -291,7 +368,6 @@
       <div class="footerNote">All data is stored locally in your browser on this device only.</div>
     </section>
 
-    <!-- PROGRESS TAB -->
     <section id="tab-progress" style="display:none;">
       <div class="card">
         <h2>Progress</h2>
@@ -314,22 +390,18 @@
       </div>
     </section>
 
-    <!-- WEEK SUMMARY TAB -->
     <section id="tab-week" style="display:none;">
       <div class="card">
         <h2>Week Summary</h2>
         <div class="hint">A simple overview of how many workouts you completed each day.</div>
-
         <div id="weekSummary"></div>
       </div>
     </section>
 
-    <!-- HEALTH RESET TAB -->
     <section id="tab-reset" style="display:none;">
       <div class="card">
         <h2>Morning Thyroid Routine</h2>
         <div class="hint">Daily checklist (resets automatically each day).</div>
-
         <div id="resetMorning"></div>
 
         <div style="margin-top:14px;">
@@ -349,11 +421,35 @@
     </section>
   </main>
 
+  <!-- Edit Plan Modal -->
+  <div class="modalBack" id="modalBack">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modalTop">
+        <div>
+          <h3 id="modalTitle">Edit plan</h3>
+          <p id="modalSub">Edit exercises for the selected day. Saved changes will show immediately.</p>
+        </div>
+        <div class="rowBtns" style="justify-content:flex-start;">
+          <button class="btn" id="addExerciseBtn">+ Add exercise</button>
+          <button class="btn danger" id="restoreDefaultsBtn">Restore defaults</button>
+          <button class="btn" id="closeModalBtn">Close</button>
+        </div>
+      </div>
+
+      <div id="editorBody" style="margin-top:10px;"></div>
+
+      <div class="rowBtns">
+        <button class="btn" id="cancelEditBtn">Cancel</button>
+        <button class="btn primary" id="saveEditBtn">Save changes</button>
+      </div>
+    </div>
+  </div>
+
 <script>
   /*************************
-   * Your Weekly Plan (as requested)
+   * Default Weekly Plan (your original)
    *************************/
-  const PLAN = {
+  const DEFAULT_PLAN = {
     Monday: [
       { name: "Incline Dumbbell Press", sets: 3, reps: "10–12" },
       { name: "Lat Pulldown", sets: 3, reps: "10–12" },
@@ -428,8 +524,9 @@
    * LocalStorage keys
    *************************/
   const LS = {
-    workoutProgress: "mdw_v2_progress", // { dayName: { exIndex: {done, weight, notes} } }
-    resetChecks: "mdw_v2_resetChecks"   // { "YYYY-MM-DD": { key: true } }
+    workoutProgress: "mdw_v2_progress",     // { dayName: { exIndex: {done, weight, notes} } }
+    resetChecks: "mdw_v2_resetChecks",      // { "YYYY-MM-DD": { key: true } }
+    planOverride: "mdw_v2_planOverride"     // full PLAN object override
   };
 
   /*************************
@@ -463,6 +560,18 @@
   }
 
   /*************************
+   * Plan source
+   *************************/
+  function getPlan(){
+    const override = load(LS.planOverride, null);
+    if(override && typeof override === "object") return override;
+    return DEFAULT_PLAN;
+  }
+  function setPlan(plan){
+    save(LS.planOverride, plan);
+  }
+
+  /*************************
    * App state
    *************************/
   const today = new Date();
@@ -484,7 +593,7 @@
 
   function setTab(name){
     tabEls.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
-    Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none");
+    Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none";
 
     if(name === "workout") renderWorkout();
     if(name === "progress") renderProgress();
@@ -540,7 +649,8 @@
     renderDayChips();
     dayTitle.textContent = `${selectedDay} workout`;
 
-    const exercises = PLAN[selectedDay] || [];
+    const plan = getPlan();
+    const exercises = plan[selectedDay] || [];
     exerciseList.innerHTML = "";
 
     let doneCount = 0;
@@ -581,9 +691,10 @@
 
       doneBtn.addEventListener("click", () => {
         const cur = getExerciseState(selectedDay, idx);
-        const next = !cur.done;
-        setExerciseField(selectedDay, idx, "done", next);
+        setExerciseField(selectedDay, idx, "done", !cur.done);
         renderWorkout();
+        renderProgress();
+        renderWeekSummary();
       });
 
       weightInput.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "weight", e.target.value));
@@ -594,12 +705,9 @@
 
     const allDone = exercises.length > 0 && doneCount === exercises.length;
     allDonePill.style.display = allDone ? "inline-block" : "none";
-
-    resetTodayLink.textContent = "Reset this day's progress (today only).";
   }
 
   resetTodayLink.addEventListener("click", () => {
-    // "today only" means: only allow reset if the selected day is today's weekday
     const todayName = currentDayName();
     if(selectedDay !== todayName){
       alert("This reset link is for today's day only. Tap today's day to reset it.");
@@ -622,12 +730,11 @@
   const weekSummary = document.getElementById("weekSummary");
 
   function dayCompletion(day){
-    const exercises = PLAN[day] || [];
+    const plan = getPlan();
+    const exercises = plan[day] || [];
     if(exercises.length === 0) return { done:0, total:0, pct:0 };
     let done = 0;
-    exercises.forEach((_, idx) => {
-      if(getExerciseState(day, idx).done) done++;
-    });
+    exercises.forEach((_, idx) => { if(getExerciseState(day, idx).done) done++; });
     const pct = Math.round((done / exercises.length) * 100);
     return { done, total: exercises.length, pct };
   }
@@ -638,7 +745,6 @@
     statToday.textContent = `${c.pct}%`;
     statTodayCount.textContent = `${c.done} / ${c.total}`;
 
-    // week days completed = days with 100%
     let completedDays = 0;
     DAYS.forEach(d => {
       const dc = dayCompletion(d);
@@ -715,6 +821,128 @@
   }
 
   /*************************
+   * Edit Plan Modal
+   *************************/
+  const editPlanBtn = document.getElementById("editPlanBtn");
+  const modalBack = document.getElementById("modalBack");
+  const editorBody = document.getElementById("editorBody");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const cancelEditBtn = document.getElementById("cancelEditBtn");
+  const saveEditBtn = document.getElementById("saveEditBtn");
+  const addExerciseBtn = document.getElementById("addExerciseBtn");
+  const restoreDefaultsBtn = document.getElementById("restoreDefaultsBtn");
+
+  let draftPlan = null; // working copy while editing
+
+  function openEditor(){
+    draftPlan = structuredClone(getPlan());
+    renderEditorRows();
+    modalBack.style.display = "flex";
+  }
+  function closeEditor(){
+    modalBack.style.display = "none";
+    draftPlan = null;
+  }
+
+  function renderEditorRows(){
+    editorBody.innerHTML = "";
+    const list = (draftPlan && draftPlan[selectedDay]) ? draftPlan[selectedDay] : [];
+
+    if(list.length === 0){
+      const empty = document.createElement("div");
+      empty.className = "editRow";
+      empty.innerHTML = `<div style="font-weight:900;">No exercises yet.</div><div style="color:var(--muted);font-weight:650;margin-top:4px;">Click “Add exercise” to create one.</div>`;
+      editorBody.appendChild(empty);
+      return;
+    }
+
+    list.forEach((ex, idx) => {
+      const row = document.createElement("div");
+      row.className = "editRow";
+      row.innerHTML = `
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap;">
+          <div style="font-weight:950;">Exercise ${idx+1}</div>
+          <button class="btn danger" type="button">Delete</button>
+        </div>
+
+        <div class="editGrid">
+          <div>
+            <label>Name</label>
+            <input type="text" value="${escapeAttr(ex.name || "")}" />
+          </div>
+          <div>
+            <label>Sets</label>
+            <input type="number" min="1" step="1" value="${escapeAttr(ex.sets ?? 3)}" />
+          </div>
+          <div>
+            <label>Reps</label>
+            <input type="text" value="${escapeAttr(ex.reps || "")}" />
+          </div>
+        </div>
+      `;
+
+      const delBtn = row.querySelector("button");
+      const [nameInput, setsInput, repsInput] = row.querySelectorAll("input");
+
+      nameInput.addEventListener("input", (e) => { draftPlan[selectedDay][idx].name = e.target.value; });
+      setsInput.addEventListener("input", (e) => {
+        const v = parseInt(e.target.value, 10);
+        draftPlan[selectedDay][idx].sets = Number.isFinite(v) && v > 0 ? v : 1;
+      });
+      repsInput.addEventListener("input", (e) => { draftPlan[selectedDay][idx].reps = e.target.value; });
+
+      delBtn.addEventListener("click", () => {
+        if(!confirm("Delete this exercise?")) return;
+        draftPlan[selectedDay].splice(idx, 1);
+        renderEditorRows();
+      });
+
+      editorBody.appendChild(row);
+    });
+  }
+
+  editPlanBtn.addEventListener("click", openEditor);
+  closeModalBtn.addEventListener("click", closeEditor);
+  cancelEditBtn.addEventListener("click", closeEditor);
+
+  modalBack.addEventListener("click", (e) => {
+    if(e.target === modalBack) closeEditor();
+  });
+
+  addExerciseBtn.addEventListener("click", () => {
+    if(!draftPlan[selectedDay]) draftPlan[selectedDay] = [];
+    draftPlan[selectedDay].push({ name:"New Exercise", sets:3, reps:"10–12" });
+    renderEditorRows();
+  });
+
+  restoreDefaultsBtn.addEventListener("click", () => {
+    if(!confirm("Restore your original default plan for ALL days? (This does not erase your workout notes.)")) return;
+    setPlan(structuredClone(DEFAULT_PLAN));
+    closeEditor();
+    renderWorkout();
+    renderProgress();
+    renderWeekSummary();
+    alert("Defaults restored.");
+  });
+
+  saveEditBtn.addEventListener("click", () => {
+    // basic cleanup
+    const list = draftPlan[selectedDay] || [];
+    for(const ex of list){
+      ex.name = String(ex.name || "").trim() || "Unnamed Exercise";
+      ex.reps = String(ex.reps || "").trim() || "—";
+      const s = parseInt(ex.sets, 10);
+      ex.sets = Number.isFinite(s) && s > 0 ? s : 1;
+    }
+    setPlan(draftPlan);
+    closeEditor();
+    renderWorkout();
+    renderProgress();
+    renderWeekSummary();
+    alert("Plan saved!");
+  });
+
+  /*************************
    * Escapes
    *************************/
   function escapeHtml(str){
@@ -733,7 +961,6 @@
    * Boot
    *************************/
   document.getElementById("dateLine").textContent = prettyDate(today);
-  // initial render
   renderWorkout();
   renderProgress();
   renderWeekSummary();
