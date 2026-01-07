@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Power Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#2c7be5" />
@@ -13,16 +13,17 @@
 
   <style>
     :root{
-      --bg:#f5f6f8;
+      --bg:#f6f7fb;
       --card:#ffffff;
-      --text:#101828;
-      --muted:#667085;
-      --line:#EAECF0;
+      --text:#0f172a;
+      --muted:#64748b;
+      --line:#e6e9f2;
       --brand:#2c7be5;
       --ok:#12B76A;
       --danger:#e11d48;
-      --shadow:0 12px 34px rgba(16,24,40,.10);
+      --shadow:0 10px 26px rgba(15,23,42,.08);
       --radius:18px;
+      --radius2:14px;
     }
     *{box-sizing:border-box}
     body{
@@ -34,7 +35,7 @@
     header{
       max-width:860px;
       margin:0 auto;
-      padding:22px 16px 12px;
+      padding:20px 14px 10px;
     }
     h1{
       margin:0;
@@ -43,29 +44,39 @@
       display:flex;
       align-items:center;
       gap:10px;
+      flex-wrap:wrap;
     }
-    .titleEmoji{font-size:.85em}
-    .sub{margin:4px 0 6px; color:var(--muted); font-weight:600}
-    .dateLine{color:var(--muted); font-weight:600}
+    .titleEmoji{font-size:.9em}
+    .sub{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-weight:650;
+    }
+    .dateLine{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-weight:650;
+    }
 
-    /* Tabs — cleaner, less “bubbly” */
+    /* Tabs */
     .tabbar{
-      margin-top:16px;
+      margin-top:14px;
       background:#fff;
       border:1px solid var(--line);
-      border-radius:14px;
+      border-radius:999px;
       padding:6px;
       display:flex;
       gap:6px;
-      box-shadow:0 6px 16px rgba(16,24,40,.06);
+      box-shadow:0 6px 16px rgba(15,23,42,.06);
       overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
     }
     .tab{
-      flex:1 0 auto;
+      flex:0 0 auto;
       text-align:center;
-      font-weight:800;
-      padding:10px 12px;
-      border-radius:12px;
+      font-weight:850;
+      padding:10px 14px;
+      border-radius:999px;
       cursor:pointer;
       user-select:none;
       color:var(--muted);
@@ -74,28 +85,36 @@
     .tab.active{
       background:var(--brand);
       color:#fff;
-      box-shadow:0 10px 22px rgba(44,123,229,.20);
+      box-shadow:0 10px 22px rgba(44,123,229,.25);
     }
 
-    .wrap{max-width:860px; margin:0 auto; padding:18px 14px 90px;}
-
+    .wrap{max-width:860px; margin:0 auto; padding:12px 14px 90px;}
     .card{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:22px;
+      border-radius:var(--radius);
       box-shadow:var(--shadow);
       padding:16px;
-      margin-top:14px;
+      margin-top:12px;
     }
-    .card h2{margin:0; font-size:22px; font-weight:900;}
-    .hint{margin:6px 0 0; color:var(--muted); font-weight:600}
+    .card h2{
+      margin:0;
+      font-size:22px;
+      font-weight:900;
+    }
+    .hint{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-weight:650;
+      line-height:1.35;
+    }
 
     .topRow{
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       justify-content:space-between;
-      gap:12px;
-      margin-top:6px;
+      gap:10px;
+      margin-top:4px;
       flex-wrap:wrap;
     }
     .rightTools{
@@ -110,7 +129,7 @@
       border:1px solid var(--line);
       background:#fff;
       border-radius:12px;
-      padding:10px 12px;
+      padding:9px 12px;
       font-weight:900;
       cursor:pointer;
       white-space:nowrap;
@@ -130,14 +149,14 @@
       border:1px solid rgba(18,183,106,.25);
       background:rgba(18,183,106,.10);
       color:var(--ok);
-      padding:6px 12px;
+      padding:6px 10px;
       border-radius:999px;
       font-weight:900;
       display:none;
       white-space:nowrap;
     }
 
-    /* Day chips — smaller + cleaner */
+    /* Day chips */
     .days{
       display:flex;
       gap:8px;
@@ -149,10 +168,12 @@
       background:#fff;
       padding:8px 12px;
       border-radius:999px;
-      font-weight:800;
+      font-weight:850;
       cursor:pointer;
       color:var(--muted);
       user-select:none;
+      min-width:52px;
+      text-align:center;
     }
     .chip.active{
       border-color: rgba(44,123,229,.25);
@@ -160,12 +181,12 @@
       color: var(--brand);
     }
 
+    /* Exercise cards */
     .ex{
       border:1px solid var(--line);
-      border-radius:18px;
+      border-radius:16px;
       padding:14px;
       margin-top:12px;
-      background:#fff;
     }
     .exHead{
       display:flex;
@@ -179,11 +200,11 @@
       margin:0;
       line-height:1.15;
     }
-    .exName.clickable{
-      text-decoration: underline dotted;
-      cursor:pointer;
+    .exMeta{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-weight:700;
     }
-    .exMeta{margin:4px 0 0; color:var(--muted); font-weight:700}
 
     .doneBtn{
       display:flex;
@@ -192,7 +213,7 @@
       border:1px solid var(--line);
       background:#fff;
       border-radius:12px;
-      padding:10px 12px;
+      padding:9px 12px;
       font-weight:900;
       cursor:pointer;
       white-space:nowrap;
@@ -230,11 +251,11 @@
     label{
       display:block;
       font-size:12px;
-      font-weight:800;
+      font-weight:850;
       color:var(--muted);
       margin-bottom:6px;
     }
-    input, textarea{
+    input, textarea, select{
       width:100%;
       border:1px solid var(--line);
       border-radius:14px;
@@ -249,12 +270,20 @@
     .resetLink{
       margin-top:14px;
       color:var(--danger);
-      font-weight:800;
+      font-weight:850;
       cursor:pointer;
       text-decoration:underline;
       display:inline-block;
     }
 
+    .footerNote{
+      text-align:center;
+      color:var(--muted);
+      font-weight:650;
+      margin-top:14px;
+    }
+
+    /* Progress tiles */
     .statGrid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -266,27 +295,21 @@
     }
     .stat{
       border:1px solid var(--line);
-      border-radius:18px;
+      border-radius:16px;
       padding:12px;
       background:#fff;
     }
-    .stat .k{color:var(--muted); font-weight:800; font-size:12px;}
+    .stat .k{color:var(--muted); font-weight:850; font-size:12px;}
     .stat .v{font-weight:950; font-size:20px; margin-top:4px;}
 
-    .footerNote{
-      text-align:center;
-      color:var(--muted);
-      font-weight:650;
-      margin-top:18px;
-    }
-
+    /* Check list rows */
     .check{
       display:flex;
       align-items:flex-start;
       gap:10px;
       padding:10px 12px;
       border:1px solid var(--line);
-      border-radius:16px;
+      border-radius:14px;
       background:#fff;
       margin-top:10px;
     }
@@ -294,14 +317,18 @@
       width:18px; height:18px; margin-top:2px;
       accent-color: var(--brand);
     }
-    .check .t{font-weight:850;}
+    .check .t{font-weight:900;}
     .check .s{margin-top:4px; color:var(--muted); font-weight:650; font-size:13px; line-height:1.35;}
 
-    .subhead{
-      margin:0;
-      font-size:16px;
-      font-weight:950;
-      color:var(--text);
+    /* Measurements */
+    .measGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    @media (max-width:720px){
+      .measGrid{grid-template-columns:1fr;}
     }
 
     /* Modal */
@@ -340,55 +367,48 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
-
     .editRow{
       border:1px solid var(--line);
-      border-radius:16px;
+      border-radius:14px;
       padding:12px;
       margin-top:10px;
       background:#fff;
     }
     .editGrid{
       display:grid;
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: 1.4fr 1fr 1fr;
       gap:10px;
       margin-top:10px;
     }
     @media (max-width:720px){
       .editGrid{grid-template-columns:1fr;}
     }
-
-    .infoBody{
-      margin-top:12px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      background:#fff;
-      line-height:1.5;
+    .small{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:650;
+      margin-top:6px;
+      line-height:1.35;
     }
-    .infoBody h4{margin:10px 0 6px; font-size:15px;}
-    .infoBody ul{margin:6px 0 10px 18px;}
-    .infoBody li{margin:4px 0;}
-
-    .measGrid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:12px;
-      margin-top:12px;
-    }
-    @media (max-width:720px){
-      .measGrid{grid-template-columns:1fr;}
+    .linkBtn{
+      border:none;
+      background:none;
+      color:var(--brand);
+      font-weight:900;
+      cursor:pointer;
+      padding:0;
+      text-decoration:underline;
+      text-align:left;
     }
 
-    /* Monday pulse (subtle) */
+    /* Monday pulse */
     @keyframes pulseSoft{
-      0%{transform:scale(1); opacity:1;}
-      50%{transform:scale(1.02); opacity:.95;}
-      100%{transform:scale(1); opacity:1;}
+      0%{transform:scale(1);opacity:1}
+      50%{transform:scale(1.03);opacity:.9}
+      100%{transform:scale(1);opacity:1}
     }
-    .mondayPulse{
-      animation:pulseSoft 2.5s ease-in-out infinite;
-    }
+    .mondayPulse{ animation:pulseSoft 2.5s ease-in-out infinite; }
+
   </style>
 </head>
 
@@ -414,9 +434,8 @@
         <div class="topRow">
           <div>
             <h2 id="dayTitle">Monday workout</h2>
-            <div class="hint">Tap a day, check off sets, and jot quick notes.</div>
+            <div class="hint">Tap a day, check off exercises, and jot quick notes.</div>
           </div>
-
           <div class="rightTools">
             <button class="btn" id="editPlanBtn" type="button">Edit plan</button>
             <div class="allDone" id="allDonePill">All done ✓</div>
@@ -453,6 +472,8 @@
           </div>
         </div>
       </div>
+
+      <div class="footerNote">Built by consistency.</div>
     </section>
 
     <!-- WEEK SUMMARY -->
@@ -462,6 +483,7 @@
         <div class="hint">A quick overview of each day.</div>
         <div id="weekSummary"></div>
       </div>
+      <div class="footerNote">Built by consistency.</div>
     </section>
 
     <!-- HEALTH RESET -->
@@ -470,7 +492,7 @@
         <div class="topRow">
           <div>
             <h2>Health Reset</h2>
-            <div class="hint">Daily checklist (resets each day).</div>
+            <div class="hint">Daily checklist (resets each day). You can edit it.</div>
           </div>
           <div class="rightTools">
             <button class="btn" id="editResetBtn" type="button">Edit reset</button>
@@ -478,17 +500,17 @@
         </div>
 
         <div style="margin-top:10px;">
-          <h3 class="subhead">Morning Thyroid Routine</h3>
+          <h3 style="margin:0; font-size:16px; font-weight:950;">Morning Thyroid Routine</h3>
           <div id="resetMorning"></div>
         </div>
 
         <div style="margin-top:14px;">
-          <h3 class="subhead">Supplements Schedule</h3>
+          <h3 style="margin:0; font-size:16px; font-weight:950;">Supplements Schedule</h3>
           <div id="resetSupps"></div>
         </div>
 
         <div style="margin-top:14px;">
-          <h3 class="subhead">2-Week Thyroid-Friendly Reset</h3>
+          <h3 style="margin:0; font-size:16px; font-weight:950;">2-Week Thyroid-Friendly Reset</h3>
           <div id="resetRules"></div>
         </div>
       </div>
@@ -503,12 +525,30 @@
         <div class="hint">Track trends, not perfection.</div>
 
         <div class="measGrid">
-          <div><label>Weight</label><input id="m_weight" type="text" placeholder="e.g., 160" /></div>
-          <div><label>Waist</label><input id="m_waist" type="text" placeholder="inches" /></div>
-          <div><label>Hips</label><input id="m_hips" type="text" placeholder="inches" /></div>
-          <div><label>Chest</label><input id="m_chest" type="text" placeholder="inches" /></div>
-          <div><label>Thigh</label><input id="m_thigh" type="text" placeholder="inches" /></div>
-          <div><label>Arm</label><input id="m_arm" type="text" placeholder="inches" /></div>
+          <div>
+            <label>Weight</label>
+            <input id="m_weight" type="text" placeholder="e.g., 160" />
+          </div>
+          <div>
+            <label>Waist</label>
+            <input id="m_waist" type="text" placeholder="inches" />
+          </div>
+          <div>
+            <label>Hips</label>
+            <input id="m_hips" type="text" placeholder="inches" />
+          </div>
+          <div>
+            <label>Chest</label>
+            <input id="m_chest" type="text" placeholder="inches" />
+          </div>
+          <div>
+            <label>Thigh</label>
+            <input id="m_thigh" type="text" placeholder="inches" />
+          </div>
+          <div>
+            <label>Arm</label>
+            <input id="m_arm" type="text" placeholder="inches" />
+          </div>
         </div>
 
         <div class="rowBtns" style="margin-top:12px;">
@@ -518,6 +558,8 @@
 
         <div id="measHistory" style="margin-top:14px;"></div>
       </div>
+
+      <div class="footerNote">Built by consistency.</div>
     </section>
   </main>
 
@@ -527,7 +569,7 @@
       <div class="modalTop">
         <div>
           <h3 id="modalTitle">Edit plan</h3>
-          <p id="modalSub">Edit exercises for the selected day. Saved changes show immediately.</p>
+          <p id="modalSub">Pick from the library or type your own. Saved changes show immediately.</p>
         </div>
         <div class="rowBtns" style="justify-content:flex-start;">
           <button class="btn" id="addExerciseBtn" type="button">+ Add exercise</button>
@@ -536,11 +578,37 @@
         </div>
       </div>
 
+      <div class="small">
+        Tip: Use “Category” → “Exercise” to fill name/sets/reps fast. You can still edit the text.
+      </div>
+
       <div id="editorBody" style="margin-top:10px;"></div>
 
       <div class="rowBtns">
         <button class="btn" id="cancelEditBtn" type="button">Cancel</button>
         <button class="btn primary" id="saveEditBtn" type="button">Save changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESET EDITOR MODAL -->
+  <div class="modalBack" id="resetBack" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modalTop">
+        <div>
+          <h3>Edit Health Reset</h3>
+          <p>Change wording, add/remove items. Saved changes show immediately.</p>
+        </div>
+        <div class="rowBtns" style="justify-content:flex-start;">
+          <button class="btn" id="resetCloseBtn" type="button">Close</button>
+        </div>
+      </div>
+
+      <div id="resetEditorBody" style="margin-top:10px;"></div>
+
+      <div class="rowBtns">
+        <button class="btn danger" id="resetRestoreBtn" type="button">Restore defaults</button>
+        <button class="btn primary" id="resetSaveBtn" type="button">Save reset</button>
       </div>
     </div>
   </div>
@@ -557,49 +625,17 @@
           <button class="btn" id="infoCloseBtn" type="button">Close</button>
         </div>
       </div>
-      <div id="infoBody" class="infoBody"></div>
-    </div>
-  </div>
-
-  <!-- EDIT RESET MODAL -->
-  <div class="modalBack" id="resetBack" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="modalTop">
-        <div>
-          <h3>Edit Health Reset</h3>
-          <p>Format: one item per line as <b>Title | Sub</b></p>
-        </div>
-        <div class="rowBtns" style="justify-content:flex-start;">
-          <button class="btn" id="resetCloseBtn" type="button">Close</button>
-        </div>
-      </div>
-
-      <div class="editRow">
-        <div style="font-weight:950;">Morning Thyroid Routine</div>
-        <textarea id="resetEditMorning" style="margin-top:8px; min-height:120px;"></textarea>
-      </div>
-
-      <div class="editRow">
-        <div style="font-weight:950;">Supplements Schedule</div>
-        <textarea id="resetEditSupps" style="margin-top:8px; min-height:140px;"></textarea>
-      </div>
-
-      <div class="editRow">
-        <div style="font-weight:950;">2-Week Reset Rules</div>
-        <textarea id="resetEditRules" style="margin-top:8px; min-height:140px;"></textarea>
-      </div>
-
-      <div class="rowBtns">
-        <button class="btn danger" id="resetRestoreBtn" type="button">Restore defaults</button>
-        <button class="btn primary" id="resetSaveBtn" type="button">Save reset</button>
-      </div>
+      <div id="infoBody" style="margin-top:10px; line-height:1.45;"></div>
     </div>
   </div>
 
 <script>
-/*************************
- * Default Weekly Plan (your original)
- *************************/
+/***********************
+ * Data + Defaults
+ ***********************/
+const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+/* Your original weekly plan (with the circuit/mobility items present) */
 const DEFAULT_PLAN = {
   Monday: [
     { name: "Incline Dumbbell Press", sets: 3, reps: "10–12" },
@@ -644,201 +680,218 @@ const DEFAULT_PLAN = {
   ]
 };
 
-/*************************
- * Info popups (your exact text)
- *************************/
-const INFO_MAP = {
-  "Core Circuit": {
-    title: "Core Circuit (3 sets • pick 3–4 moves)",
-    html: `
-      <p><b>Pick 3–4 moves below.</b> Do them in a loop.</p>
-      <ul>
-        <li>Rest <b>30–45 sec</b> between moves</li>
-        <li>Rest <b>60–90 sec</b> between rounds</li>
-        <li>Total time: <b>10–15 min</b></li>
-      </ul>
-
-      <h4>Option A (best overall)</h4>
-      <ul>
-        <li>Dead Bug – 8–10/side</li>
-        <li>Bird Dog – 8–10/side</li>
-        <li>Side Plank – 20–30 sec/side</li>
-        <li>Glute Bridge – 12–15</li>
-      </ul>
-
-      <h4>Option B (more “tight waist” feel)</h4>
-      <ul>
-        <li>Pallof Press (band/cable) – 10–12/side</li>
-        <li>Plank – 30–45 sec</li>
-        <li>Suitcase Carry (one dumbbell) – 30–45 sec/side</li>
-        <li>Reverse Crunch – 10–12 (slow)</li>
-      </ul>
-
-      <p><b>👉 Rule:</b> if anything hurts your low back, swap it.</p>
-    `
-  },
-  "Full-Body Circuit": {
-    title: "Full-Body Circuit (3 sets • 8–10 exercises)",
-    html: `
-      <p>This is a <b>moderate pace circuit</b>, not HIIT.</p>
-      <ul>
-        <li>Pick <b>8 exercises</b> (or use the ready-made below)</li>
-        <li>Work <b>35–45 sec</b>, rest <b>15–25 sec</b> between exercises</li>
-        <li>Rest <b>90 sec</b> between rounds</li>
-        <li>Total time: <b>20–30 min</b></li>
-      </ul>
-
-      <h4>Ready-made Full-Body Circuit (fat loss + strength)</h4>
-      <ul>
-        <li>Goblet Squat</li>
-        <li>Dumbbell Row</li>
-        <li>Incline Dumbbell Press (or push-ups)</li>
-        <li>Romanian Deadlift (light–moderate)</li>
-        <li>Shoulder Press</li>
-        <li>Lateral Raise</li>
-        <li>Glute Bridge / Hip Thrust</li>
-        <li>Pallof Press or Dead Bug</li>
-      </ul>
-
-      <h4>Optional 9–10</h4>
-      <ul>
-        <li>Biceps Curl</li>
-        <li>Triceps Rope Pushdown</li>
-      </ul>
-
-      <p><b>👉 Goal:</b> “sweaty but controlled.” Keep weights where form stays clean.</p>
-    `
-  },
-  "Stretching / Mobility": {
-    title: "Stretching / Mobility (10–15 min)",
-    html: `
-      <p>This is your <b>“feel better tomorrow”</b> block.</p>
-
-      <h4>Quick 10–12 minute mobility flow</h4>
-      <ul>
-        <li>Chest opener (doorway) – 45 sec</li>
-        <li>Child’s pose – 45 sec</li>
-        <li>Hip flexor stretch – 45 sec/side</li>
-        <li>Figure-4 glute stretch – 45 sec/side</li>
-        <li>Hamstring stretch – 45 sec/side</li>
-        <li>Thoracic rotation (“open books”) – 8 reps/side</li>
-        <li>Calf stretch – 30–45 sec/side</li>
-      </ul>
-
-      <p><b>If knees are cranky:</b> do more hip + upper body stretches, less deep knee bending.</p>
-    `
-  }
+/* Circuit + Mobility popups (your exact text) */
+const POPUPS = {
+  "Core Circuit": `
+  <div style="font-weight:950; margin-bottom:8px;">Pick 3–4 moves below. Do them in a loop.</div>
+  <ul>
+    <li>Rest 30–45 seconds between moves.</li>
+    <li>Rest 60–90 seconds between rounds.</li>
+    <li><b>Total time:</b> 10–15 minutes</li>
+  </ul>
+  <div style="margin-top:12px; font-weight:950;">Option A (best overall)</div>
+  <ul>
+    <li>Dead Bug – 8–10/side</li>
+    <li>Bird Dog – 8–10/side</li>
+    <li>Side Plank – 20–30 sec/side</li>
+    <li>Glute Bridge – 12–15</li>
+  </ul>
+  <div style="margin-top:12px; font-weight:950;">Option B (more “tight waist” feel)</div>
+  <ul>
+    <li>Pallof Press (band/cable) – 10–12/side</li>
+    <li>Plank – 30–45 sec</li>
+    <li>Suitcase Carry (one dumbbell) – 30–45 sec/side</li>
+    <li>Reverse Crunch – 10–12 (slow)</li>
+  </ul>
+  <div style="margin-top:10px; font-weight:900;">👉 Rule: if anything hurts your low back, swap it.</div>
+  `,
+  "Full-Body Circuit": `
+  <div style="font-weight:950; margin-bottom:8px;">✅ Full-Body Circuit (3 sets • 8–10 exercises)</div>
+  <div>This is a moderate pace circuit, not HIIT.</div>
+  <ul>
+    <li>Pick 8 exercises (or use my ready-made one below).</li>
+    <li>Work 35–45 sec, rest 15–25 sec between exercises.</li>
+    <li>Rest 90 sec between rounds.</li>
+    <li><b>Total time:</b> 20–30 minutes</li>
+  </ul>
+  <div style="margin-top:12px; font-weight:950;">Ready-made Full-Body Circuit (my favorite for fat loss + strength)</div>
+  <ul>
+    <li>Goblet Squat</li>
+    <li>Dumbbell Row</li>
+    <li>Incline Dumbbell Press (or push-ups)</li>
+    <li>Romanian Deadlift (light–moderate)</li>
+    <li>Shoulder Press</li>
+    <li>Lateral Raise</li>
+    <li>Glute Bridge / Hip Thrust</li>
+    <li>Pallof Press or Dead Bug</li>
+  </ul>
+  <div style="margin-top:10px; font-weight:900;">Optional 9–10:</div>
+  <ul>
+    <li>Biceps Curl</li>
+    <li>Triceps Rope Pushdown</li>
+  </ul>
+  <div style="margin-top:10px;"><b>👉 Keep weights</b> where you can maintain good form. The goal is “sweaty but controlled.”</div>
+  `,
+  "Stretching / Mobility": `
+  <div style="font-weight:950; margin-bottom:8px;">✅ Stretching / Mobility (10–15 min)</div>
+  <div>This is your “feel better tomorrow” block.</div>
+  <div style="margin-top:10px; font-weight:950;">Quick 10–12 minute mobility flow</div>
+  <ul>
+    <li>Chest opener stretch (doorway) – 45 sec</li>
+    <li>Child’s pose – 45 sec</li>
+    <li>Hip flexor stretch – 45 sec/side</li>
+    <li>Figure-4 glute stretch – 45 sec/side</li>
+    <li>Hamstring stretch – 45 sec/side</li>
+    <li>Thoracic rotation (“open books”) – 8 reps/side</li>
+    <li>Calf stretch – 30–45 sec/side</li>
+  </ul>
+  <div style="margin-top:10px;"><b>If knees are cranky:</b> do hip + upper body stretches more, less deep knee bending.</div>
+  `
 };
 
-/*************************
- * Health Reset defaults (editable via modal)
- *************************/
-const RESET_DEFAULTS = {
+/* Exercise Library (for picker in Edit Plan) */
+const EX_LIBRARY = {
+  "Chest": [
+    {name:"Incline Dumbbell Press", sets:3, reps:"10–12"},
+    {name:"Dumbbell Bench Press", sets:3, reps:"8–12"},
+    {name:"Push-Ups", sets:3, reps:"AMRAP"},
+    {name:"Incline Push-Ups", sets:3, reps:"AMRAP"}
+  ],
+  "Back": [
+    {name:"Lat Pulldown", sets:3, reps:"10–12"},
+    {name:"Dumbbell Row", sets:3, reps:"10–12"},
+    {name:"Seated Cable Row", sets:3, reps:"10–12"},
+    {name:"Face Pulls", sets:3, reps:"12–15"}
+  ],
+  "Shoulders": [
+    {name:"Dumbbell Shoulder Press", sets:3, reps:"10–12"},
+    {name:"Lateral Raises", sets:3, reps:"12–15"},
+    {name:"Rear Delt Fly", sets:3, reps:"12–15"}
+  ],
+  "Biceps": [
+    {name:"Biceps Curls", sets:3, reps:"10–12"},
+    {name:"Hammer Curls", sets:3, reps:"12–15"}
+  ],
+  "Triceps": [
+    {name:"Triceps Rope Pushdown", sets:3, reps:"12–15"},
+    {name:"Overhead Triceps Extension", sets:3, reps:"10–12"},
+    {name:"Bench Dips", sets:3, reps:"12–15"}
+  ],
+  "Legs/Glutes": [
+    {name:"Goblet Squat", sets:3, reps:"10–12"},
+    {name:"Romanian Deadlift", sets:3, reps:"10–12"},
+    {name:"Leg Press or Step-Ups", sets:3, reps:"10–12"},
+    {name:"Lunges (or split squats)", sets:3, reps:"10–12/leg"},
+    {name:"Hamstring Curl", sets:3, reps:"10–12"},
+    {name:"Glute Bridge/Hip Thrust", sets:3, reps:"12–15"},
+    {name:"Calf Raises", sets:3, reps:"15–20"}
+  ],
+  "Core": [
+    {name:"Dead Bug", sets:3, reps:"8–10/side"},
+    {name:"Bird Dog", sets:3, reps:"8–10/side"},
+    {name:"Pallof Press", sets:3, reps:"10–12/side"},
+    {name:"Plank", sets:3, reps:"30–45 sec"}
+  ],
+  "Cardio": [
+    {name:"Walking Treadmill", sets:1, reps:"20–30 min"},
+    {name:"Optional: Light Walk", sets:1, reps:"20–40 min"}
+  ],
+  "Mobility": [
+    {name:"Stretching / Mobility", sets:1, reps:"10–15 min"},
+    {name:"Stretching / Yoga", sets:1, reps:"10–20 min"},
+    {name:"Rest / Mobility", sets:1, reps:"10–20 min"}
+  ],
+  "Circuits": [
+    {name:"Core Circuit", sets:3, reps:"3–4 exercises"},
+    {name:"Full-Body Circuit", sets:3, reps:"8–10 exercises"},
+    {name:"Extra Arms / Glutes", sets:2, reps:"Choose your favs"}
+  ]
+};
+
+/* Health Reset defaults (editable) */
+const RESET_DEFAULT = {
   morning: [
     { key:"synthroid", title:"6:30 AM: Synthroid (empty stomach)", sub:"Water is fine. Avoid supplements/minerals/fiber for 45–60 minutes." },
     { key:"lemon", title:"Warm lemon water at work is OK", sub:"No minerals in lemon = fine with Synthroid timing." },
     { key:"coffee", title:"Coffee + collagen after your wait window", sub:"Aim for 45–60 minutes after Synthroid." },
-    { key:"salt", title:"Baja Gold salt water after coffee", sub:"Small sips earlier are fine; finishing later is cleanest." }
+    { key:"salt", title:"Finish Baja Gold salt water after coffee", sub:"Small sips earlier are fine; finishing later is the cleanest." }
   ],
   supps: [
-    { key:"lunch_berberine", title:"Lunch: Berberine (if keeping it)", sub:"With food. If it ever bloats you again, pause and reassess." },
     { key:"lunch_probiotic", title:"Lunch: Good Girl Probiotic", sub:"Keep consistent." },
     { key:"lunch_omega", title:"Lunch: Omega-3", sub:"With food." },
     { key:"dinner_multi", title:"Dinner: MultiComplete", sub:"Keeps minerals away from Synthroid." },
-    { key:"dinner_citrucel", title:"Dinner: Citrucel", sub:"Keeps fiber away from Synthroid window." },
+    { key:"dinner_chromium", title:"Dinner: Chromium picolinate (if using)", sub:"Best with your higher-carb meal." },
+    { key:"dinner_citrucel", title:"Dinner: Citrucel", sub:"Helps keep fiber away from Synthroid window." },
     { key:"bed_mag", title:"Bedtime: Magnesium", sub:"Supports sleep + insulin sensitivity." },
-    { key:"asneeded_flatter", title:"As needed: HUM Flatter Me", sub:"With the FIRST bite of heavier/carb meals." }
+    { key:"asneeded_hum", title:"As needed: HUM Flatter Me", sub:"With the FIRST bite of heavy/carb meals." }
   ],
   rules: [
-    { key:"protein", title:"Protein first at every meal", sub:"This stabilizes insulin and reduces cravings." },
+    { key:"protein", title:"Protein first at every meal", sub:"Stabilizes appetite and blood sugar." },
     { key:"carb_once", title:"Carbs once per day", sub:"Pick the meal you want them most." },
     { key:"portion", title:"Heavy-carb meals: cut portion in half", sub:"Eat protein first, then carbs. Stop at satisfied." },
-    { key:"walk", title:"Walk 10–15 minutes after carb meals", sub:"This is a game-changer for glucose control." },
-    { key:"no_hiit", title:"No punishment HIIT", sub:"Keep cortisol lower for better fat loss." }
+    { key:"walk", title:"Walk 10–15 minutes after carb meals", sub:"Big impact on glucose control." },
+    { key:"no_hiit", title:"No punishment HIIT", sub:"Keep stress lower for easier fat loss." }
   ]
 };
 
-/*************************
- * LocalStorage keys
- *************************/
+/***********************
+ * Storage
+ ***********************/
 const LS = {
-  workoutProgress: "pu_progress_v2",        // { dayName: { exIndex: {done, weight, notes} } }
-  resetChecks: "pu_resetChecks_v2",         // { "YYYY-MM-DD": { key: true } }
-  planOverride: "pu_planOverride_v2",       // full PLAN object override
-  resetOverride: "pu_resetOverride_v2",     // { morning:[], supps:[], rules:[] }
-  measurements: "pu_measurements_v2"        // { weekKey: { ...fields } }
+  workoutProgress: "pu_progress_v2",   // { dayName: { exIndex: {done, weight, notes} } }
+  planOverride: "pu_planOverride_v2",  // plan object
+  resetChecks: "pu_resetChecks_v2",    // { "YYYY-MM-DD": { key: true } }
+  resetOverride: "pu_resetOverride_v2",// {morning:[], supps:[], rules:[]}
+  measurements: "pu_measurements_v2"   // { weekKey: {fields...} }
 };
 
-/*************************
+function load(key, fallback){
+  try{
+    const v = JSON.parse(localStorage.getItem(key));
+    return (v === null || v === undefined) ? fallback : v;
+  }catch{ return fallback; }
+}
+function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+
+/***********************
  * Date helpers
- *************************/
-const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+ ***********************/
 function pad(n){ return String(n).padStart(2,"0"); }
 function isoDate(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
 function prettyDate(d){
   return d.toLocaleDateString(undefined, { weekday:"long", month:"short", day:"numeric", year:"numeric" });
 }
-function currentDayName(){ return new Date().toLocaleDateString(undefined, { weekday:"long" }); }
-function weekKey(d=new Date()){
-  // ISO-ish week key: YYYY-Www (simple Monday-based)
-  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  const dayNum = date.getUTCDay() || 7;
-  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
-  const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1)/7);
-  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
+function currentDayName(){
+  return new Date().toLocaleDateString(undefined, { weekday:"long" });
+}
+/* Week key = Monday of current week */
+function weekKey(d){
+  const x = new Date(d);
+  const day = x.getDay(); // 0 Sun, 1 Mon...
+  const diff = (day === 0 ? -6 : (1 - day)); // move to Monday
+  x.setDate(x.getDate() + diff);
+  return isoDate(x);
 }
 
-/*************************
- * Storage helpers
- *************************/
-function load(key, fallback){
-  try{
-    const v = JSON.parse(localStorage.getItem(key));
-    return (v === null || v === undefined) ? fallback : v;
-  }catch{
-    return fallback;
-  }
-}
-function save(key, val){
-  localStorage.setItem(key, JSON.stringify(val));
-}
-
-/*************************
- * Plan source
- *************************/
+/***********************
+ * Plan
+ ***********************/
 function getPlan(){
   const override = load(LS.planOverride, null);
-  if(override && typeof override === "object") return override;
-  return DEFAULT_PLAN;
+  return (override && typeof override === "object") ? override : DEFAULT_PLAN;
 }
-function setPlan(plan){
-  save(LS.planOverride, plan);
-}
+function setPlan(plan){ save(LS.planOverride, plan); }
 
-/*************************
- * Reset source (editable)
- *************************/
-function getResetData(){
-  const o = load(LS.resetOverride, null);
-  if(o && o.morning && o.supps && o.rules) return o;
-  return structuredClone(RESET_DEFAULTS);
-}
-function setResetData(obj){
-  save(LS.resetOverride, obj);
-}
-
-/*************************
- * App state
- *************************/
+/***********************
+ * App State
+ ***********************/
 const today = new Date();
 const todayISO = isoDate(today);
-const defaultSelected = DAYS.includes(currentDayName()) ? currentDayName() : "Monday";
-let selectedDay = defaultSelected;
+let selectedDay = DAYS.includes(currentDayName()) ? currentDayName() : "Monday";
 
-/*************************
+/***********************
  * Tabs
- *************************/
+ ***********************/
 const tabEls = Array.from(document.querySelectorAll(".tab"));
 const sections = {
   workout: document.getElementById("tab-workout"),
@@ -851,8 +904,7 @@ tabEls.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
 
 function setTab(name){
   tabEls.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
-  Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none");
-
+  Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none";
   if(name === "workout") renderWorkout();
   if(name === "progress") renderProgress();
   if(name === "week") renderWeekSummary();
@@ -860,15 +912,9 @@ function setTab(name){
   if(name === "measurements") renderMeasurements();
 }
 
-/*************************
- * Workout rendering
- *************************/
-const dayTitle = document.getElementById("dayTitle");
-const allDonePill = document.getElementById("allDonePill");
-const dayChips = document.getElementById("dayChips");
-const exerciseList = document.getElementById("exerciseList");
-const resetTodayLink = document.getElementById("resetTodayLink");
-
+/***********************
+ * Workout Progress
+ ***********************/
 function getProgress(){ return load(LS.workoutProgress, {}); }
 function setExerciseField(day, idx, field, value){
   const p = getProgress();
@@ -887,6 +933,24 @@ function resetDayProgress(day){
   save(LS.workoutProgress, p);
 }
 
+function dayCompletion(day){
+  const plan = getPlan();
+  const exercises = plan[day] || [];
+  if(exercises.length === 0) return { done:0, total:0, pct:0 };
+  let done = 0;
+  exercises.forEach((_, idx) => { if(getExerciseState(day, idx).done) done++; });
+  return { done, total: exercises.length, pct: Math.round((done / exercises.length) * 100) };
+}
+
+/***********************
+ * Render Workout
+ ***********************/
+const dayTitle = document.getElementById("dayTitle");
+const allDonePill = document.getElementById("allDonePill");
+const dayChips = document.getElementById("dayChips");
+const exerciseList = document.getElementById("exerciseList");
+const resetTodayLink = document.getElementById("resetTodayLink");
+
 function renderDayChips(){
   dayChips.innerHTML = "";
   DAYS.forEach(d => {
@@ -894,10 +958,7 @@ function renderDayChips(){
     c.className = "chip" + (d === selectedDay ? " active" : "");
     c.textContent = d.slice(0,3);
     c.title = d;
-    c.addEventListener("click", () => {
-      selectedDay = d;
-      renderWorkout();
-    });
+    c.addEventListener("click", () => { selectedDay = d; renderWorkout(); });
     dayChips.appendChild(c);
   });
 }
@@ -916,15 +977,18 @@ function renderWorkout(){
     const st = getExerciseState(selectedDay, idx);
     if(st.done) doneCount++;
 
-    const isInfo = !!INFO_MAP[ex.name];
+    const isPopup = !!POPUPS[ex.name];
 
     const wrap = document.createElement("div");
     wrap.className = "ex";
     wrap.innerHTML = `
       <div class="exHead">
         <div>
-          <p class="exName ${isInfo ? "clickable" : ""}">${escapeHtml(ex.name)}</p>
-          <div class="exMeta">${ex.sets} sets • ${escapeHtml(ex.reps)}</div>
+          <p class="exName">
+            ${escapeHtml(ex.name)}
+          </p>
+          <div class="exMeta">${escapeHtml(String(ex.sets))} sets • ${escapeHtml(ex.reps)}</div>
+          ${isPopup ? `<button class="linkBtn" type="button" style="margin-top:8px;">View details</button>` : ``}
         </div>
 
         <button class="doneBtn ${st.done ? "checked" : ""}" type="button">
@@ -948,7 +1012,6 @@ function renderWorkout(){
     const doneBtn = wrap.querySelector(".doneBtn");
     const weightInput = wrap.querySelector("input");
     const notesArea = wrap.querySelector("textarea");
-    const nameEl = wrap.querySelector(".exName");
 
     doneBtn.addEventListener("click", () => {
       const cur = getExerciseState(selectedDay, idx);
@@ -961,8 +1024,9 @@ function renderWorkout(){
     weightInput.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "weight", e.target.value));
     notesArea.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "notes", e.target.value));
 
-    if(isInfo){
-      nameEl.addEventListener("click", () => openInfo(ex.name));
+    const detailsBtn = wrap.querySelector(".linkBtn");
+    if(detailsBtn){
+      detailsBtn.addEventListener("click", () => openInfo(ex.name));
     }
 
     exerciseList.appendChild(wrap);
@@ -986,23 +1050,14 @@ resetTodayLink.addEventListener("click", () => {
   }
 });
 
-/*************************
- * Progress + Week summary
- *************************/
+/***********************
+ * Progress + Week Summary
+ ***********************/
 const statToday = document.getElementById("statToday");
 const statTodayCount = document.getElementById("statTodayCount");
 const statWeekDays = document.getElementById("statWeekDays");
 const weekSummary = document.getElementById("weekSummary");
 
-function dayCompletion(day){
-  const plan = getPlan();
-  const exercises = plan[day] || [];
-  if(exercises.length === 0) return { done:0, total:0, pct:0 };
-  let done = 0;
-  exercises.forEach((_, idx) => { if(getExerciseState(day, idx).done) done++; });
-  const pct = Math.round((done / exercises.length) * 100);
-  return { done, total: exercises.length, pct };
-}
 function renderProgress(){
   const todayName = currentDayName();
   const c = dayCompletion(todayName);
@@ -1016,6 +1071,7 @@ function renderProgress(){
   });
   statWeekDays.textContent = String(completedDays);
 }
+
 function renderWeekSummary(){
   weekSummary.innerHTML = "";
   DAYS.forEach(d => {
@@ -1036,12 +1092,19 @@ function renderWeekSummary(){
   });
 }
 
-/*************************
- * Health Reset (daily checks by date)
- *************************/
+/***********************
+ * Health Reset (editable + daily checks)
+ ***********************/
 const resetMorningEl = document.getElementById("resetMorning");
 const resetSuppsEl = document.getElementById("resetSupps");
 const resetRulesEl = document.getElementById("resetRules");
+
+function getResetData(){
+  const override = load(LS.resetOverride, null);
+  if(override && override.morning && override.supps && override.rules) return override;
+  return RESET_DEFAULT;
+}
+function setResetData(data){ save(LS.resetOverride, data); }
 
 function getResetChecks(){ return load(LS.resetChecks, {}); }
 function getChecksForToday(){
@@ -1055,7 +1118,6 @@ function setCheck(key, val){
   all[todayISO] = day;
   save(LS.resetChecks, all);
 }
-
 function renderResetSection(container, items){
   container.innerHTML = "";
   const checks = getChecksForToday();
@@ -1074,86 +1136,98 @@ function renderResetSection(container, items){
     container.appendChild(row);
   });
 }
-
 function renderReset(){
-  const r = getResetData();
-  renderResetSection(resetMorningEl, r.morning);
-  renderResetSection(resetSuppsEl, r.supps);
-  renderResetSection(resetRulesEl, r.rules);
+  const data = getResetData();
+  renderResetSection(resetMorningEl, data.morning);
+  renderResetSection(resetSuppsEl, data.supps);
+  renderResetSection(resetRulesEl, data.rules);
 }
 
-/*************************
+/***********************
  * Measurements (weekly)
- *************************/
-const measFields = ["weight","waist","hips","chest","thigh","arm"];
+ ***********************/
+const mFields = ["weight","waist","hips","chest","thigh","arm"];
+const measHistory = document.getElementById("measHistory");
 const measSaveBtn = document.getElementById("measSaveBtn");
 const measClearBtn = document.getElementById("measClearBtn");
-const measHistory = document.getElementById("measHistory");
 
 function getMeasurements(){ return load(LS.measurements, {}); }
-function setMeasurements(obj){ save(LS.measurements, obj); }
+function setMeasurements(v){ save(LS.measurements, v); }
 
 function renderMeasurements(){
   const wk = weekKey(new Date());
   const all = getMeasurements();
   const cur = all[wk] || {};
 
-  measFields.forEach(f => {
+  mFields.forEach(f => {
     const el = document.getElementById("m_"+f);
-    if(el) el.value = cur[f] || "";
+    el.value = cur[f] || "";
   });
 
   // history
   measHistory.innerHTML = "";
   const keys = Object.keys(all).sort().reverse();
   if(keys.length === 0){
-    measHistory.innerHTML = `<div class="hint" style="margin-top:10px;">No saved weeks yet.</div>`;
+    measHistory.innerHTML = `<div class="hint" style="margin-top:10px;">No entries yet.</div>`;
     return;
   }
 
   keys.forEach(k => {
-    const v = all[k] || {};
     const row = document.createElement("div");
     row.className = "ex";
-    row.style.padding = "12px 14px";
+    row.style.padding="12px 14px";
+    const v = all[k] || {};
     row.innerHTML = `
-      <div style="font-weight:950;">${escapeHtml(k)}</div>
-      <div class="exMeta" style="margin-top:6px;">
-        Weight: <b>${escapeHtml(v.weight || "—")}</b> •
-        Waist: <b>${escapeHtml(v.waist || "—")}</b> •
-        Hips: <b>${escapeHtml(v.hips || "—")}</b> •
-        Chest: <b>${escapeHtml(v.chest || "—")}</b> •
-        Thigh: <b>${escapeHtml(v.thigh || "—")}</b> •
-        Arm: <b>${escapeHtml(v.arm || "—")}</b>
+      <div style="font-weight:950;">Week of ${escapeHtml(k)}</div>
+      <div class="small">
+        Weight: <b>${escapeHtml(v.weight||"—")}</b> • Waist: <b>${escapeHtml(v.waist||"—")}</b> • Hips: <b>${escapeHtml(v.hips||"—")}</b>
+        <br/>Chest: <b>${escapeHtml(v.chest||"—")}</b> • Thigh: <b>${escapeHtml(v.thigh||"—")}</b> • Arm: <b>${escapeHtml(v.arm||"—")}</b>
       </div>
     `;
     measHistory.appendChild(row);
   });
 }
 
-measSaveBtn?.addEventListener("click", () => {
+measSaveBtn.addEventListener("click", () => {
   const wk = weekKey(new Date());
   const all = getMeasurements();
   all[wk] = all[wk] || {};
-  measFields.forEach(f => {
-    const el = document.getElementById("m_"+f);
-    all[wk][f] = (el?.value || "").trim();
-  });
+  mFields.forEach(f => { all[wk][f] = (document.getElementById("m_"+f).value || "").trim(); });
   setMeasurements(all);
   alert("Saved!");
   renderMeasurements();
 });
-measClearBtn?.addEventListener("click", () => {
-  if(!confirm("Clear this week's fields (does not delete your saved history)?")) return;
-  measFields.forEach(f => {
-    const el = document.getElementById("m_"+f);
-    if(el) el.value = "";
-  });
+
+measClearBtn.addEventListener("click", () => {
+  const wk = weekKey(new Date());
+  if(!confirm("Clear this week's fields?")) return;
+  mFields.forEach(f => { document.getElementById("m_"+f).value = ""; });
+  const all = getMeasurements();
+  if(all[wk]){ delete all[wk]; setMeasurements(all); }
+  renderMeasurements();
 });
 
-/*************************
- * Edit Plan Modal
- *************************/
+/***********************
+ * Info popup
+ ***********************/
+const infoBack = document.getElementById("infoBack");
+const infoTitle = document.getElementById("infoTitle");
+const infoSub = document.getElementById("infoSub");
+const infoBody = document.getElementById("infoBody");
+document.getElementById("infoCloseBtn").addEventListener("click", closeInfo);
+infoBack.addEventListener("click", (e)=>{ if(e.target===infoBack) closeInfo(); });
+
+function openInfo(name){
+  infoTitle.textContent = name;
+  infoSub.textContent = "Quick guide";
+  infoBody.innerHTML = POPUPS[name] || `<div class="hint">No details yet.</div>`;
+  infoBack.style.display = "flex";
+}
+function closeInfo(){ infoBack.style.display = "none"; }
+
+/***********************
+ * Edit Plan Modal (with library picker)
+ ***********************/
 const editPlanBtn = document.getElementById("editPlanBtn");
 const modalBack = document.getElementById("modalBack");
 const editorBody = document.getElementById("editorBody");
@@ -1174,6 +1248,23 @@ function closeEditor(){
   modalBack.style.display = "none";
   draftPlan = null;
 }
+modalBack.addEventListener("click", (e)=>{ if(e.target===modalBack) closeEditor(); });
+
+editPlanBtn.addEventListener("click", openEditor);
+closeModalBtn.addEventListener("click", closeEditor);
+cancelEditBtn.addEventListener("click", closeEditor);
+
+function categoryOptions(){
+  const cats = Object.keys(EX_LIBRARY);
+  return cats.map(c => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join("");
+}
+function exerciseOptions(cat){
+  const list = EX_LIBRARY[cat] || [];
+  return [`<option value="">— choose —</option>`]
+    .concat(list.map((x, i)=> `<option value="${i}">${escapeHtml(x.name)}</option>`))
+    .join("");
+}
+
 function renderEditorRows(){
   editorBody.innerHTML = "";
   const list = (draftPlan && draftPlan[selectedDay]) ? draftPlan[selectedDay] : [];
@@ -1181,7 +1272,7 @@ function renderEditorRows(){
   if(list.length === 0){
     const empty = document.createElement("div");
     empty.className = "editRow";
-    empty.innerHTML = `<div style="font-weight:900;">No exercises yet.</div><div style="color:var(--muted);font-weight:650;margin-top:4px;">Click “Add exercise” to create one.</div>`;
+    empty.innerHTML = `<div style="font-weight:950;">No exercises yet.</div><div class="small">Click “Add exercise” to create one.</div>`;
     editorBody.appendChild(empty);
     return;
   }
@@ -1189,6 +1280,11 @@ function renderEditorRows(){
   list.forEach((ex, idx) => {
     const row = document.createElement("div");
     row.className = "editRow";
+
+    // default category guess
+    const cats = Object.keys(EX_LIBRARY);
+    let guess = cats.find(c => (EX_LIBRARY[c]||[]).some(x => x.name === ex.name)) || "Chest";
+
     row.innerHTML = `
       <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap;">
         <div style="font-weight:950;">Exercise ${idx+1}</div>
@@ -1197,29 +1293,77 @@ function renderEditorRows(){
 
       <div class="editGrid">
         <div>
-          <label>Name</label>
-          <input type="text" value="${escapeAttr(ex.name || "")}" />
+          <label>Category</label>
+          <select class="catSel">${categoryOptions()}</select>
+        </div>
+        <div>
+          <label>Pick from library</label>
+          <select class="pickSel"></select>
         </div>
         <div>
           <label>Sets</label>
-          <input type="number" min="1" step="1" value="${escapeAttr(ex.sets ?? 3)}" />
+          <input class="setsIn" type="number" min="1" step="1" value="${escapeAttr(ex.sets ?? 3)}" />
+        </div>
+      </div>
+
+      <div class="editGrid" style="grid-template-columns: 2fr 1fr 1fr; margin-top:10px;">
+        <div>
+          <label>Name (you can type)</label>
+          <input class="nameIn" type="text" value="${escapeAttr(ex.name || "")}" />
         </div>
         <div>
           <label>Reps</label>
-          <input type="text" value="${escapeAttr(ex.reps || "")}" />
+          <input class="repsIn" type="text" value="${escapeAttr(ex.reps || "")}" />
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+          <button class="btn" type="button" style="width:100%;">View details</button>
         </div>
       </div>
+      <div class="small">“View details” works for Core Circuit / Full-Body Circuit / Stretching.</div>
     `;
 
-    const delBtn = row.querySelector("button");
-    const [nameInput, setsInput, repsInput] = row.querySelectorAll("input");
+    const delBtn = row.querySelector(".btn.danger");
+    const catSel = row.querySelector(".catSel");
+    const pickSel = row.querySelector(".pickSel");
+    const nameIn = row.querySelector(".nameIn");
+    const setsIn = row.querySelector(".setsIn");
+    const repsIn = row.querySelector(".repsIn");
+    const detailsBtn = row.querySelectorAll(".btn")[1];
 
-    nameInput.addEventListener("input", (e) => { draftPlan[selectedDay][idx].name = e.target.value; });
-    setsInput.addEventListener("input", (e) => {
+    catSel.value = guess;
+    pickSel.innerHTML = exerciseOptions(catSel.value);
+
+    catSel.addEventListener("change", () => {
+      pickSel.innerHTML = exerciseOptions(catSel.value);
+      pickSel.value = "";
+    });
+
+    pickSel.addEventListener("change", () => {
+      const i = parseInt(pickSel.value, 10);
+      const list = EX_LIBRARY[catSel.value] || [];
+      const chosen = Number.isFinite(i) ? list[i] : null;
+      if(!chosen) return;
+      draftPlan[selectedDay][idx].name = chosen.name;
+      draftPlan[selectedDay][idx].sets = chosen.sets;
+      draftPlan[selectedDay][idx].reps = chosen.reps;
+
+      nameIn.value = chosen.name;
+      setsIn.value = chosen.sets;
+      repsIn.value = chosen.reps;
+    });
+
+    nameIn.addEventListener("input", (e) => { draftPlan[selectedDay][idx].name = e.target.value; });
+    setsIn.addEventListener("input", (e) => {
       const v = parseInt(e.target.value, 10);
       draftPlan[selectedDay][idx].sets = Number.isFinite(v) && v > 0 ? v : 1;
     });
-    repsInput.addEventListener("input", (e) => { draftPlan[selectedDay][idx].reps = e.target.value; });
+    repsIn.addEventListener("input", (e) => { draftPlan[selectedDay][idx].reps = e.target.value; });
+
+    detailsBtn.addEventListener("click", () => {
+      const nm = (draftPlan[selectedDay][idx].name || "").trim();
+      if(POPUPS[nm]) openInfo(nm);
+      else alert("Details are only set up for Core Circuit, Full-Body Circuit, and Stretching / Mobility right now.");
+    });
 
     delBtn.addEventListener("click", () => {
       if(!confirm("Delete this exercise?")) return;
@@ -1230,12 +1374,6 @@ function renderEditorRows(){
     editorBody.appendChild(row);
   });
 }
-
-editPlanBtn.addEventListener("click", openEditor);
-closeModalBtn.addEventListener("click", closeEditor);
-cancelEditBtn.addEventListener("click", closeEditor);
-
-modalBack.addEventListener("click", (e) => { if(e.target === modalBack) closeEditor(); });
 
 addExerciseBtn.addEventListener("click", () => {
   if(!draftPlan[selectedDay]) draftPlan[selectedDay] = [];
@@ -1269,92 +1407,156 @@ saveEditBtn.addEventListener("click", () => {
   alert("Plan saved!");
 });
 
-/*************************
- * Info popup modal
- *************************/
-const infoBack = document.getElementById("infoBack");
-const infoTitle = document.getElementById("infoTitle");
-const infoSub = document.getElementById("infoSub");
-const infoBody = document.getElementById("infoBody");
-const infoCloseBtn = document.getElementById("infoCloseBtn");
-
-function openInfo(name){
-  const d = INFO_MAP[name];
-  if(!d) return;
-  infoTitle.textContent = d.title;
-  infoSub.textContent = "Tap Close when you’re done.";
-  infoBody.innerHTML = d.html;
-  infoBack.style.display = "flex";
-}
-function closeInfo(){ infoBack.style.display = "none"; }
-infoCloseBtn.addEventListener("click", closeInfo);
-infoBack.addEventListener("click", (e) => { if(e.target === infoBack) closeInfo(); });
-
-/*************************
- * Edit Reset modal
- *************************/
+/***********************
+ * Reset Editor
+ ***********************/
 const editResetBtn = document.getElementById("editResetBtn");
 const resetBack = document.getElementById("resetBack");
+const resetEditorBody = document.getElementById("resetEditorBody");
 const resetCloseBtn = document.getElementById("resetCloseBtn");
 const resetSaveBtn = document.getElementById("resetSaveBtn");
 const resetRestoreBtn = document.getElementById("resetRestoreBtn");
-const resetEditMorning = document.getElementById("resetEditMorning");
-const resetEditSupps = document.getElementById("resetEditSupps");
-const resetEditRules = document.getElementById("resetEditRules");
 
-function linesFromItems(items){
-  return items.map(it => `${it.title} | ${it.sub}`).join("\n");
-}
-function itemsFromLines(text, prefix){
-  const lines = String(text || "").split("\n").map(s => s.trim()).filter(Boolean);
-  return lines.map((line, i) => {
-    const parts = line.split("|");
-    const title = (parts[0] || "").trim();
-    const sub = (parts.slice(1).join("|") || "").trim();
-    return {
-      key: `${prefix}_${i}_${title.toLowerCase().replace(/\W+/g,"_").slice(0,30)}`,
-      title: title || "Untitled",
-      sub: sub || ""
-    };
-  });
-}
+let resetDraft = null;
 
 function openResetEditor(){
-  const r = getResetData();
-  resetEditMorning.value = linesFromItems(r.morning);
-  resetEditSupps.value = linesFromItems(r.supps);
-  resetEditRules.value = linesFromItems(r.rules);
+  resetDraft = structuredClone(getResetData());
+  renderResetEditor();
   resetBack.style.display = "flex";
 }
-function closeResetEditor(){ resetBack.style.display = "none"; }
+function closeResetEditor(){
+  resetBack.style.display = "none";
+  resetDraft = null;
+}
+resetBack.addEventListener("click", (e)=>{ if(e.target===resetBack) closeResetEditor(); });
 
 editResetBtn.addEventListener("click", openResetEditor);
 resetCloseBtn.addEventListener("click", closeResetEditor);
-resetBack.addEventListener("click", (e) => { if(e.target === resetBack) closeResetEditor(); });
+
+function renderResetEditor(){
+  resetEditorBody.innerHTML = "";
+
+  const sections = [
+    {key:"morning", title:"Morning Thyroid Routine"},
+    {key:"supps", title:"Supplements Schedule"},
+    {key:"rules", title:"2-Week Reset Rules"}
+  ];
+
+  sections.forEach(sec => {
+    const box = document.createElement("div");
+    box.className = "editRow";
+    box.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div style="font-weight:950;">${escapeHtml(sec.title)}</div>
+        <button class="btn" type="button">+ Add</button>
+      </div>
+      <div class="small">Edit text freely. “Key” is used for daily checkmarks.</div>
+      <div class="secBody" style="margin-top:8px;"></div>
+    `;
+
+    const addBtn = box.querySelector(".btn");
+    const secBody = box.querySelector(".secBody");
+
+    function renderItems(){
+      secBody.innerHTML = "";
+      const items = resetDraft[sec.key] || [];
+      items.forEach((it, i) => {
+        const row = document.createElement("div");
+        row.className = "editRow";
+        row.style.marginTop = "10px";
+        row.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+            <div style="font-weight:900;">Item ${i+1}</div>
+            <button class="btn danger" type="button">Delete</button>
+          </div>
+          <div class="editGrid">
+            <div>
+              <label>Key</label>
+              <input type="text" value="${escapeAttr(it.key || "")}">
+            </div>
+            <div style="grid-column: span 2;">
+              <label>Title</label>
+              <input type="text" value="${escapeAttr(it.title || "")}">
+            </div>
+          </div>
+          <div style="margin-top:10px;">
+            <label>Subtext</label>
+            <input type="text" value="${escapeAttr(it.sub || "")}">
+          </div>
+        `;
+
+        const del = row.querySelector(".btn.danger");
+        const inputs = row.querySelectorAll("input");
+        const [keyIn, titleIn, subIn] = inputs;
+
+        keyIn.addEventListener("input", e => resetDraft[sec.key][i].key = e.target.value);
+        titleIn.addEventListener("input", e => resetDraft[sec.key][i].title = e.target.value);
+        subIn.addEventListener("input", e => resetDraft[sec.key][i].sub = e.target.value);
+
+        del.addEventListener("click", () => {
+          if(!confirm("Delete this item?")) return;
+          resetDraft[sec.key].splice(i,1);
+          renderItems();
+        });
+
+        secBody.appendChild(row);
+      });
+    }
+
+    addBtn.addEventListener("click", () => {
+      resetDraft[sec.key] = resetDraft[sec.key] || [];
+      resetDraft[sec.key].push({ key:`new_${Date.now()}`, title:"New item", sub:"" });
+      renderItems();
+    });
+
+    renderItems();
+    resetEditorBody.appendChild(box);
+  });
+}
 
 resetRestoreBtn.addEventListener("click", () => {
-  if(!confirm("Restore default reset text?")) return;
-  setResetData(structuredClone(RESET_DEFAULTS));
+  if(!confirm("Restore Health Reset defaults?")) return;
+  setResetData(structuredClone(RESET_DEFAULT));
+  closeResetEditor();
   renderReset();
   alert("Reset defaults restored.");
-  closeResetEditor();
 });
 
 resetSaveBtn.addEventListener("click", () => {
-  const obj = {
-    morning: itemsFromLines(resetEditMorning.value, "morning"),
-    supps: itemsFromLines(resetEditSupps.value, "supps"),
-    rules: itemsFromLines(resetEditRules.value, "rules")
-  };
-  setResetData(obj);
-  renderReset();
-  alert("Reset saved!");
+  // sanitize
+  ["morning","supps","rules"].forEach(k => {
+    resetDraft[k] = (resetDraft[k] || []).map(it => ({
+      key: String(it.key || "").trim() || `key_${Math.random().toString(16).slice(2)}`,
+      title: String(it.title || "").trim() || "Untitled",
+      sub: String(it.sub || "").trim() || ""
+    }));
+  });
+  setResetData(resetDraft);
   closeResetEditor();
+  renderReset();
+  alert("Health Reset saved!");
 });
 
-/*************************
+/***********************
+ * Boot
+ ***********************/
+document.getElementById("dateLine").textContent = prettyDate(today);
+
+// Monday pulse on title (Monday = 1)
+if(new Date().getDay() === 1){
+  document.getElementById("appTitle").classList.add("mondayPulse");
+}
+
+renderWorkout();
+renderProgress();
+renderWeekSummary();
+renderReset();
+renderMeasurements();
+setTab("workout");
+
+/***********************
  * Escapes
- *************************/
+ ***********************/
 function escapeHtml(str){
   return String(str)
     .replaceAll("&","&amp;")
@@ -1366,23 +1568,6 @@ function escapeHtml(str){
 function escapeAttr(str){
   return escapeHtml(str).replaceAll("\n"," ");
 }
-
-/*************************
- * Boot
- *************************/
-document.getElementById("dateLine").textContent = prettyDate(today);
-
-// Monday pulse
-if(new Date().getDay() === 1){
-  document.getElementById("appTitle").classList.add("mondayPulse");
-}
-
-renderWorkout();
-renderProgress();
-renderWeekSummary();
-renderReset();
-renderMeasurements();
-setTab("workout");
 </script>
 </body>
 </html>
