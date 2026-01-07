@@ -2,1487 +2,489 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Power Up</title>
+  <title>My Daily Workout</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Optional PWA bits (keep if you already have these files) -->
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#2c7be5" />
-  <link rel="apple-touch-icon" href="wk-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-
   <style>
-    :root{
-      --bg:#f5f6f8;
-      --card:#ffffff;
-      --text:#101828;
-      --muted:#667085;
-      --line:#E7EAF0;
-      --brand:#2c7be5;
-      --ok:#12B76A;
-
-      /* Less “bubbly” */
-      --radius-card:18px;
-      --radius-pill:14px;
-      --radius-chip:12px;
-
-      /* Lighter shadow */
-      --shadow:0 10px 24px rgba(16,24,40,.08);
+    :root {
+      --bg: #f7f7f7;
+      --card: #ffffff;
+      --accent: #2c7be5;
+      --accent-soft: #e1edff;
+      --text: #222222;
+      --muted: #777777;
+      --border: #dddddd;
+      --danger: #e55353;
+      --success: #28a745;
     }
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      background:var(--bg);
-      color:var(--text);
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    header{
-      max-width:860px;
-      margin:0 auto;
-      padding:18px 14px 10px;
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      padding: 10px;
     }
 
-    h1{
-      margin:0;
-      font-size:34px;
-      letter-spacing:-.3px;
-      line-height:1.1;
-    }
-    .titleEmoji{font-size:.8em; margin-left:6px; vertical-align:baseline}
-    .sub{
-      color:var(--muted);
-      font-weight:600;
-      margin-top:4px;
-      font-size:15px;
-    }
-    .dateLine{
-      color:var(--muted);
-      font-weight:600;
-      margin-top:6px;
-      font-size:15px;
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
     }
 
-    /* Thinner, less pillowy tab bar */
-    .tabbar{
-      margin-top:14px;
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:4px;
-      display:flex;
-      gap:4px;
-      overflow-x:auto;
-      -webkit-overflow-scrolling:touch;
-    }
-    .tabbar::-webkit-scrollbar{height:0}
-    .tab{
-      padding:10px 12px;
-      border-radius:12px;
-      font-weight:800;
-      color:var(--muted);
-      cursor:pointer;
-      white-space:nowrap;
-      font-size:14px; /* smaller */
-      user-select:none;
-    }
-    .tab.active{
-      background:var(--brand);
-      color:#fff;
+    header {
+      text-align: center;
+      margin-bottom: 12px;
     }
 
-    .wrap{
-      max-width:860px;
-      margin:0 auto;
-      padding:12px 14px 90px;
+    header h1 {
+      font-size: 1.4rem;
+      margin: 0 0 4px 0;
     }
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius-card);
-      box-shadow:var(--shadow);
-      padding:14px;
-      margin-top:12px;
+    header p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
     }
 
-    .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
+    .date-label {
+      margin-top: 4px;
+      font-size: 0.85rem;
+      color: var(--muted);
     }
 
-    h2{
-      margin:0;
-      font-size:22px;
-      letter-spacing:-.2px;
-    }
-    .hint{
-      color:var(--muted);
-      font-weight:600;
-      margin-top:6px;
-      font-size:14px;
+    .day-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 6px;
+      margin: 10px 0 8px 0;
+      padding-bottom: 4px;
     }
 
-    /* Days: one line */
-    .days{
-      display:flex;
-      gap:8px;
-      margin-top:10px;
-      flex-wrap:nowrap;
-      overflow-x:auto;
-      padding-bottom:6px;
-      -webkit-overflow-scrolling:touch;
-    }
-    .days::-webkit-scrollbar{height:0}
-    .chip{
-      padding:10px 14px;
-      border-radius:var(--radius-chip);
-      border:1px solid var(--line);
-      font-weight:900;
-      cursor:pointer;
-      background:#fff;
-      color:var(--muted);
-      min-width:64px;
-      text-align:center;
-      user-select:none;
-    }
-    .chip.active{
-      background:rgba(44,123,229,.12);
-      color:var(--brand);
-      border-color:rgba(44,123,229,.35);
+    .day-tab {
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      background: #fff;
+      white-space: nowrap;
+      cursor: pointer;
+      flex: 0 0 auto;
     }
 
-    .topTitle{
-      margin-top:6px;
+    .day-tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
     }
 
-    .btn{
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:12px;
-      padding:10px 12px;
-      font-weight:900;
-      cursor:pointer;
-      user-select:none;
-      font-size:14px;
-    }
-    .btn.primary{
-      background:var(--brand);
-      border-color:var(--brand);
-      color:#fff;
-    }
-    .btn.danger{
-      color:#B42318;
-      border-color:rgba(180,35,24,.25);
-      background:rgba(180,35,24,.06);
+    .card {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 12px;
     }
 
-    .pillOk{
-      border:1px solid rgba(18,183,106,.35);
-      background:rgba(18,183,106,.10);
-      color:var(--ok);
-      font-weight:900;
-      padding:8px 12px;
-      border-radius:999px;
-      font-size:14px;
-      display:none;
-      user-select:none;
+    .workout-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 4px;
     }
 
-    .exercise{
-      border:1px solid var(--line);
-      border-radius:16px;     /* tighter than before */
-      padding:12px;
-      margin-top:10px;
-      background:#fff;
+    .badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid var(--border);
     }
 
-    .exHead{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .exName{
-      font-size:20px;
-      font-weight:950;
-      letter-spacing:-.2px;
-      margin:0;
-      line-height:1.15;
-    }
-    .exMeta{
-      color:var(--muted);
-      font-weight:700;
-      margin-top:4px;
-      font-size:14px;
+    .badge-complete {
+      color: var(--success);
+      border-color: var(--success);
     }
 
-    .doneBtn{
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:12px;
-      padding:10px 12px;
-      font-weight:900;
-      cursor:pointer;
-      display:flex;
-      gap:8px;
-      align-items:center;
-      user-select:none;
-      min-width:92px;
-      justify-content:center;
-    }
-    .box{
-      width:18px;height:18px;border-radius:5px;border:2px solid #98A2B3;
-      display:inline-block;
-      background:#fff;
-    }
-    .doneBtn.checked{
-      border-color:rgba(44,123,229,.35);
-      background:rgba(44,123,229,.10);
-      color:var(--brand);
-    }
-    .doneBtn.checked .box{
-      border-color:var(--brand);
-      background:var(--brand);
-      position:relative;
-    }
-    .doneBtn.checked .box:after{
-      content:"";
-      position:absolute;
-      left:5px; top:1px;
-      width:5px; height:10px;
-      border:2px solid #fff;
-      border-top:none; border-left:none;
-      transform:rotate(45deg);
+    .badge-incomplete {
+      color: var(--danger);
+      border-color: var(--danger);
     }
 
-    /* Weight/Notes in one line */
-    .exInputs{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-top:10px;
-    }
-    .field label{
-      display:block;
-      color:var(--muted);
-      font-weight:800;
-      font-size:13px;
-      margin-bottom:6px;
-    }
-    input, textarea, select{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px 12px;
-      font-size:14px;
-      outline:none;
-      background:#fff;
-      color:var(--text);
-    }
-    textarea{min-height:42px; resize:vertical}
-
-    .linkDanger{
-      margin-top:12px;
-      color:#E11D48;
-      font-weight:800;
-      text-decoration:underline;
-      cursor:pointer;
-      display:inline-block;
-      user-select:none;
-      font-size:14px;
+    .exercise {
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 8px;
+      margin-bottom: 8px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .footerNote{
-      text-align:center;
-      color:var(--muted);
-      font-weight:700;
-      margin-top:14px;
-      padding-bottom:8px;
-      font-size:14px;
+    .exercise-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
     }
 
-    /* Modals */
-    .backdrop{
-      position:fixed;
-      inset:0;
-      background:rgba(16,24,40,.45);
-      display:none;
-      align-items:flex-end;
-      justify-content:center;
-      padding:18px 14px;
-      z-index:999;
-    }
-    .modal{
-      width:min(900px, 100%);
-      background:#fff;
-      border-radius:18px;
-      border:1px solid var(--line);
-      box-shadow:0 18px 45px rgba(16,24,40,.22);
-      padding:14px;
-      max-height:85vh;
-      overflow:auto;
-    }
-    .modalTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .modal h3{
-      margin:0;
-      font-size:18px;
-      font-weight:950;
-    }
-    .modal p{
-      margin:6px 0 0 0;
-      color:var(--muted);
-      font-weight:650;
-      font-size:14px;
-    }
-    .modalActions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
+    .exercise-name {
+      font-size: 0.95rem;
+      font-weight: 600;
     }
 
-    .editorRow{
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:10px;
-      margin-top:10px;
-      background:#fff;
-    }
-    .editorGrid{
-      display:grid;
-      grid-template-columns: 1.2fr .6fr .6fr;
-      gap:8px;
-    }
-    .small{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:800;
-      margin-top:6px;
-    }
-    .editorBtns{
-      margin-top:10px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+    .exercise-info {
+      font-size: 0.8rem;
+      color: var(--muted);
     }
 
-    .infoBody{
-      margin-top:10px;
-      font-size:14px;
-      line-height:1.5;
-    }
-    .infoBody ul{margin:8px 0 0 18px}
-    .infoBody li{margin:6px 0}
-
-    /* Monday pulse (title only) */
-    @keyframes pulseSoft{
-      0%{transform:scale(1);opacity:1}
-      50%{transform:scale(1.02);opacity:.94}
-      100%{transform:scale(1);opacity:1}
-    }
-    .mondayPulse{
-      display:inline-block;
-      animation:pulseSoft 2.6s ease-in-out infinite;
+    .exercise-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
-    /* Mobile tweaks */
-    @media (max-width:560px){
-      .exInputs{grid-template-columns:1fr}  /* stack on very small screens */
-      h1{font-size:32px}
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 100px;
+    }
+
+    .form-group label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      font-size: 0.8rem;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      width: 100%;
+    }
+
+    .form-group textarea {
+      min-height: 40px;
+      resize: vertical;
+    }
+
+    .done-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .done-toggle input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .reset-btn {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      background: none;
+      border: none;
+      color: var(--danger);
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* Scrollbar styling for day tabs (mobile-safe) */
+    .day-tabs::-webkit-scrollbar {
+      height: 4px;
+    }
+    .day-tabs::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 999px;
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <h1 id="appTitle">
-      Power Up <span class="titleEmoji">🏋️‍♀️💧</span>
-    </h1>
-    <div class="sub">Steady Progress.</div>
-    <div class="dateLine" id="dateLine"></div>
+  <div class="app">
+    <header>
+      <h1>My Daily Workout</h1>
+      <p>Check off today’s lifts and track notes.</p>
+      <div class="date-label" id="currentDateLabel"></div>
+    </header>
 
-    <div class="tabbar" role="tablist">
-      <div class="tab active" data-tab="workout">Workout</div>
-      <div class="tab" data-tab="progress">Progress</div>
-      <div class="tab" data-tab="week">Week Summary</div>
-      <div class="tab" data-tab="reset">Health Reset</div>
-      <div class="tab" data-tab="measurements">Measurements</div>
+    <div class="day-tabs" id="dayTabs"></div>
+
+    <div class="card">
+      <div class="workout-summary">
+        <span id="currentDayLabel"></span>
+        <span class="badge" id="completionBadge"></span>
+      </div>
+      <div id="exerciseList"></div>
+      <button class="reset-btn" id="resetDayBtn" type="button">
+        Reset this day’s progress
+      </button>
     </div>
-  </header>
 
-  <main class="wrap">
-    <!-- WORKOUT -->
-    <section id="tab-workout">
-      <div class="card">
-        <!-- Days FIRST (above title) -->
-        <div class="days" id="dayChips"></div>
-
-        <div class="row topTitle">
-          <div style="min-width:240px;">
-            <h2 id="dayTitle">Monday workout</h2>
-            <div class="hint">Tap a day, check off sets, and jot quick notes.</div>
-          </div>
-
-          <div class="row" style="gap:8px;">
-            <button class="btn" id="editPlanBtn" type="button">Edit plan</button>
-            <div class="pillOk" id="allDonePill">All done ✓</div>
-          </div>
-        </div>
-
-        <div id="exerciseList"></div>
-
-        <div class="linkDanger" id="resetTodayLink">Reset this day’s progress (today only).</div>
-      </div>
-
-      <div class="footerNote">All data is stored locally in your browser on this device only.</div>
-    </section>
-
-    <!-- PROGRESS -->
-    <section id="tab-progress" style="display:none;">
-      <div class="card">
-        <h2>Progress</h2>
-        <div class="hint">Today’s completion + week-to-date.</div>
-        <div id="progressBox" style="margin-top:10px;"></div>
-      </div>
-      <div class="footerNote">Built by consistency.</div>
-    </section>
-
-    <!-- WEEK SUMMARY -->
-    <section id="tab-week" style="display:none;">
-      <div class="card">
-        <h2>Week Summary</h2>
-        <div class="hint">A quick overview of each day.</div>
-        <div id="weekSummary" style="margin-top:10px;"></div>
-      </div>
-      <div class="footerNote">Built by consistency.</div>
-    </section>
-
-    <!-- HEALTH RESET -->
-    <section id="tab-reset" style="display:none;">
-      <div class="card">
-        <div class="row">
-          <div>
-            <h2>Health Reset</h2>
-            <div class="hint">Daily checklist (resets each day).</div>
-          </div>
-          <button class="btn" id="editResetBtn" type="button">Edit</button>
-        </div>
-
-        <div style="margin-top:12px;">
-          <h3 style="margin:0;font-size:16px;font-weight:950;">Morning Thyroid Routine</h3>
-          <div id="resetMorning" style="margin-top:8px;"></div>
-        </div>
-
-        <div style="margin-top:14px;">
-          <h3 style="margin:0;font-size:16px;font-weight:950;">Supplements Schedule</h3>
-          <div id="resetSupps" style="margin-top:8px;"></div>
-        </div>
-
-        <div style="margin-top:14px;">
-          <h3 style="margin:0;font-size:16px;font-weight:950;">2-Week Thyroid-Friendly Reset</h3>
-          <div id="resetRules" style="margin-top:8px;"></div>
-        </div>
-      </div>
-      <div class="footerNote">Consistency over perfection.</div>
-    </section>
-
-    <!-- MEASUREMENTS -->
-    <section id="tab-measurements" style="display:none;">
-      <div class="card">
-        <h2>Measurements (Weekly)</h2>
-        <div class="hint">Track trends, not perfection.</div>
-
-        <div class="exInputs" style="margin-top:12px;">
-          <div class="field">
-            <label>Weight</label>
-            <input id="m_weight" type="text" placeholder="e.g., 160" />
-          </div>
-          <div class="field">
-            <label>Waist</label>
-            <input id="m_waist" type="text" placeholder="inches" />
-          </div>
-          <div class="field">
-            <label>Hips</label>
-            <input id="m_hips" type="text" placeholder="inches" />
-          </div>
-          <div class="field">
-            <label>Chest</label>
-            <input id="m_chest" type="text" placeholder="inches" />
-          </div>
-          <div class="field">
-            <label>Thigh</label>
-            <input id="m_thigh" type="text" placeholder="inches" />
-          </div>
-          <div class="field">
-            <label>Arm</label>
-            <input id="m_arm" type="text" placeholder="inches" />
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px; justify-content:flex-end;">
-          <button class="btn danger" id="measClearBtn" type="button">Clear this week</button>
-          <button class="btn primary" id="measSaveBtn" type="button">Save this week</button>
-        </div>
-
-        <div id="measHistory" style="margin-top:14px;"></div>
-      </div>
-      <div class="footerNote">Weekly snapshots help you see trends.</div>
-    </section>
-  </main>
-
-  <!-- EDIT PLAN MODAL -->
-  <div class="backdrop" id="editBack">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="modalTop">
-        <div>
-          <h3 id="editTitle">Edit plan</h3>
-          <p>Pick from the exercise list or type a custom move. Save updates the selected day.</p>
-        </div>
-        <div class="modalActions">
-          <button class="btn" id="addExerciseBtn" type="button">+ Add</button>
-          <button class="btn danger" id="restoreDefaultsBtn" type="button">Restore defaults</button>
-          <button class="btn" id="closeEditBtn" type="button">Close</button>
-        </div>
-      </div>
-
-      <div id="editorBody" style="margin-top:10px;"></div>
-
-      <div class="editorBtns">
-        <button class="btn" id="cancelEditBtn" type="button">Cancel</button>
-        <button class="btn primary" id="saveEditBtn" type="button">Save changes</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- INFO POPUP (circuits/mobility) -->
-  <div class="backdrop" id="infoBack">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="modalTop">
-        <div>
-          <h3 id="infoTitle">Details</h3>
-          <p id="infoSub">Quick guide</p>
-        </div>
-        <div class="modalActions">
-          <button class="btn" id="infoCloseBtn" type="button">Close</button>
-        </div>
-      </div>
-      <div id="infoBody" class="infoBody"></div>
-    </div>
-  </div>
-
-  <!-- EDIT RESET MODAL -->
-  <div class="backdrop" id="resetBack">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="modalTop">
-        <div>
-          <h3>Edit Health Reset</h3>
-          <p>One item per line. Saved changes show immediately.</p>
-        </div>
-        <div class="modalActions">
-          <button class="btn" id="closeResetBtn" type="button">Close</button>
-        </div>
-      </div>
-
-      <div style="margin-top:10px;">
-        <div class="small">Morning Thyroid Routine</div>
-        <textarea id="resetEditMorning" placeholder="One line per item"></textarea>
-
-        <div class="small" style="margin-top:10px;">Supplements Schedule</div>
-        <textarea id="resetEditSupps" placeholder="One line per item"></textarea>
-
-        <div class="small" style="margin-top:10px;">2-Week Thyroid-Friendly Reset</div>
-        <textarea id="resetEditRules" placeholder="One line per item"></textarea>
-      </div>
-
-      <div class="editorBtns">
-        <button class="btn" id="cancelResetSaveBtn" type="button">Cancel</button>
-        <button class="btn primary" id="saveResetBtn" type="button">Save</button>
-      </div>
+    <div class="footer-note">
+      Tip: Edit exercises by opening this file on your computer and changing the workout plan in the code.
     </div>
   </div>
 
   <script>
-    /***********************
-     * Storage Keys
-     ***********************/
-    const LS = {
-      planOverride: "pu_planOverride_v2",
-      progress: "pu_progress_v2",
-      resetChecks: "pu_resetChecks_v2",
-      resetText: "pu_resetText_v2",
-      measurements: "pu_measurements_v2"
-    };
-
-    /***********************
-     * Date helpers
-     ***********************/
-    const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-    function dayNameFromDate(d){
-      // JS getDay(): 0 Sun ... 6 Sat
-      return DAYS[(d.getDay()+6)%7]; // shift so Monday first
-    }
-    function todayKey(){
-      const d=new Date();
-      return d.toISOString().slice(0,10); // YYYY-MM-DD
-    }
-    function weekKey(d=new Date()){
-      // ISO-ish week key: year-week
-      const tmp = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-      const dayNum = tmp.getUTCDay() || 7;
-      tmp.setUTCDate(tmp.getUTCDate() + 4 - dayNum);
-      const yearStart = new Date(Date.UTC(tmp.getUTCFullYear(),0,1));
-      const weekNo = Math.ceil((((tmp - yearStart) / 86400000) + 1) / 7);
-      return `${tmp.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
-    }
-
-    /***********************
-     * Default workout plan (includes your clickable circuit blocks)
-     ***********************/
-    const DEFAULT_PLAN = {
+    // ==== 1. Define your weekly workout plan here ====
+    // You can customize exercises, sets, reps, etc.
+    const workoutPlan = {
       Monday: [
-        { name:"Lateral Raises", sets:3, reps:"12–15", kind:"exercise" },
-        { name:"Overhead Dumbbell Press", sets:3, reps:"10–12", kind:"exercise" },
-        { name:"Tricep Rope Pushdowns", sets:3, reps:"12–15", kind:"exercise" },
-        { name:"Overhead Tricep Extension", sets:3, reps:"10–12", kind:"exercise" },
-        { name:"Face Pulls", sets:3, reps:"12–15", kind:"exercise" },
-        { name:"Tricep Dips", sets:3, reps:"15", kind:"exercise" },
-        { name:"Finisher: Light Dumbbell Punches", sets:2, reps:"1 min w/ 1 min rest", kind:"exercise" }
+        { name: "Incline Dumbbell Press", sets: 3, reps: "10–12" },
+        { name: "Lat Pulldown", sets: 3, reps: "10–12" },
+        { name: "Dumbbell Shoulder Press", sets: 3, reps: "10–12" },
+        { name: "Triceps Rope Pushdown", sets: 3, reps: "12–15" },
+        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
       ],
       Tuesday: [
-        { name:"Core Circuit", sets:3, reps:"Pick 3–4 moves", kind:"info", infoKey:"core" },
-        { name:"Glute Bridge", sets:3, reps:"15", kind:"exercise" },
-        { name:"Hip Thrusts", sets:3, reps:"12–15", kind:"exercise" },
-        { name:"Standing Kickbacks", sets:3, reps:"15/side", kind:"exercise" },
-        { name:"Clamshells", sets:3, reps:"15/side", kind:"exercise" }
+        { name: "Goblet Squat", sets: 3, reps: "10–12" },
+        { name: "Romanian Deadlift", sets: 3, reps: "10–12" },
+        { name: "Glute Bridge/Hip Thrust", sets: 3, reps: "12–15" },
+        { name: "Calf Raises", sets: 3, reps: "15–20" },
+        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
       ],
       Wednesday: [
-        { name:"Leg / Glute Focus", sets:3, reps:"Choose your plan", kind:"exercise" },
-        { name:"Stretching / Mobility", sets:1, reps:"10–15 min", kind:"info", infoKey:"mobility" }
+        { name: "Push-Ups / Incline Push-Ups", sets: 3, reps: "As many as possible" },
+        { name: "Dumbbell Row", sets: 3, reps: "10–12" },
+        { name: "Lateral Raises", sets: 3, reps: "12–15" },
+        { name: "Biceps Curls", sets: 3, reps: "10–12" },
+        { name: "Core Circuit", sets: 3, reps: "3–4 exercises" }
       ],
       Thursday: [
-        { name:"Lat Pulldowns", sets:3, reps:"10–12", kind:"exercise" },
-        { name:"Seated Cable Row", sets:3, reps:"10–12", kind:"exercise" },
-        { name:"Single-Arm Dumbbell Row", sets:3, reps:"10/side", kind:"exercise" },
-        { name:"Hammer Curls", sets:3, reps:"12–15", kind:"exercise" },
-        { name:"Rear Delt Flys", sets:3, reps:"12–15", kind:"exercise" },
-        { name:"Finisher: Pulse Curls", sets:2, reps:"30 sec", kind:"exercise" }
+        { name: "Leg Press or Step-Ups", sets: 3, reps: "10–12" },
+        { name: "Lunges (or split squats)", sets: 3, reps: "10–12/leg" },
+        { name: "Hamstring Curl", sets: 3, reps: "10–12" },
+        { name: "Core Circuit", sets: 3, reps: "3–4 exercises" },
+        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
       ],
       Friday: [
-        { name:"Full-Body Circuit", sets:3, reps:"8–10 exercises", kind:"info", infoKey:"fullbody" },
-        { name:"Walking Treadmill", sets:1, reps:"20–30 min", kind:"exercise" },
-        { name:"Stretching / Mobility", sets:1, reps:"10–15 min", kind:"info", infoKey:"mobility" }
+        { name: "Full-Body Circuit", sets: 3, reps: "8–10 exercises" },
+        { name: "Extra Arms / Glutes", sets: 2, reps: "Choose your favs" },
+        { name: "Stretching / Mobility", sets: 1, reps: "10–15 min" },
+        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
       ],
-      Saturday: [],
-      Sunday: []
-    };
-
-    /***********************
-     * Info popup content (your exact text)
-     ***********************/
-    const INFO = {
-      core: {
-        title: "Core Circuit",
-        sub: "Pick 3–4 moves below. Do them in a loop.",
-        body: `
-          <ul>
-            <li><strong>Rest 30–45 seconds</strong> between moves.</li>
-            <li><strong>Rest 60–90 seconds</strong> between rounds.</li>
-            <li><strong>Total time:</strong> 10–15 minutes</li>
-          </ul>
-
-          <p style="margin-top:12px;"><strong>Option A (best overall)</strong></p>
-          <ul>
-            <li>Dead Bug – 8–10/side</li>
-            <li>Bird Dog – 8–10/side</li>
-            <li>Side Plank – 20–30 sec/side</li>
-            <li>Glute Bridge – 12–15</li>
-          </ul>
-
-          <p style="margin-top:12px;"><strong>Option B (more “tight waist” feel)</strong></p>
-          <ul>
-            <li>Pallof Press (band/cable) – 10–12/side</li>
-            <li>Plank – 30–45 sec</li>
-            <li>Suitcase Carry (one dumbbell) – 30–45 sec/side</li>
-            <li>Reverse Crunch – 10–12 (slow)</li>
-          </ul>
-
-          <p style="margin-top:12px;">👉 <strong>Rule:</strong> if anything hurts your low back, swap it.</p>
-        `
-      },
-      fullbody: {
-        title: "Full-Body Circuit",
-        sub: "3 sets • 8–10 exercises (moderate pace, not HIIT)",
-        body: `
-          <ul>
-            <li>Pick 8 exercises (or use the ready-made one below).</li>
-            <li>Work <strong>35–45 sec</strong>, rest <strong>15–25 sec</strong> between exercises.</li>
-            <li>Rest <strong>90 sec</strong> between rounds.</li>
-            <li><strong>Total time:</strong> 20–30 minutes</li>
-          </ul>
-
-          <p style="margin-top:12px;"><strong>Ready-made Full-Body Circuit (my favorite for fat loss + strength)</strong></p>
-          <ul>
-            <li>Goblet Squat</li>
-            <li>Dumbbell Row</li>
-            <li>Incline Dumbbell Press (or push-ups)</li>
-            <li>Romanian Deadlift (light–moderate)</li>
-            <li>Shoulder Press</li>
-            <li>Lateral Raise</li>
-            <li>Glute Bridge / Hip Thrust</li>
-            <li>Pallof Press or Dead Bug</li>
-            <li><em>Optional 9–10:</em> Biceps Curl, Triceps Rope Pushdown</li>
-          </ul>
-
-          <p style="margin-top:12px;">👉 Keep weights where you can maintain good form. The goal is “sweaty but controlled.”</p>
-        `
-      },
-      mobility: {
-        title: "Stretching / Mobility",
-        sub: "10–15 min — your “feel better tomorrow” block",
-        body: `
-          <p><strong>Quick 10–12 minute mobility flow</strong></p>
-          <ul>
-            <li>Chest opener stretch (doorway) – 45 sec</li>
-            <li>Child’s pose – 45 sec</li>
-            <li>Hip flexor stretch – 45 sec/side</li>
-            <li>Figure-4 glute stretch – 45 sec/side</li>
-            <li>Hamstring stretch – 45 sec/side</li>
-            <li>Thoracic rotation (“open books”) – 8 reps/side</li>
-            <li>Calf stretch – 30–45 sec/side</li>
-          </ul>
-          <p style="margin-top:12px;">If knees are cranky: do hip + upper body stretches more, less deep knee bending.</p>
-        `
-      }
-    };
-
-    /***********************
-     * Exercise Library (for pick-list in editor)
-     ***********************/
-    const EXERCISE_LIBRARY = {
-      "Shoulders": ["Lateral Raise","Shoulder Press","Rear Delt Fly","Face Pulls"],
-      "Back": ["Lat Pulldown","Seated Cable Row","Single-Arm Dumbbell Row","Dumbbell Row"],
-      "Chest": ["Incline Dumbbell Press","Push-Ups","Incline Push-Ups"],
-      "Arms": ["Biceps Curl","Hammer Curl","Tricep Rope Pushdown","Overhead Tricep Extension","Tricep Dips"],
-      "Legs/Glutes": ["Goblet Squat","Romanian Deadlift","Hip Thrust","Glute Bridge","Step-Ups (Low Step)","Reverse Lunge","Calf Raise","Banded Side Steps"],
-      "Core": ["Dead Bug","Bird Dog","Plank","Side Plank","Reverse Crunch","Pallof Press","Suitcase Carry","Standing Woodchoppers"],
-      "Cardio": ["Walking Treadmill","Incline Walk","Bike","Row Machine"],
-      "Mobility": ["Stretching / Mobility"]
-    };
-
-    /***********************
-     * Health Reset defaults (editable)
-     ***********************/
-    const RESET_DEFAULTS = {
-      morning: [
-        "Take Synthroid (empty stomach).",
-        "Wait 45–60 min before food/coffee.",
-        "Hydrate (water + electrolytes if you want)."
+      Saturday: [
+        { name: "Optional: Light Walk", sets: 1, reps: "20–40 min" },
+        { name: "Stretching / Yoga", sets: 1, reps: "10–20 min" }
       ],
-      supps: [
-        "Lunch: Multi + Probiotic (if that’s your routine).",
-        "Pre-workout: Perfect Amino (if training).",
-        "Evening: Magnesium (if using)."
-      ],
-      rules: [
-        "Protein-forward meals.",
-        "Walk breaks (2 × 15 min).",
-        "Sleep goal: 7+ hours.",
-        "Consistency over perfection."
+      Sunday: [
+        { name: "Rest / Mobility", sets: 1, reps: "10–20 min" }
       ]
     };
 
-    /***********************
-     * State
-     ***********************/
-    const state = {
-      tab: "workout",
-      selectedDay: dayNameFromDate(new Date()),
-      plan: null,
-      progress: null
-    };
+    // ==== 2. State & helpers ====
+    const days = Object.keys(workoutPlan);
+    const today = new Date();
+    const todayDateStr = today.toISOString().slice(0, 10); // e.g. "2025-12-11"
 
-    /***********************
-     * DOM
-     ***********************/
-    const tabEls = Array.from(document.querySelectorAll(".tab"));
-    const sections = {
-      workout: document.getElementById("tab-workout"),
-      progress: document.getElementById("tab-progress"),
-      week: document.getElementById("tab-week"),
-      reset: document.getElementById("tab-reset"),
-      measurements: document.getElementById("tab-measurements"),
-    };
+    const dayTabsEl = document.getElementById("dayTabs");
+    const currentDayLabelEl = document.getElementById("currentDayLabel");
+    const currentDateLabelEl = document.getElementById("currentDateLabel");
+    const exerciseListEl = document.getElementById("exerciseList");
+    const completionBadgeEl = document.getElementById("completionBadge");
+    const resetDayBtn = document.getElementById("resetDayBtn");
 
-    const dayChips = document.getElementById("dayChips");
-    const dayTitle = document.getElementById("dayTitle");
-    const exerciseList = document.getElementById("exerciseList");
-    const allDonePill = document.getElementById("allDonePill");
+    let currentDay = getDefaultDay();
 
-    const editBack = document.getElementById("editBack");
-    const editorBody = document.getElementById("editorBody");
-
-    const infoBack = document.getElementById("infoBack");
-    const infoTitle = document.getElementById("infoTitle");
-    const infoSub = document.getElementById("infoSub");
-    const infoBody = document.getElementById("infoBody");
-
-    const resetMorningEl = document.getElementById("resetMorning");
-    const resetSuppsEl = document.getElementById("resetSupps");
-    const resetRulesEl = document.getElementById("resetRules");
-
-    const resetBack = document.getElementById("resetBack");
-    const resetEditMorning = document.getElementById("resetEditMorning");
-    const resetEditSupps = document.getElementById("resetEditSupps");
-    const resetEditRules = document.getElementById("resetEditRules");
-
-    /***********************
-     * Storage
-     ***********************/
-    function loadJSON(key, fallback){
-      try{
-        const v = localStorage.getItem(key);
-        return v ? JSON.parse(v) : fallback;
-      }catch(e){
-        return fallback;
-      }
-    }
-    function saveJSON(key, value){
-      localStorage.setItem(key, JSON.stringify(value));
+    function getDefaultDay() {
+      // Monday = 1, Sunday = 0
+      const weekday = today.getDay();
+      const map = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+      return map[weekday] || "Monday";
     }
 
-    /***********************
-     * Plan + Progress
-     ***********************/
-    function getPlan(){
-      const override = loadJSON(LS.planOverride, null);
-      const plan = structuredClone(DEFAULT_PLAN);
-      if(override){
-        for(const day of Object.keys(override)){
-          plan[day] = override[day];
-        }
-      }
-      return plan;
+    function getStorageKey(day) {
+      return "workoutProgress_" + day + "_" + todayDateStr;
     }
 
-    function getProgress(){
-      return loadJSON(LS.progress, {});
-    }
-    function setProgress(p){
-      saveJSON(LS.progress, p);
-    }
-
-    function progressKeyForDay(dayName){
-      // Store by date for "today only reset" functionality
-      // We'll map selected day to THIS week’s date (Mon..Sun)
-      const now = new Date();
-      const todayIdx = (now.getDay()+6)%7; // Monday=0
-      const targetIdx = DAYS.indexOf(dayName);
-      const diff = targetIdx - todayIdx;
-      const d = new Date(now);
-      d.setDate(now.getDate() + diff);
-      return d.toISOString().slice(0,10);
-    }
-
-    function ensureDayProgress(day){
-      const p = getProgress();
-      const key = progressKeyForDay(day);
-      p[key] = p[key] || { exercises:{} }; // exercises: {id:{done,weight,notes}}
-      setProgress(p);
-      return p[key];
-    }
-
-    /***********************
-     * Render Days
-     ***********************/
-    function renderDays(){
-      dayChips.innerHTML="";
-      for(const d of DAYS){
-        const chip = document.createElement("div");
-        chip.className = "chip" + (d===state.selectedDay ? " active" : "");
-        chip.textContent = d.slice(0,3);
-        chip.onclick = () => {
-          state.selectedDay = d;
-          renderWorkout();
-        };
-        dayChips.appendChild(chip);
+    function loadProgress(day) {
+      const key = getStorageKey(day);
+      const raw = localStorage.getItem(key);
+      if (!raw) return {};
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return {};
       }
     }
 
-    /***********************
-     * Render Workout
-     ***********************/
-    function renderWorkout(){
-      state.plan = getPlan();
-      renderDays();
+    function saveProgress(day, progress) {
+      const key = getStorageKey(day);
+      localStorage.setItem(key, JSON.stringify(progress));
+    }
 
-      dayTitle.textContent = `${state.selectedDay} workout`;
+    // ==== 3. Render UI ====
+    function renderDateLabel() {
+      const opts = { weekday: "long", year: "numeric", month: "short", day: "numeric" };
+      currentDateLabelEl.textContent = today.toLocaleDateString(undefined, opts);
+    }
 
-      const planForDay = state.plan[state.selectedDay] || [];
-      const dayProg = ensureDayProgress(state.selectedDay);
+    function renderDayTabs() {
+      dayTabsEl.innerHTML = "";
+      days.forEach(day => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = day.slice(0, 3); // Mon, Tue...
+        btn.className = "day-tab" + (day === currentDay ? " active" : "");
+        btn.addEventListener("click", () => {
+          currentDay = day;
+          render();
+        });
+        dayTabsEl.appendChild(btn);
+      });
+    }
 
-      exerciseList.innerHTML = "";
-      let doneCount = 0;
+    function renderExercises() {
+      const exercises = workoutPlan[currentDay] || [];
+      const progress = loadProgress(currentDay);
+      exerciseListEl.innerHTML = "";
 
-      planForDay.forEach((ex, idx) => {
-        const exId = `${state.selectedDay}-${idx}`;
-        const saved = dayProg.exercises[exId] || { done:false, weight:"", notes:"" };
+      let completedCount = 0;
 
-        if(saved.done) doneCount++;
+      exercises.forEach((ex, index) => {
+        const exKey = String(index);
+        const exState = progress[exKey] || { done: false, weight: "", notes: "" };
+        if (exState.done) completedCount++;
 
-        const wrap = document.createElement("div");
-        wrap.className = "exercise";
+        const wrapper = document.createElement("div");
+        wrapper.className = "exercise";
 
-        const isInfo = ex.kind === "info";
-        const nameHtml = isInfo
-          ? `<button class="btn" type="button" data-info="${ex.infoKey}" style="padding:6px 10px;border-radius:10px;font-weight:950;">${ex.name}</button>`
-          : `<div class="exName">${ex.name}</div>`;
+        const header = document.createElement("div");
+        header.className = "exercise-header";
 
-        wrap.innerHTML = `
-          <div class="exHead">
-            <div>
-              ${isInfo ? nameHtml : `<div class="exName">${ex.name}</div>`}
-              <div class="exMeta">${ex.sets} sets • ${ex.reps}</div>
-            </div>
-            <button class="doneBtn ${saved.done ? "checked":""}" type="button">
-              <span class="box"></span>
-              Done
-            </button>
-          </div>
-
-          <div class="exInputs">
-            <div class="field">
-              <label>Weight / Level</label>
-              <input type="text" class="wInput" placeholder="e.g. 15 lb DBs" value="${escapeHtml(saved.weight)}" />
-            </div>
-            <div class="field">
-              <label>Notes</label>
-              <textarea class="nInput" placeholder="How it felt, tweaks, etc.">${escapeHtml(saved.notes)}</textarea>
-            </div>
-          </div>
+        const nameDiv = document.createElement("div");
+        nameDiv.innerHTML = `
+          <div class="exercise-name">${ex.name}</div>
+          <div class="exercise-info">${ex.sets} sets • ${ex.reps}</div>
         `;
 
-        // Info buttons (Core/Full-body/Mobility)
-        const infoBtn = wrap.querySelector("[data-info]");
-        if(infoBtn){
-          infoBtn.onclick = () => openInfo(infoBtn.getAttribute("data-info"));
+        const doneDiv = document.createElement("label");
+        doneDiv.className = "done-toggle";
+        const doneCheckbox = document.createElement("input");
+        doneCheckbox.type = "checkbox";
+        doneCheckbox.checked = !!exState.done;
+        const doneSpan = document.createElement("span");
+        doneSpan.textContent = "Done";
+
+        doneDiv.appendChild(doneCheckbox);
+        doneDiv.appendChild(doneSpan);
+
+        header.appendChild(nameDiv);
+        header.appendChild(doneDiv);
+
+        const controls = document.createElement("div");
+        controls.className = "exercise-controls";
+
+        const weightGroup = document.createElement("div");
+        weightGroup.className = "form-group";
+        const weightLabel = document.createElement("label");
+        weightLabel.textContent = "Weight / Level";
+        const weightInput = document.createElement("input");
+        weightInput.type = "text";
+        weightInput.value = exState.weight || "";
+        weightInput.placeholder = "e.g. 15 lb DBs";
+
+        weightGroup.appendChild(weightLabel);
+        weightGroup.appendChild(weightInput);
+
+        const notesGroup = document.createElement("div");
+        notesGroup.className = "form-group";
+        const notesLabel = document.createElement("label");
+        notesLabel.textContent = "Notes";
+        const notesInput = document.createElement("textarea");
+        notesInput.value = exState.notes || "";
+        notesInput.placeholder = "How it felt, tweaks, etc.";
+
+        notesGroup.appendChild(notesLabel);
+        notesGroup.appendChild(notesInput);
+
+        controls.appendChild(weightGroup);
+        controls.appendChild(notesGroup);
+
+        // Wire up events
+        function updateState() {
+          const newState = loadProgress(currentDay);
+          newState[exKey] = {
+            done: doneCheckbox.checked,
+            weight: weightInput.value || "",
+            notes: notesInput.value || ""
+          };
+          saveProgress(currentDay, newState);
+          updateCompletionBadge(exercises.length, countCompleted(exercises.length, newState));
         }
 
-        // Done toggle
-        const doneBtn = wrap.querySelector(".doneBtn");
-        doneBtn.onclick = () => {
-          const p = getProgress();
-          const key = progressKeyForDay(state.selectedDay);
-          p[key] = p[key] || { exercises:{} };
-          const cur = p[key].exercises[exId] || { done:false, weight:"", notes:"" };
-          cur.done = !cur.done;
-          p[key].exercises[exId] = cur;
-          setProgress(p);
-          renderWorkout();
-          renderProgress(); // keep in sync
-          renderWeekSummary();
-        };
+        doneCheckbox.addEventListener("change", updateState);
+        weightInput.addEventListener("change", updateState);
+        notesInput.addEventListener("change", updateState);
+        notesInput.addEventListener("blur", updateState);
 
-        // Save inputs
-        const wInput = wrap.querySelector(".wInput");
-        const nInput = wrap.querySelector(".nInput");
-
-        const saveInputs = () => {
-          const p = getProgress();
-          const key = progressKeyForDay(state.selectedDay);
-          p[key] = p[key] || { exercises:{} };
-          const cur = p[key].exercises[exId] || { done:false, weight:"", notes:"" };
-          cur.weight = wInput.value;
-          cur.notes = nInput.value;
-          p[key].exercises[exId] = cur;
-          setProgress(p);
-        };
-        wInput.addEventListener("change", saveInputs);
-        nInput.addEventListener("change", saveInputs);
-
-        exerciseList.appendChild(wrap);
+        wrapper.appendChild(header);
+        wrapper.appendChild(controls);
+        exerciseListEl.appendChild(wrapper);
       });
 
-      // All done pill
-      const total = planForDay.length;
-      const allDone = total>0 && doneCount === total;
-      allDonePill.style.display = allDone ? "inline-block" : "none";
+      updateCompletionBadge(exercises.length, completedCount);
     }
 
-    /***********************
-     * Progress tab
-     ***********************/
-    function renderProgress(){
-      const box = document.getElementById("progressBox");
-      const planForDay = getPlan()[state.selectedDay] || [];
-      const key = progressKeyForDay(state.selectedDay);
-      const p = getProgress();
-      const dayData = p[key]?.exercises || {};
-      const total = planForDay.length;
-      let done = 0;
-      for(let i=0;i<total;i++){
-        const exId = `${state.selectedDay}-${i}`;
-        if(dayData[exId]?.done) done++;
+    function countCompleted(total, progressObj) {
+      let c = 0;
+      for (let i = 0; i < total; i++) {
+        const st = progressObj[String(i)];
+        if (st && st.done) c++;
       }
-      const pct = total ? Math.round((done/total)*100) : 0;
-
-      // Days completed this week:
-      const now = new Date();
-      const monday = new Date(now);
-      const dow = (now.getDay()+6)%7; // Monday=0
-      monday.setDate(now.getDate()-dow);
-      let weekDaysDone = 0;
-      for(let i=0;i<7;i++){
-        const d = new Date(monday);
-        d.setDate(monday.getDate()+i);
-        const k = d.toISOString().slice(0,10);
-        const dayName = dayNameFromDate(d);
-        const planLen = (getPlan()[dayName]||[]).length;
-        if(planLen===0) continue;
-        const ex = p[k]?.exercises || {};
-        let dd=0;
-        for(let j=0;j<planLen;j++){
-          const exId = `${dayName}-${j}`;
-          if(ex[exId]?.done) dd++;
-        }
-        if(dd===planLen) weekDaysDone++;
-      }
-
-      box.innerHTML = `
-        <div class="exercise" style="margin-top:10px;">
-          <div class="row">
-            <div style="font-weight:950;">Today</div>
-            <div style="font-weight:950;color:var(--brand);">${pct}%</div>
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <div style="color:var(--muted);font-weight:800;">Completed exercises (today)</div>
-            <div style="font-weight:950;">${done} / ${total}</div>
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <div style="color:var(--muted);font-weight:800;">Days completed this week</div>
-            <div style="font-weight:950;">${weekDaysDone}</div>
-          </div>
-        </div>
-      `;
+      return c;
     }
 
-    /***********************
-     * Week Summary tab
-     ***********************/
-    function renderWeekSummary(){
-      const el = document.getElementById("weekSummary");
-      const plan = getPlan();
-      const p = getProgress();
-
-      const now = new Date();
-      const monday = new Date(now);
-      const dow = (now.getDay()+6)%7;
-      monday.setDate(now.getDate()-dow);
-
-      let html = "";
-      for(let i=0;i<7;i++){
-        const d = new Date(monday);
-        d.setDate(monday.getDate()+i);
-        const dayName = dayNameFromDate(d);
-        const k = d.toISOString().slice(0,10);
-        const list = plan[dayName] || [];
-        const total = list.length;
-        const ex = p[k]?.exercises || {};
-        let done=0;
-        for(let j=0;j<total;j++){
-          const exId = `${dayName}-${j}`;
-          if(ex[exId]?.done) done++;
-        }
-        const pct = total ? Math.round((done/total)*100) : 0;
-
-        html += `
-          <div class="exercise">
-            <div class="row">
-              <div style="font-weight:950;">${dayName}</div>
-              <div style="font-weight:950;color:${pct===100 ? "var(--ok)" : "var(--muted)"};">
-                ${total ? `${pct}%` : "—"}
-              </div>
-            </div>
-            <div class="exMeta">${total ? `${done} / ${total} completed` : "Rest / no plan"}</div>
-          </div>
-        `;
-      }
-      el.innerHTML = html;
-    }
-
-    /***********************
-     * Health Reset tab
-     ***********************/
-    function getResetText(){
-      return loadJSON(LS.resetText, RESET_DEFAULTS);
-    }
-    function getResetChecks(){
-      return loadJSON(LS.resetChecks, {});
-    }
-    function setResetChecks(v){
-      saveJSON(LS.resetChecks, v);
-    }
-
-    function renderReset(){
-      const txt = getResetText();
-      const checks = getResetChecks();
-      const key = todayKey();
-      checks[key] = checks[key] || { morning:{}, supps:{}, rules:{} };
-
-      const renderList = (items, bucket, container) => {
-        container.innerHTML = "";
-        items.forEach((line, idx) => {
-          const id = `${bucket}-${idx}`;
-          const checked = !!checks[key][bucket][id];
-
-          const row = document.createElement("div");
-          row.className = "exercise";
-          row.style.padding = "10px";
-          row.innerHTML = `
-            <div class="row" style="align-items:center;">
-              <div style="font-weight:900;">${escapeHtml(line)}</div>
-              <button class="doneBtn ${checked?"checked":""}" type="button" style="min-width:90px;">
-                <span class="box"></span> Done
-              </button>
-            </div>
-          `;
-          row.querySelector("button").onclick = () => {
-            const c = getResetChecks();
-            c[key] = c[key] || { morning:{}, supps:{}, rules:{} };
-            c[key][bucket][id] = !c[key][bucket][id];
-            setResetChecks(c);
-            renderReset();
-          };
-          container.appendChild(row);
-        });
-      };
-
-      renderList(txt.morning, "morning", resetMorningEl);
-      renderList(txt.supps, "supps", resetSuppsEl);
-      renderList(txt.rules, "rules", resetRulesEl);
-    }
-
-    /***********************
-     * Measurements
-     ***********************/
-    function renderMeasurements(){
-      const hist = document.getElementById("measHistory");
-      const all = loadJSON(LS.measurements, {});
-      const wk = weekKey();
-      const cur = all[wk] || {};
-
-      // load current
-      document.getElementById("m_weight").value = cur.weight || "";
-      document.getElementById("m_waist").value  = cur.waist  || "";
-      document.getElementById("m_hips").value   = cur.hips   || "";
-      document.getElementById("m_chest").value  = cur.chest  || "";
-      document.getElementById("m_thigh").value  = cur.thigh  || "";
-      document.getElementById("m_arm").value    = cur.arm    || "";
-
-      // history display
-      const keys = Object.keys(all).sort().reverse();
-      if(keys.length===0){
-        hist.innerHTML = `<div class="hint">No saved weeks yet.</div>`;
+    function updateCompletionBadge(total, completed) {
+      if (total === 0) {
+        completionBadgeEl.textContent = "No workout set";
+        completionBadgeEl.className = "badge badge-incomplete";
         return;
       }
-      let html = "";
-      keys.slice(0,12).forEach(k=>{
-        const v = all[k];
-        html += `
-          <div class="exercise">
-            <div class="row">
-              <div style="font-weight:950;">${k}</div>
-              <div style="color:var(--muted);font-weight:800;">Weight: ${escapeHtml(v.weight||"—")} • Waist: ${escapeHtml(v.waist||"—")}</div>
-            </div>
-          </div>
-        `;
-      });
-      hist.innerHTML = html;
-    }
-
-    /***********************
-     * Tabs
-     ***********************/
-    function setTab(name){
-      state.tab = name;
-      tabEls.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
-      Object.keys(sections).forEach(k => {
-        sections[k].style.display = (k === name) ? "" : "none";
-      });
-
-      if(name === "workout") renderWorkout();
-      if(name === "progress") renderProgress();
-      if(name === "week") renderWeekSummary();
-      if(name === "reset") renderReset();
-      if(name === "measurements") renderMeasurements();
-    }
-    tabEls.forEach(t => t.onclick = () => setTab(t.dataset.tab));
-
-    /***********************
-     * Info popup
-     ***********************/
-    function openInfo(key){
-      const item = INFO[key];
-      if(!item) return;
-      infoTitle.textContent = item.title;
-      infoSub.textContent = item.sub;
-      infoBody.innerHTML = item.body;
-      infoBack.style.display = "flex";
-    }
-    document.getElementById("infoCloseBtn").onclick = () => infoBack.style.display = "none";
-    infoBack.addEventListener("click", (e)=>{ if(e.target===infoBack) infoBack.style.display="none"; });
-
-    /***********************
-     * Edit Plan (with pick list)
-     ***********************/
-    let editDraft = null;
-
-    function buildLibrarySelect(selectedName){
-      const sel = document.createElement("select");
-      sel.innerHTML = `<option value="">— Choose from list —</option>`;
-      for(const group of Object.keys(EXERCISE_LIBRARY)){
-        const og = document.createElement("optgroup");
-        og.label = group;
-        EXERCISE_LIBRARY[group].forEach(name=>{
-          const opt = document.createElement("option");
-          opt.value = name;
-          opt.textContent = name;
-          if(name === selectedName) opt.selected = true;
-          og.appendChild(opt);
-        });
-        sel.appendChild(og);
+      if (completed >= total) {
+        completionBadgeEl.textContent = "All done ✔";
+        completionBadgeEl.className = "badge badge-complete";
+      } else {
+        completionBadgeEl.textContent = `${completed}/${total} done`;
+        completionBadgeEl.className = "badge badge-incomplete";
       }
-      const custom = document.createElement("option");
-      custom.value = "__custom__";
-      custom.textContent = "Custom (type your own)…";
-      sel.appendChild(custom);
-      return sel;
     }
 
-    function openEdit(){
-      const plan = getPlan();
-      editDraft = structuredClone(plan[state.selectedDay] || []);
-      renderEditor();
-      document.getElementById("editTitle").textContent = `Edit plan — ${state.selectedDay}`;
-      editBack.style.display = "flex";
+    function render() {
+      renderDayTabs();
+      currentDayLabelEl.textContent = currentDay + " workout";
+      renderExercises();
     }
 
-    function renderEditor(){
-      editorBody.innerHTML = "";
-      editDraft.forEach((ex, idx)=>{
-        const row = document.createElement("div");
-        row.className = "editorRow";
+    // Reset button
+    resetDayBtn.addEventListener("click", () => {
+      if (!confirm(`Reset all progress for ${currentDay} (today only)?`)) return;
+      saveProgress(currentDay, {});
+      renderExercises();
+    });
 
-        // Library select
-        const libSel = buildLibrarySelect(ex.name);
-
-        row.innerHTML = `
-          <div class="editorGrid">
-            <div>
-              <div class="small">Exercise</div>
-              <div class="libHolder"></div>
-              <input class="name" type="text" placeholder="Exercise name" value="${escapeHtml(ex.name||"")}" style="margin-top:6px;" />
-              <div class="small">Tip: choose from the list above, or type a custom name.</div>
-            </div>
-            <div>
-              <div class="small">Sets</div>
-              <input class="sets" type="number" min="0" value="${ex.sets ?? 3}" />
-            </div>
-            <div>
-              <div class="small">Reps / Time</div>
-              <input class="reps" type="text" value="${escapeHtml(ex.reps||"")}" />
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:10px; justify-content:flex-end;">
-            <button class="btn danger removeBtn" type="button">Remove</button>
-            <button class="btn infoBtn" type="button" ${ex.kind==="info" ? "" : "style='display:none;'"}>Info popup</button>
-          </div>
-        `;
-
-        row.querySelector(".libHolder").appendChild(libSel);
-
-        const nameInput = row.querySelector(".name");
-
-        libSel.onchange = () => {
-          if(libSel.value && libSel.value !== "__custom__"){
-            nameInput.value = libSel.value;
-          }
-          if(libSel.value === "Stretching / Mobility"){
-            editDraft[idx].kind="info"; editDraft[idx].infoKey="mobility";
-          }
-          if(libSel.value === "Core Circuit"){
-            editDraft[idx].kind="info"; editDraft[idx].infoKey="core";
-          }
-          if(libSel.value === "Full-Body Circuit"){
-            editDraft[idx].kind="info"; editDraft[idx].infoKey="fullbody";
-          }
-        };
-
-        row.querySelector(".removeBtn").onclick = () => {
-          editDraft.splice(idx,1);
-          renderEditor();
-        };
-
-        row.querySelector(".infoBtn").onclick = () => {
-          openInfo(ex.infoKey || "core");
-        };
-
-        // Write back values on input changes
-        row.querySelector(".sets").onchange = (e)=> editDraft[idx].sets = Number(e.target.value||0);
-        row.querySelector(".reps").onchange = (e)=> editDraft[idx].reps = e.target.value;
-        nameInput.onchange = (e)=> {
-          editDraft[idx].name = e.target.value;
-
-          // If user typed a known popup title, keep popup behavior
-          if(e.target.value.trim() === "Core Circuit"){ editDraft[idx].kind="info"; editDraft[idx].infoKey="core"; }
-          else if(e.target.value.trim() === "Full-Body Circuit"){ editDraft[idx].kind="info"; editDraft[idx].infoKey="fullbody"; }
-          else if(e.target.value.trim() === "Stretching / Mobility"){ editDraft[idx].kind="info"; editDraft[idx].infoKey="mobility"; }
-          else { editDraft[idx].kind = editDraft[idx].kind || "exercise"; }
-        };
-
-        editorBody.appendChild(row);
-      });
-    }
-
-    document.getElementById("editPlanBtn").onclick = openEdit;
-    document.getElementById("closeEditBtn").onclick = () => editBack.style.display = "none";
-    document.getElementById("cancelEditBtn").onclick = () => editBack.style.display = "none";
-    editBack.addEventListener("click", (e)=>{ if(e.target===editBack) editBack.style.display="none"; });
-
-    document.getElementById("addExerciseBtn").onclick = () => {
-      editDraft.push({ name:"", sets:3, reps:"10–12", kind:"exercise" });
-      renderEditor();
-    };
-
-    document.getElementById("restoreDefaultsBtn").onclick = () => {
-      if(confirm("Restore defaults for this day?")){
-        editDraft = structuredClone(DEFAULT_PLAN[state.selectedDay] || []);
-        renderEditor();
-      }
-    };
-
-    document.getElementById("saveEditBtn").onclick = () => {
-      const override = loadJSON(LS.planOverride, {});
-      override[state.selectedDay] = editDraft.map(x => ({
-        name: (x.name||"").trim() || "Exercise",
-        sets: Number(x.sets||0),
-        reps: (x.reps||"").trim(),
-        kind: x.kind || "exercise",
-        infoKey: x.infoKey
-      }));
-      saveJSON(LS.planOverride, override);
-      editBack.style.display="none";
-      renderWorkout();
-      renderProgress();
-      renderWeekSummary();
-    };
-
-    /***********************
-     * Reset day progress (today only)
-     ***********************/
-    document.getElementById("resetTodayLink").onclick = () => {
-      if(!confirm("Reset progress for this selected day (this week) only?")) return;
-      const p = getProgress();
-      const key = progressKeyForDay(state.selectedDay);
-      delete p[key];
-      setProgress(p);
-      renderWorkout();
-      renderProgress();
-      renderWeekSummary();
-    };
-
-    /***********************
-     * Edit Health Reset
-     ***********************/
-    document.getElementById("editResetBtn").onclick = () => {
-      const txt = getResetText();
-      resetEditMorning.value = (txt.morning||[]).join("\n");
-      resetEditSupps.value = (txt.supps||[]).join("\n");
-      resetEditRules.value = (txt.rules||[]).join("\n");
-      resetBack.style.display="flex";
-    };
-    document.getElementById("closeResetBtn").onclick = () => resetBack.style.display="none";
-    document.getElementById("cancelResetSaveBtn").onclick = () => resetBack.style.display="none";
-    resetBack.addEventListener("click", (e)=>{ if(e.target===resetBack) resetBack.style.display="none"; });
-
-    document.getElementById("saveResetBtn").onclick = () => {
-      const newTxt = {
-        morning: resetEditMorning.value.split("\n").map(s=>s.trim()).filter(Boolean),
-        supps: resetEditSupps.value.split("\n").map(s=>s.trim()).filter(Boolean),
-        rules: resetEditRules.value.split("\n").map(s=>s.trim()).filter(Boolean),
-      };
-      saveJSON(LS.resetText, newTxt);
-      resetBack.style.display="none";
-      renderReset();
-    };
-
-    /***********************
-     * Measurements actions
-     ***********************/
-    document.getElementById("measSaveBtn").onclick = () => {
-      const all = loadJSON(LS.measurements, {});
-      const wk = weekKey();
-      all[wk] = {
-        weight: document.getElementById("m_weight").value.trim(),
-        waist: document.getElementById("m_waist").value.trim(),
-        hips: document.getElementById("m_hips").value.trim(),
-        chest: document.getElementById("m_chest").value.trim(),
-        thigh: document.getElementById("m_thigh").value.trim(),
-        arm: document.getElementById("m_arm").value.trim(),
-      };
-      saveJSON(LS.measurements, all);
-      renderMeasurements();
-      alert("Saved!");
-    };
-    document.getElementById("measClearBtn").onclick = () => {
-      if(!confirm("Clear this week’s inputs?")) return;
-      document.getElementById("m_weight").value = "";
-      document.getElementById("m_waist").value = "";
-      document.getElementById("m_hips").value = "";
-      document.getElementById("m_chest").value = "";
-      document.getElementById("m_thigh").value = "";
-      document.getElementById("m_arm").value = "";
-    };
-
-    /***********************
-     * Utilities
-     ***********************/
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    /***********************
-     * Init
-     ***********************/
-    document.getElementById("dateLine").textContent =
-      new Date().toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric",year:"numeric"});
-
-    // Monday pulse (title only)
-    if(new Date().getDay() === 1){
-      document.getElementById("appTitle").classList.add("mondayPulse");
-    }
-
-    // First render
-    setTab("workout");
-    renderProgress();
-    renderWeekSummary();
+    // Initial render
+    renderDateLabel();
+    render();
   </script>
 </body>
 </html>
