@@ -22,12 +22,11 @@
       --ok:#12B76A;
       --danger:#e11d48;
 
-      /* “tighter / sleeker” */
-      --radius:16px;
-      --radius-sm:12px;
-      --shadow:0 10px 24px rgba(16,24,40,.08);
+      /* Sleeker (less bubbly) */
+      --radiusCard:18px;
+      --radiusBox:12px;
+      --shadow:0 10px 26px rgba(16,24,40,.10);
     }
-
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -35,48 +34,42 @@
       background:var(--bg);
       color:var(--text);
     }
-
     header{
-      max-width:900px;
+      max-width:860px;
       margin:0 auto;
-      padding:18px 16px 10px;
+      padding:18px 14px 10px;
     }
-
     h1{
       margin:0;
       font-size:34px;
       letter-spacing:.2px;
-      line-height:1.1;
-      font-weight:900;
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
-    .titleEmoji{font-size:.78em; margin-left:8px}
-    .sub{margin:6px 0 4px; color:var(--muted); font-weight:650}
+    .titleEmoji{font-size:.85em}
+    .sub{margin:4px 0 4px; color:var(--muted); font-weight:650}
     .dateLine{color:var(--muted); font-weight:650}
 
-    .wrap{
-      max-width:900px;
-      margin:0 auto;
-      padding:12px 16px 90px;
-    }
-
-    /* Tabs */
+    /* Tabs: thinner + tighter */
     .tabbar{
-      margin-top:14px;
+      margin-top:12px;
       background:#fff;
       border:1px solid var(--line);
       border-radius:999px;
-      padding:6px;
+      padding:4px;
       display:flex;
-      gap:6px;
-      box-shadow:0 6px 14px rgba(16,24,40,.06);
-      overflow:auto;
+      gap:4px;
+      box-shadow:0 4px 10px rgba(16,24,40,.06);
+      overflow-x:auto;
       -webkit-overflow-scrolling:touch;
     }
     .tab{
       flex:1 0 auto;
       text-align:center;
-      font-weight:850;
-      padding:10px 14px;
+      font-weight:800;
+      font-size:14px;
+      padding:8px 10px;
       border-radius:999px;
       cursor:pointer;
       user-select:none;
@@ -86,33 +79,61 @@
     .tab.active{
       background:var(--brand);
       color:#fff;
-      box-shadow:0 10px 22px rgba(44,123,229,.22);
+      box-shadow:0 8px 18px rgba(44,123,229,.22);
     }
 
-    /* Cards */
+    .wrap{max-width:860px; margin:0 auto; padding:12px 14px 90px;}
     .card{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:var(--radius);
+      border-radius:var(--radiusCard);
       box-shadow:var(--shadow);
       padding:14px;
       margin-top:12px;
     }
-
-    .topRow{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    h2{
+    .card h2{
       margin:0;
       font-size:22px;
-      font-weight:950;
+      font-weight:900;
     }
     .hint{margin:6px 0 0; color:var(--muted); font-weight:650}
 
+    /* Day chips: one line, above title */
+    .days{
+      display:flex;
+      gap:8px;
+      flex-wrap:nowrap;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      padding-bottom:4px;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:7px 10px;
+      border-radius:999px;
+      font-weight:850;
+      font-size:14px;
+      cursor:pointer;
+      color:var(--muted);
+      user-select:none;
+      min-width:52px;
+      text-align:center;
+    }
+    .chip.active{
+      border-color: rgba(44,123,229,.25);
+      background: rgba(44,123,229,.10);
+      color: var(--brand);
+    }
+
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:10px;
+      flex-wrap:wrap;
+    }
     .rightTools{
       display:flex;
       align-items:center;
@@ -124,11 +145,12 @@
     .btn{
       border:1px solid var(--line);
       background:#fff;
-      border-radius:12px;
+      border-radius:10px;
       padding:9px 11px;
       font-weight:900;
       cursor:pointer;
       white-space:nowrap;
+      font-size:14px;
     }
     .btn.primary{
       background:var(--brand);
@@ -136,7 +158,7 @@
       color:#fff;
     }
     .btn.danger{
-      background:rgba(225,29,72,.10);
+      background:rgba(225,29,72,.08);
       border-color:rgba(225,29,72,.25);
       color:var(--danger);
     }
@@ -147,44 +169,19 @@
       color:var(--ok);
       padding:6px 10px;
       border-radius:999px;
-      font-weight:950;
+      font-weight:900;
       display:none;
       white-space:nowrap;
+      font-size:13px;
     }
 
-    /* Day chips */
-    .days{
-      display:flex;
-      gap:8px;
-      margin-top:12px;
-      flex-wrap:wrap;
-    }
-    .chip{
-      border:1px solid var(--line);
-      background:#fff;
-      padding:8px 12px;
-      border-radius:999px;
-      font-weight:850;
-      cursor:pointer;
-      color:var(--muted);
-      user-select:none;
-      min-width:56px;
-      text-align:center;
-    }
-    .chip.active{
-      border-color: rgba(44,123,229,.25);
-      background: rgba(44,123,229,.10);
-      color: var(--brand);
-    }
-
-    /* Exercise blocks */
     .ex{
       border:1px solid var(--line);
-      border-radius:14px;      /* tighter than before */
+      border-radius:var(--radiusBox);
       padding:12px;
       margin-top:10px;
+      background:#fff;
     }
-
     .exHead{
       display:flex;
       align-items:flex-start;
@@ -195,24 +192,31 @@
       font-weight:950;
       font-size:18px;
       margin:0;
+      line-height:1.2;
     }
     .exMeta{
       margin:4px 0 0;
       color:var(--muted);
-      font-weight:700
+      font-weight:700;
+      font-size:14px;
     }
-
+    .exClickable{
+      cursor:pointer;
+      text-decoration:underline dotted rgba(102,112,133,.8);
+      text-underline-offset:3px;
+    }
     .doneBtn{
       display:flex;
       align-items:center;
       gap:8px;
       border:1px solid var(--line);
       background:#fff;
-      border-radius:12px;
-      padding:9px 10px;
+      border-radius:10px;
+      padding:9px 11px;
       font-weight:900;
       cursor:pointer;
       white-space:nowrap;
+      font-size:14px;
     }
     .doneBtn.checked{
       border-color: rgba(44,123,229,.25);
@@ -220,7 +224,7 @@
       color: var(--brand);
     }
     .doneBox{
-      width:20px; height:20px;
+      width:18px; height:18px;
       border-radius:6px;
       border:2px solid #98A2B3;
       display:inline-flex;
@@ -229,25 +233,27 @@
       font-weight:900;
       color:#fff;
       background:#fff;
+      line-height:1;
     }
     .doneBtn.checked .doneBox{
       background: var(--brand);
       border-color: var(--brand);
     }
 
+    /* Weight + Notes on one line (stack only on very tiny screens) */
     .grid2{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:10px;
       margin-top:10px;
     }
-    @media (max-width:720px){
+    @media (max-width:420px){
       .grid2{grid-template-columns:1fr;}
     }
     label{
       display:block;
       font-size:12px;
-      font-weight:850;
+      font-weight:800;
       color:var(--muted);
       margin-bottom:6px;
     }
@@ -255,13 +261,13 @@
       width:100%;
       border:1px solid var(--line);
       border-radius:12px;
-      padding:10px 10px;
+      padding:11px 12px;
       font-size:14px;
       font-weight:650;
       outline:none;
       background:#fff;
     }
-    textarea{min-height:48px; resize:vertical;}
+    textarea{min-height:44px; resize:vertical;}
 
     .resetLink{
       margin-top:12px;
@@ -270,16 +276,9 @@
       cursor:pointer;
       text-decoration:underline;
       display:inline-block;
+      font-size:14px;
     }
 
-    .footerNote{
-      text-align:center;
-      color:var(--muted);
-      font-weight:650;
-      margin-top:14px;
-    }
-
-    /* Progress stats */
     .statGrid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -291,74 +290,51 @@
     }
     .stat{
       border:1px solid var(--line);
-      border-radius:14px;
+      border-radius:var(--radiusBox);
       padding:12px;
       background:#fff;
     }
     .stat .k{color:var(--muted); font-weight:850; font-size:12px;}
     .stat .v{font-weight:950; font-size:20px; margin-top:4px;}
 
-    /* Reset checklist rows */
+    .footerNote{
+      text-align:center;
+      color:var(--muted);
+      font-weight:650;
+      margin-top:14px;
+      font-size:13px;
+    }
+
+    /* Checklist rows */
     .check{
       display:flex;
       align-items:flex-start;
       gap:10px;
       padding:10px 12px;
       border:1px solid var(--line);
-      border-radius:14px;
+      border-radius:var(--radiusBox);
       background:#fff;
       margin-top:10px;
     }
-    .check input[type="checkbox"]{
+    .check input{
       width:18px; height:18px; margin-top:2px;
       accent-color: var(--brand);
     }
     .check .t{font-weight:900;}
     .check .s{margin-top:4px; color:var(--muted); font-weight:650; font-size:13px; line-height:1.35;}
 
-    .subhead{
-      margin:0;
-      font-size:16px;
-      font-weight:950;
-    }
-
-    /* Measurements */
-    .measGrid{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:10px;
-      margin-top:10px;
-    }
-    @media (max-width:720px){
-      .measGrid{grid-template-columns:1fr;}
-    }
-    .rowBtns{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      margin-top:10px;
-    }
-    .historyRow{
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:10px 12px;
-      background:#fff;
-      margin-top:10px;
-    }
-
-    /* Modals */
+    /* Modal */
     .modalBack{
       position:fixed; inset:0;
       background:rgba(0,0,0,.35);
       display:none;
       align-items:center;
       justify-content:center;
-      padding:16px;
+      padding:14px;
       z-index:50;
     }
     .modal{
-      width:min(920px, 100%);
+      width:min(860px, 100%);
       background:#fff;
       border:1px solid var(--line);
       border-radius:16px;
@@ -376,45 +352,51 @@
     }
     .modal h3{margin:0; font-size:18px; font-weight:950;}
     .modal p{margin:6px 0 0; color:var(--muted); font-weight:650;}
-
     .editRow{
       border:1px solid var(--line);
-      border-radius:14px;
+      border-radius:var(--radiusBox);
       padding:12px;
       margin-top:10px;
       background:#fff;
     }
     .editGrid{
       display:grid;
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: 1.2fr 1fr .7fr .9fr; /* picker + name + sets + reps */
       gap:10px;
       margin-top:10px;
     }
     @media (max-width:720px){
       .editGrid{grid-template-columns:1fr;}
     }
-
+    .rowBtns{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
     .infoBody{
       margin-top:10px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px;
-      background:#fff;
-      font-weight:650;
-      line-height:1.5;
-      color:#1f2937;
-      white-space:pre-wrap;
+      line-height:1.45;
+      font-size:14px;
     }
+    .infoBody h4{margin:12px 0 6px; font-size:15px;}
+    .infoBody ul{margin:6px 0 10px 18px;}
+    .infoBody li{margin:4px 0;}
 
-    /* Monday pulse */
+    /* Monday pulse on title */
     @keyframes pulseSoft{
       0%{transform:scale(1);opacity:1}
       50%{transform:scale(1.02);opacity:.92}
       100%{transform:scale(1);opacity:1}
     }
-    .mondayPulse{
-      animation:pulseSoft 2.4s ease-in-out infinite;
-      transform-origin:left center;
+    .mondayPulse{ animation:pulseSoft 2.5s ease-in-out infinite; }
+
+    /* Make cards slightly tighter on phone */
+    @media (max-width:480px){
+      .card{padding:12px}
+      .ex{padding:12px}
+      .tab{font-size:13px}
     }
   </style>
 </head>
@@ -438,6 +420,9 @@
     <!-- WORKOUT -->
     <section id="tab-workout">
       <div class="card">
+        <!-- Days FIRST (per your request) -->
+        <div class="days" id="dayChips"></div>
+
         <div class="topRow">
           <div>
             <h2 id="dayTitle">Monday workout</h2>
@@ -450,13 +435,11 @@
           </div>
         </div>
 
-        <div class="days" id="dayChips"></div>
         <div id="exerciseList"></div>
-
         <div class="resetLink" id="resetTodayLink">Reset this day’s progress (today only).</div>
       </div>
 
-      <div class="footerNote">All data is stored locally on this device.</div>
+      <div class="footerNote">All data is stored locally in your browser on this device only.</div>
     </section>
 
     <!-- PROGRESS -->
@@ -480,8 +463,6 @@
           </div>
         </div>
       </div>
-
-      <div class="footerNote">Built by consistency.</div>
     </section>
 
     <!-- WEEK SUMMARY -->
@@ -491,11 +472,9 @@
         <div class="hint">A quick overview of each day.</div>
         <div id="weekSummary"></div>
       </div>
-
-      <div class="footerNote">Built by consistency.</div>
     </section>
 
-    <!-- HEALTH RESET -->
+    <!-- HEALTH RESET (editable) -->
     <section id="tab-reset" style="display:none;">
       <div class="card">
         <div class="topRow">
@@ -509,17 +488,17 @@
         </div>
 
         <div style="margin-top:10px;">
-          <h3 class="subhead">Morning Thyroid Routine</h3>
+          <h3 style="margin:0; font-size:16px; font-weight:950;">Morning Thyroid Routine</h3>
           <div id="resetMorning"></div>
         </div>
 
         <div style="margin-top:14px;">
-          <h3 class="subhead">Supplements Schedule</h3>
+          <h3 style="margin:0; font-size:16px; font-weight:950;">Supplements Schedule</h3>
           <div id="resetSupps"></div>
         </div>
 
         <div style="margin-top:14px;">
-          <h3 class="subhead">2-Week Thyroid-Friendly Reset</h3>
+          <h3 style="margin:0; font-size:16px; font-weight:950;">2-Week Thyroid-Friendly Reset</h3>
           <div id="resetRules"></div>
         </div>
       </div>
@@ -527,30 +506,52 @@
       <div class="footerNote">These checkmarks reset daily by date.</div>
     </section>
 
-    <!-- MEASUREMENTS -->
+    <!-- MEASUREMENTS (weekly) -->
     <section id="tab-measurements" style="display:none;">
       <div class="card">
         <h2>Measurements (Weekly)</h2>
         <div class="hint">Track trends, not perfection.</div>
 
-        <div class="measGrid">
-          <div><label>Weight</label><input id="m_weight" type="text" placeholder="e.g., 160" /></div>
-          <div><label>Waist</label><input id="m_waist" type="text" placeholder="inches" /></div>
-          <div><label>Hips</label><input id="m_hips" type="text" placeholder="inches" /></div>
-          <div><label>Chest</label><input id="m_chest" type="text" placeholder="inches" /></div>
-          <div><label>Thigh</label><input id="m_thigh" type="text" placeholder="inches" /></div>
-          <div><label>Arm</label><input id="m_arm" type="text" placeholder="inches" /></div>
+        <div class="grid2" style="margin-top:12px;">
+          <div>
+            <label>Weight</label>
+            <input id="m_weight" type="text" placeholder="e.g., 160" />
+          </div>
+          <div>
+            <label>Waist</label>
+            <input id="m_waist" type="text" placeholder="inches" />
+          </div>
         </div>
 
-        <div class="rowBtns">
-          <button class="btn primary" id="measSaveBtn" type="button">Save this week</button>
+        <div class="grid2">
+          <div>
+            <label>Hips</label>
+            <input id="m_hips" type="text" placeholder="inches" />
+          </div>
+          <div>
+            <label>Chest</label>
+            <input id="m_chest" type="text" placeholder="inches" />
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label>Thigh</label>
+            <input id="m_thigh" type="text" placeholder="inches" />
+          </div>
+          <div>
+            <label>Arm</label>
+            <input id="m_arm" type="text" placeholder="inches" />
+          </div>
+        </div>
+
+        <div class="rowBtns" style="margin-top:12px;">
+          <button class="btn" id="measSaveBtn" type="button">Save this week</button>
           <button class="btn danger" id="measClearBtn" type="button">Clear this week</button>
         </div>
 
         <div id="measHistory" style="margin-top:14px;"></div>
       </div>
-
-      <div class="footerNote">Built by consistency.</div>
     </section>
   </main>
 
@@ -560,7 +561,7 @@
       <div class="modalTop">
         <div>
           <h3 id="modalTitle">Edit plan</h3>
-          <p id="modalSub">Edit exercises for the selected day. Saved changes show immediately.</p>
+          <p id="modalSub">Pick from lists or type your own. Saved changes show immediately.</p>
         </div>
         <div class="rowBtns" style="justify-content:flex-start;">
           <button class="btn" id="addExerciseBtn" type="button">+ Add exercise</button>
@@ -578,7 +579,7 @@
     </div>
   </div>
 
-  <!-- POPUP MODAL (circuits/mobility) -->
+  <!-- INFO POPUP (circuits/mobility) -->
   <div class="modalBack" id="infoBack" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div class="modalTop">
@@ -595,44 +596,44 @@
   </div>
 
   <!-- EDIT RESET MODAL -->
-  <div class="modalBack" id="resetBack" aria-hidden="true">
+  <div class="modalBack" id="resetEditBack" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div class="modalTop">
         <div>
           <h3>Edit Health Reset</h3>
-          <p>One item per line. Format: <b>Title | Subtitle</b></p>
+          <p>One item per line. Format: <b>Title</b> | <b>Subtext</b></p>
         </div>
         <div class="rowBtns" style="justify-content:flex-start;">
-          <button class="btn" id="resetCloseBtn" type="button">Close</button>
+          <button class="btn" id="resetEditCloseBtn" type="button">Close</button>
         </div>
       </div>
 
-      <div class="editRow">
-        <div style="font-weight:950;">Morning Thyroid Routine</div>
-        <textarea id="resetMorningText" placeholder="Title | Subtitle&#10;Title | Subtitle"></textarea>
+      <div style="margin-top:10px;">
+        <h4 style="margin:0 0 6px; font-size:14px;">Morning Thyroid Routine</h4>
+        <textarea id="resetEditMorning" placeholder="Title | Subtext"></textarea>
       </div>
 
-      <div class="editRow">
-        <div style="font-weight:950;">Supplements Schedule</div>
-        <textarea id="resetSuppsText" placeholder="Title | Subtitle&#10;Title | Subtitle"></textarea>
+      <div style="margin-top:10px;">
+        <h4 style="margin:0 0 6px; font-size:14px;">Supplements Schedule</h4>
+        <textarea id="resetEditSupps" placeholder="Title | Subtext"></textarea>
       </div>
 
-      <div class="editRow">
-        <div style="font-weight:950;">2-Week Thyroid-Friendly Reset</div>
-        <textarea id="resetRulesText" placeholder="Title | Subtitle&#10;Title | Subtitle"></textarea>
+      <div style="margin-top:10px;">
+        <h4 style="margin:0 0 6px; font-size:14px;">2-Week Thyroid-Friendly Reset</h4>
+        <textarea id="resetEditRules" placeholder="Title | Subtext"></textarea>
       </div>
 
       <div class="rowBtns">
-        <button class="btn danger" id="resetRestoreBtn" type="button">Restore defaults</button>
-        <button class="btn primary" id="resetSaveBtn" type="button">Save</button>
+        <button class="btn" id="resetEditCancelBtn" type="button">Cancel</button>
+        <button class="btn primary" id="resetEditSaveBtn" type="button">Save reset</button>
       </div>
     </div>
   </div>
 
 <script>
 /* =========================
-   Defaults
-========================= */
+   DEFAULT WORKOUT PLAN
+   ========================= */
 const DEFAULT_PLAN = {
   Monday: [
     { name: "Incline Dumbbell Press", sets: 3, reps: "10–12" },
@@ -644,7 +645,7 @@ const DEFAULT_PLAN = {
   Tuesday: [
     { name: "Goblet Squat", sets: 3, reps: "10–12" },
     { name: "Romanian Deadlift", sets: 3, reps: "10–12" },
-    { name: "Glute Bridge/Hip Thrust", sets: 3, reps: "12–15" },
+    { name: "Glute Bridge / Hip Thrust", sets: 3, reps: "12–15" },
     { name: "Calf Raises", sets: 3, reps: "15–20" },
     { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
   ],
@@ -653,13 +654,13 @@ const DEFAULT_PLAN = {
     { name: "Dumbbell Row", sets: 3, reps: "10–12" },
     { name: "Lateral Raises", sets: 3, reps: "12–15" },
     { name: "Biceps Curls", sets: 3, reps: "10–12" },
-    { name: "Core Circuit", sets: 3, reps: "3–4 exercises" }
+    { name: "Core Circuit", sets: 3, reps: "3–4 moves" }
   ],
   Thursday: [
     { name: "Leg Press or Step-Ups", sets: 3, reps: "10–12" },
     { name: "Lunges (or split squats)", sets: 3, reps: "10–12/leg" },
     { name: "Hamstring Curl", sets: 3, reps: "10–12" },
-    { name: "Core Circuit", sets: 3, reps: "3–4 exercises" },
+    { name: "Core Circuit", sets: 3, reps: "3–4 moves" },
     { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
   ],
   Friday: [
@@ -677,121 +678,99 @@ const DEFAULT_PLAN = {
   ]
 };
 
-const INFO_TEXT = {
-  core: `Pick 3–4 moves below. Do them in a loop.
-Rest 30–45 seconds between moves.
-Rest 60–90 seconds between rounds.
-Total time: 10–15 minutes
-
-Option A (best overall)
-
-Dead Bug – 8–10/side
-Bird Dog – 8–10/side
-Side Plank – 20–30 sec/side
-Glute Bridge – 12–15
-
-Option B (more “tight waist” feel)
-
-Pallof Press (band/cable) – 10–12/side
-Plank – 30–45 sec
-Suitcase Carry (one dumbbell) – 30–45 sec/side
-Reverse Crunch – 10–12 (slow)
-
-👉 Rule: if anything hurts your low back, swap it.`,
-  full: `✅ Full-Body Circuit (3 sets • 8–10 exercises)
-
-This is a moderate pace circuit, not HIIT.
-Pick 8 exercises (or use my ready-made one below).
-Work 35–45 sec, rest 15–25 sec between exercises.
-Rest 90 sec between rounds.
-Total time: 20–30 minutes
-
-Ready-made Full-Body Circuit (my favorite for fat loss + strength)
-
-Goblet Squat
-Dumbbell Row
-Incline Dumbbell Press (or push-ups)
-Romanian Deadlift (light–moderate)
-Shoulder Press
-Lateral Raise
-Glute Bridge / Hip Thrust
-Pallof Press or Dead Bug
-
-Optional 9–10:
-Biceps Curl
-Triceps Rope Pushdown
-
-👉 Keep weights where you can maintain good form. The goal is “sweaty but controlled.”`,
-  stretch: `✅ Stretching / Mobility (10–15 min)
-
-This is your “feel better tomorrow” block.
-
-Quick 10–12 minute mobility flow
-
-Chest opener stretch (doorway) – 45 sec
-Child’s pose – 45 sec
-Hip flexor stretch – 45 sec/side
-Figure-4 glute stretch – 45 sec/side
-Hamstring stretch – 45 sec/side
-Thoracic rotation (“open books”) – 8 reps/side
-Calf stretch – 30–45 sec/side
-
-If knees are cranky: do hip + upper body stretches more, less deep knee bending.`
-};
-
-/* Exercise library for picker */
+/* =========================
+   EXERCISE PICKER LISTS
+   ========================= */
 const EXERCISE_LIBRARY = {
-  "Chest": [
-    { name:"Incline Dumbbell Press", reps:"10–12" },
-    { name:"Push-Ups", reps:"AMRAP" }
-  ],
-  "Back": [
-    { name:"Lat Pulldown", reps:"10–12" },
-    { name:"Dumbbell Row", reps:"10–12" }
-  ],
-  "Shoulders": [
-    { name:"Dumbbell Shoulder Press", reps:"10–12" },
-    { name:"Lateral Raises", reps:"12–15" }
-  ],
-  "Biceps": [
-    { name:"Biceps Curls", reps:"10–12" },
-    { name:"Hammer Curls", reps:"10–12" }
-  ],
-  "Triceps": [
-    { name:"Triceps Rope Pushdown", reps:"12–15" },
-    { name:"Overhead Triceps Extension", reps:"10–12" }
-  ],
-  "Legs/Glutes": [
-    { name:"Goblet Squat", reps:"10–12" },
-    { name:"Romanian Deadlift", reps:"10–12" },
-    { name:"Glute Bridge/Hip Thrust", reps:"12–15" },
-    { name:"Lunges (or split squats)", reps:"10–12/leg" },
-    { name:"Leg Press or Step-Ups", reps:"10–12" },
-    { name:"Hamstring Curl", reps:"10–12" },
-    { name:"Calf Raises", reps:"15–20" }
-  ],
-  "Core": [
-    { name:"Core Circuit", reps:"3–4 exercises" },
-    { name:"Pallof Press", reps:"10–12/side" },
-    { name:"Dead Bug", reps:"8–10/side" }
-  ],
-  "Conditioning": [
-    { name:"Walking Treadmill", reps:"20–30 min" },
-    { name:"Optional: Light Walk", reps:"20–40 min" }
-  ],
-  "Mobility": [
-    { name:"Stretching / Mobility", reps:"10–15 min" },
-    { name:"Stretching / Yoga", reps:"10–20 min" },
-    { name:"Rest / Mobility", reps:"10–20 min" }
-  ],
-  "Circuits": [
-    { name:"Full-Body Circuit", reps:"8–10 exercises" },
-    { name:"Extra Arms / Glutes", reps:"Choose your favs" }
-  ]
+  "Shoulders": ["Lateral Raises","Front Raises","Rear Delt Fly","Face Pulls","Dumbbell Shoulder Press","Arnold Press"],
+  "Back": ["Lat Pulldown","Seated Cable Row","Dumbbell Row","Single-Arm Dumbbell Row","Assisted Pull-Up","Band Row"],
+  "Chest": ["Incline Dumbbell Press","Flat Dumbbell Press","Push-Ups","Incline Push-Ups","Chest Fly (DB/Cable)"],
+  "Biceps": ["Biceps Curls","Hammer Curls","Alternating Curls","Cable Curls"],
+  "Triceps": ["Triceps Rope Pushdown","Overhead Tricep Extension","Skull Crushers","Bench Dips","Tricep Dips"],
+  "Legs": ["Goblet Squat","Leg Press","Step-Ups","Lunges","Split Squat","Calf Raises","Hamstring Curl","Leg Extension"],
+  "Glutes": ["Glute Bridge","Hip Thrust","RDL (Romanian Deadlift)","Cable Kickbacks","Banded Side Steps"],
+  "Core": ["Core Circuit","Dead Bug","Bird Dog","Plank","Side Plank","Pallof Press","Reverse Crunch"],
+  "Conditioning": ["Walking Treadmill","Incline Walk","Bike","Row (easy)"]
 };
 
-/* Health reset defaults */
-const RESET_DEFAULTS = {
+/* =========================
+   INFO POPUPS (your exact text)
+   ========================= */
+const INFO_CONTENT = {
+  "Core Circuit": `
+    <p><b>Pick 3–4 moves below. Do them in a loop.</b><br>
+    Rest 30–45 seconds between moves.<br>
+    Rest 60–90 seconds between rounds.<br>
+    Total time: 10–15 minutes</p>
+
+    <h4>Option A (best overall)</h4>
+    <ul>
+      <li>Dead Bug – 8–10/side</li>
+      <li>Bird Dog – 8–10/side</li>
+      <li>Side Plank – 20–30 sec/side</li>
+      <li>Glute Bridge – 12–15</li>
+    </ul>
+
+    <h4>Option B (more “tight waist” feel)</h4>
+    <ul>
+      <li>Pallof Press (band/cable) – 10–12/side</li>
+      <li>Plank – 30–45 sec</li>
+      <li>Suitcase Carry (one dumbbell) – 30–45 sec/side</li>
+      <li>Reverse Crunch – 10–12 (slow)</li>
+    </ul>
+
+    <p>👉 <b>Rule:</b> if anything hurts your low back, swap it.</p>
+  `,
+  "Full-Body Circuit": `
+    <p><b>✅ Full-Body Circuit (3 sets • 8–10 exercises)</b></p>
+    <p>This is a moderate pace circuit, not HIIT.<br>
+    Pick 8 exercises (or use my ready-made one below).<br>
+    Work 35–45 sec, rest 15–25 sec between exercises.<br>
+    Rest 90 sec between rounds.<br>
+    Total time: 20–30 minutes</p>
+
+    <h4>Ready-made Full-Body Circuit (my favorite for fat loss + strength)</h4>
+    <ul>
+      <li>Goblet Squat</li>
+      <li>Dumbbell Row</li>
+      <li>Incline Dumbbell Press (or push-ups)</li>
+      <li>Romanian Deadlift (light–moderate)</li>
+      <li>Shoulder Press</li>
+      <li>Lateral Raise</li>
+      <li>Glute Bridge / Hip Thrust</li>
+      <li>Pallof Press or Dead Bug</li>
+    </ul>
+    <p><b>Optional 9–10:</b></p>
+    <ul>
+      <li>Biceps Curl</li>
+      <li>Triceps Rope Pushdown</li>
+    </ul>
+
+    <p>👉 Keep weights where you can maintain good form. The goal is “sweaty but controlled.”</p>
+  `,
+  "Stretching / Mobility": `
+    <p><b>✅ Stretching / Mobility (10–15 min)</b><br>
+    This is your “feel better tomorrow” block.</p>
+
+    <h4>Quick 10–12 minute mobility flow</h4>
+    <ul>
+      <li>Chest opener stretch (doorway) – 45 sec</li>
+      <li>Child’s pose – 45 sec</li>
+      <li>Hip flexor stretch – 45 sec/side</li>
+      <li>Figure-4 glute stretch – 45 sec/side</li>
+      <li>Hamstring stretch – 45 sec/side</li>
+      <li>Thoracic rotation (“open books”) – 8 reps/side</li>
+      <li>Calf stretch – 30–45 sec/side</li>
+    </ul>
+
+    <p>If knees are cranky: do hip + upper body stretches more, less deep knee bending.</p>
+  `
+};
+
+/* =========================
+   DEFAULT HEALTH RESET (editable)
+   ========================= */
+const DEFAULT_RESET = {
   morning: [
     { key:"synthroid", title:"6:30 AM: Synthroid (empty stomach)", sub:"Water is fine. Avoid supplements/minerals/fiber for 45–60 minutes." },
     { key:"lemon", title:"Warm lemon water at work is OK", sub:"No minerals in lemon = fine with Synthroid timing." },
@@ -799,35 +778,39 @@ const RESET_DEFAULTS = {
     { key:"salt", title:"Finish Baja Gold salt water after coffee", sub:"Small sips earlier are fine; finishing later is the cleanest." }
   ],
   supps: [
-    { key:"lunch_probiotic", title:"Lunch: Probiotic", sub:"Keep consistent." },
-    { key:"dinner_multi", title:"Dinner: Multi (with minerals)", sub:"Keeps minerals away from Synthroid." },
-    { key:"dinner_chromium", title:"Dinner: Chromium (if using)", sub:"Best with higher-carb meal." },
-    { key:"bed_mag", title:"Bedtime: Magnesium", sub:"Supports sleep + insulin sensitivity." }
+    { key:"am_nad", title:"Morning or lunch (not late): NAD+ (if keeping it)", sub:"Avoid late-day dosing if it revs your system." },
+    { key:"lunch_probiotic", title:"Lunch: Good Girl Probiotic", sub:"Keep consistent." },
+    { key:"lunch_omega", title:"Lunch: Omega-3", sub:"With food." },
+    { key:"dinner_multi", title:"Dinner: MultiComplete", sub:"Keeps minerals away from Synthroid." },
+    { key:"dinner_chromium", title:"Dinner: Chromium picolinate 200 mcg", sub:"Best with your higher-carb meal." },
+    { key:"dinner_citrucel", title:"Dinner: Citrucel", sub:"Helps keep fiber away from Synthroid window." },
+    { key:"bed_mag", title:"Bedtime: Magnesium", sub:"Supports sleep + insulin sensitivity." },
+    { key:"asneeded_hum", title:"As needed: HUM Flatter Me", sub:"With the FIRST bite of heavy/carb meals." }
   ],
   rules: [
-    { key:"protein", title:"Protein first at every meal", sub:"Stabilizes appetite + blood sugar." },
+    { key:"protein", title:"Protein first at every meal", sub:"This stabilizes insulin and reduces cravings." },
     { key:"carb_once", title:"Carbs once per day", sub:"Pick the meal you want them most." },
-    { key:"walk", title:"Walk 10–15 minutes after carb meals", sub:"Big impact for glucose control." },
+    { key:"portion", title:"Heavy-carb meals: cut portion in half", sub:"Eat protein first, then carbs. Stop at satisfied." },
+    { key:"walk", title:"Walk 10–15 minutes after carb meals", sub:"This is a game-changer for glucose control." },
     { key:"no_hiit", title:"No punishment HIIT", sub:"Keep cortisol lower for better fat loss." }
   ]
 };
 
 /* =========================
-   Storage keys
-========================= */
+   LocalStorage Keys
+   ========================= */
 const LS = {
   workoutProgress: "pu_progress_v2",
-  resetChecks: "pu_resetChecks_v2",
   planOverride: "pu_planOverride_v2",
-  measurements: "pu_measurements_v2",
-  resetOverride: "pu_resetOverride_v2"
+  resetChecks: "pu_resetChecks_v2",
+  resetTemplate: "pu_resetTemplate_v2",
+  measurements: "pu_measurements_v2"
 };
 
 /* =========================
    Helpers
-========================= */
+   ========================= */
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-
 function pad(n){ return String(n).padStart(2,"0"); }
 function isoDate(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
 function prettyDate(d){
@@ -840,13 +823,9 @@ function load(key, fallback){
   try{
     const v = JSON.parse(localStorage.getItem(key));
     return (v === null || v === undefined) ? fallback : v;
-  }catch{
-    return fallback;
-  }
+  }catch{ return fallback; }
 }
-function save(key, val){
-  localStorage.setItem(key, JSON.stringify(val));
-}
+function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
 function escapeHtml(str){
   return String(str)
     .replaceAll("&","&amp;")
@@ -855,56 +834,39 @@ function escapeHtml(str){
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
 }
-function escapeAttr(str){
-  return escapeHtml(str).replaceAll("\n"," ");
-}
-
-/* ISO week (for weekly measurements) */
-function getISOWeekKey(date=new Date()){
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-  return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
-}
+function escapeAttr(str){ return escapeHtml(str).replaceAll("\n"," "); }
 
 /* =========================
-   Plan source
-========================= */
+   Plan Source
+   ========================= */
 function getPlan(){
   const override = load(LS.planOverride, null);
   if(override && typeof override === "object") return override;
   return DEFAULT_PLAN;
 }
-function setPlan(plan){
-  save(LS.planOverride, plan);
-}
+function setPlan(plan){ save(LS.planOverride, plan); }
 
 /* =========================
-   App state
-========================= */
-const today = new Date();
-const todayISO = isoDate(today);
-let selectedDay = DAYS.includes(currentDayName()) ? currentDayName() : "Monday";
-
-/* Monday pulse */
-if(new Date().getDay() === 1){
-  document.getElementById("appTitle").classList.add("mondayPulse");
+   Reset Template Source (editable)
+   ========================= */
+function getResetTemplate(){
+  const t = load(LS.resetTemplate, null);
+  if(t && typeof t === "object") return t;
+  return DEFAULT_RESET;
 }
+function setResetTemplate(t){ save(LS.resetTemplate, t); }
 
 /* =========================
    Tabs
-========================= */
+   ========================= */
 const tabEls = Array.from(document.querySelectorAll(".tab"));
 const sections = {
   workout: document.getElementById("tab-workout"),
   progress: document.getElementById("tab-progress"),
   week: document.getElementById("tab-week"),
   reset: document.getElementById("tab-reset"),
-  measurements: document.getElementById("tab-measurements")
+  measurements: document.getElementById("tab-measurements"),
 };
-
 tabEls.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
 
 function setTab(name){
@@ -921,8 +883,8 @@ function setTab(name){
 }
 
 /* =========================
-   Workout progress storage
-========================= */
+   Workout Progress Storage
+   ========================= */
 function getProgress(){ return load(LS.workoutProgress, {}); }
 function setExerciseField(day, idx, field, value){
   const p = getProgress();
@@ -942,13 +904,18 @@ function resetDayProgress(day){
 }
 
 /* =========================
-   Workout rendering
-========================= */
+   Workout Rendering
+   ========================= */
 const dayTitle = document.getElementById("dayTitle");
 const allDonePill = document.getElementById("allDonePill");
 const dayChips = document.getElementById("dayChips");
 const exerciseList = document.getElementById("exerciseList");
 const resetTodayLink = document.getElementById("resetTodayLink");
+
+const today = new Date();
+const todayISO = isoDate(today);
+const defaultSelected = DAYS.includes(currentDayName()) ? currentDayName() : "Monday";
+let selectedDay = defaultSelected;
 
 function renderDayChips(){
   dayChips.innerHTML = "";
@@ -965,31 +932,13 @@ function renderDayChips(){
   });
 }
 
-/* Clickable names that open info popup */
-function isInfoExercise(name){
-  const n = String(name || "").toLowerCase();
-  return (
-    n.includes("core circuit") ||
-    n.includes("full-body circuit") ||
-    n.includes("stretching / mobility") ||
-    n.includes("stretching / yoga") ||
-    n.includes("rest / mobility")
-  );
-}
-function openInfoForExercise(name){
-  const n = String(name || "").toLowerCase();
-  let title = "Details";
-  let body = "No details found.";
-  if(n.includes("core circuit")){ title = "Core Circuit"; body = INFO_TEXT.core; }
-  else if(n.includes("full-body circuit")){ title = "Full-Body Circuit"; body = INFO_TEXT.full; }
-  else if(n.includes("stretching / mobility") || n.includes("stretching / yoga") || n.includes("rest / mobility")){
-    title = "Stretching / Mobility";
-    body = INFO_TEXT.stretch;
+function maybeOpenInfo(exName){
+  const key = (exName || "").trim();
+  if(INFO_CONTENT[key]){
+    openInfo(key, INFO_CONTENT[key]);
+    return true;
   }
-  document.getElementById("infoTitle").textContent = title;
-  document.getElementById("infoSub").textContent = "Tap Close when done.";
-  document.getElementById("infoBody").textContent = body;
-  document.getElementById("infoBack").style.display = "flex";
+  return false;
 }
 
 function renderWorkout(){
@@ -1006,18 +955,15 @@ function renderWorkout(){
     const st = getExerciseState(selectedDay, idx);
     if(st.done) doneCount++;
 
+    const isInfo = !!INFO_CONTENT[(ex.name || "").trim()];
+    const nameClass = "exName" + (isInfo ? " exClickable" : "");
+
     const wrap = document.createElement("div");
     wrap.className = "ex";
-
-    const clickable = isInfoExercise(ex.name);
-    const nameHtml = clickable
-      ? `<button type="button" class="btn" style="padding:0;border:none;background:transparent;text-align:left;font-weight:950;font-size:18px;cursor:pointer;color:var(--text);" data-info="1">${escapeHtml(ex.name)}</button>`
-      : `<p class="exName">${escapeHtml(ex.name)}</p>`;
-
     wrap.innerHTML = `
       <div class="exHead">
         <div>
-          ${nameHtml}
+          <p class="${nameClass}">${escapeHtml(ex.name)}</p>
           <div class="exMeta">${ex.sets} sets • ${escapeHtml(ex.reps)}</div>
         </div>
 
@@ -1042,6 +988,11 @@ function renderWorkout(){
     const doneBtn = wrap.querySelector(".doneBtn");
     const weightInput = wrap.querySelector("input");
     const notesArea = wrap.querySelector("textarea");
+    const nameEl = wrap.querySelector(".exName");
+
+    if(isInfo){
+      nameEl.addEventListener("click", () => maybeOpenInfo(ex.name));
+    }
 
     doneBtn.addEventListener("click", () => {
       const cur = getExerciseState(selectedDay, idx);
@@ -1054,11 +1005,6 @@ function renderWorkout(){
     weightInput.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "weight", e.target.value));
     notesArea.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "notes", e.target.value));
 
-    const infoBtn = wrap.querySelector('[data-info="1"]');
-    if(infoBtn){
-      infoBtn.addEventListener("click", () => openInfoForExercise(ex.name));
-    }
-
     exerciseList.appendChild(wrap);
   });
 
@@ -1069,10 +1015,10 @@ function renderWorkout(){
 resetTodayLink.addEventListener("click", () => {
   const todayName = currentDayName();
   if(selectedDay !== todayName){
-    alert("This reset link is for today's day only. Tap today's day to reset it.");
+    alert("This reset link is for today only. Tap today’s day first.");
     return;
   }
-  if(confirm("Reset today's progress? This clears Done/Weight/Notes for today.")){
+  if(confirm("Reset today's progress? This will clear Done/Weight/Notes for today.")){
     resetDayProgress(selectedDay);
     renderWorkout();
     renderProgress();
@@ -1081,8 +1027,8 @@ resetTodayLink.addEventListener("click", () => {
 });
 
 /* =========================
-   Progress + Week summary
-========================= */
+   Progress + Week Summary
+   ========================= */
 const statToday = document.getElementById("statToday");
 const statTodayCount = document.getElementById("statTodayCount");
 const statWeekDays = document.getElementById("statWeekDays");
@@ -1118,7 +1064,7 @@ function renderWeekSummary(){
     const c = dayCompletion(d);
     const row = document.createElement("div");
     row.className = "ex";
-    row.style.padding = "10px 12px";
+    row.style.padding = "12px";
     row.innerHTML = `
       <div class="exHead">
         <div>
@@ -1133,8 +1079,8 @@ function renderWeekSummary(){
 }
 
 /* =========================
-   Health Reset (daily checks)
-========================= */
+   Health Reset (daily checks by date)
+   ========================= */
 const resetMorningEl = document.getElementById("resetMorning");
 const resetSuppsEl = document.getElementById("resetSupps");
 const resetRulesEl = document.getElementById("resetRules");
@@ -1150,16 +1096,6 @@ function setCheck(key, val){
   day[key] = !!val;
   all[todayISO] = day;
   save(LS.resetChecks, all);
-}
-
-/* Reset list source (editable) */
-function getResetLists(){
-  const o = load(LS.resetOverride, null);
-  if(o && typeof o === "object" && o.morning && o.supps && o.rules) return o;
-  return RESET_DEFAULTS;
-}
-function setResetLists(obj){
-  save(LS.resetOverride, obj);
 }
 
 function renderResetSection(container, items){
@@ -1182,127 +1118,111 @@ function renderResetSection(container, items){
 }
 
 function renderReset(){
-  const lists = getResetLists();
-  renderResetSection(resetMorningEl, lists.morning);
-  renderResetSection(resetSuppsEl, lists.supps);
-  renderResetSection(resetRulesEl, lists.rules);
+  const t = getResetTemplate();
+  renderResetSection(resetMorningEl, t.morning || []);
+  renderResetSection(resetSuppsEl, t.supps || []);
+  renderResetSection(resetRulesEl, t.rules || []);
 }
-
-/* Edit reset modal logic */
-const editResetBtn = document.getElementById("editResetBtn");
-const resetBack = document.getElementById("resetBack");
-const resetCloseBtn = document.getElementById("resetCloseBtn");
-const resetSaveBtn = document.getElementById("resetSaveBtn");
-const resetRestoreBtn = document.getElementById("resetRestoreBtn");
-
-function listsToText(list){
-  return list.map(x => `${x.title} | ${x.sub}`).join("\n");
-}
-function textToList(text, prefix){
-  const lines = String(text || "").split("\n").map(l => l.trim()).filter(Boolean);
-  return lines.map((line, i) => {
-    const parts = line.split("|");
-    const title = (parts[0] || "").trim() || "Untitled";
-    const sub = (parts.slice(1).join("|") || "").trim() || "";
-    return { key:`${prefix}_${i+1}`, title, sub };
-  });
-}
-function openResetEditor(){
-  const lists = getResetLists();
-  document.getElementById("resetMorningText").value = listsToText(lists.morning);
-  document.getElementById("resetSuppsText").value = listsToText(lists.supps);
-  document.getElementById("resetRulesText").value = listsToText(lists.rules);
-  resetBack.style.display = "flex";
-}
-function closeResetEditor(){
-  resetBack.style.display = "none";
-}
-
-editResetBtn.addEventListener("click", openResetEditor);
-resetCloseBtn.addEventListener("click", closeResetEditor);
-resetBack.addEventListener("click", (e) => { if(e.target === resetBack) closeResetEditor(); });
-
-resetSaveBtn.addEventListener("click", () => {
-  const morning = textToList(document.getElementById("resetMorningText").value, "m");
-  const supps = textToList(document.getElementById("resetSuppsText").value, "s");
-  const rules = textToList(document.getElementById("resetRulesText").value, "r");
-  setResetLists({ morning, supps, rules });
-  closeResetEditor();
-  renderReset();
-  alert("Reset updated!");
-});
-
-resetRestoreBtn.addEventListener("click", () => {
-  if(!confirm("Restore the default Health Reset text?")) return;
-  setResetLists(RESET_DEFAULTS);
-  openResetEditor();
-  renderReset();
-});
 
 /* =========================
    Measurements (weekly)
-========================= */
-const measFields = ["weight","waist","hips","chest","thigh","arm"];
-function getMeas(){ return load(LS.measurements, {}); }
-function setMeas(obj){ save(LS.measurements, obj); }
+   ========================= */
+const measInputs = {
+  weight: document.getElementById("m_weight"),
+  waist: document.getElementById("m_waist"),
+  hips: document.getElementById("m_hips"),
+  chest: document.getElementById("m_chest"),
+  thigh: document.getElementById("m_thigh"),
+  arm: document.getElementById("m_arm"),
+};
+const measSaveBtn = document.getElementById("measSaveBtn");
+const measClearBtn = document.getElementById("measClearBtn");
+const measHistory = document.getElementById("measHistory");
+
+function weekKey(d){
+  // ISO-ish week key: YYYY-Www (simple approach)
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+  const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
+}
+
+function getMeasurements(){ return load(LS.measurements, {}); }
+function setMeasurements(all){ save(LS.measurements, all); }
 
 function renderMeasurements(){
-  const wk = getISOWeekKey(new Date());
-  const all = getMeas();
+  const all = getMeasurements();
+  const wk = weekKey(new Date());
   const cur = all[wk] || {};
-
-  measFields.forEach(f => {
-    const el = document.getElementById("m_"+f);
-    if(el) el.value = cur[f] || "";
-  });
-
-  const hist = document.getElementById("measHistory");
-  hist.innerHTML = "";
+  measInputs.weight.value = cur.weight || "";
+  measInputs.waist.value = cur.waist || "";
+  measInputs.hips.value = cur.hips || "";
+  measInputs.chest.value = cur.chest || "";
+  measInputs.thigh.value = cur.thigh || "";
+  measInputs.arm.value = cur.arm || "";
 
   const keys = Object.keys(all).sort().reverse();
   if(keys.length === 0){
-    hist.innerHTML = `<div class="historyRow" style="color:var(--muted);font-weight:650;">No history yet. Save your first week.</div>`;
+    measHistory.innerHTML = `<div class="hint" style="margin-top:10px;">No saved weeks yet.</div>`;
     return;
   }
 
+  let html = `<div style="margin-top:6px; font-weight:950;">History</div>`;
   keys.forEach(k => {
-    const row = document.createElement("div");
-    row.className = "historyRow";
-    const v = all[k] || {};
-    row.innerHTML = `
-      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-        <div style="font-weight:950;">${escapeHtml(k)}</div>
-        <div style="color:var(--muted);font-weight:650;">Weight: ${escapeHtml(v.weight || "—")}</div>
-      </div>
-      <div style="margin-top:6px;color:var(--muted);font-weight:650;font-size:13px;">
-        Waist: ${escapeHtml(v.waist || "—")} • Hips: ${escapeHtml(v.hips || "—")} • Chest: ${escapeHtml(v.chest || "—")} • Thigh: ${escapeHtml(v.thigh || "—")} • Arm: ${escapeHtml(v.arm || "—")}
+    const r = all[k];
+    html += `
+      <div class="ex" style="margin-top:10px;">
+        <div class="exHead">
+          <div>
+            <div class="exName" style="font-size:16px; margin:0;">${k}</div>
+            <div class="exMeta">
+              Wt ${escapeHtml(r.weight||"—")} • Waist ${escapeHtml(r.waist||"—")} • Hips ${escapeHtml(r.hips||"—")}
+            </div>
+          </div>
+        </div>
       </div>
     `;
-    hist.appendChild(row);
   });
+  measHistory.innerHTML = html;
 }
 
-document.getElementById("measSaveBtn").addEventListener("click", () => {
-  const wk = getISOWeekKey(new Date());
-  const all = getMeas();
-  const cur = {};
-  measFields.forEach(f => {
-    cur[f] = (document.getElementById("m_"+f).value || "").trim();
-  });
-  all[wk] = cur;
-  setMeas(all);
+measSaveBtn?.addEventListener("click", () => {
+  const wk = weekKey(new Date());
+  const all = getMeasurements();
+  all[wk] = {
+    weight: measInputs.weight.value.trim(),
+    waist: measInputs.waist.value.trim(),
+    hips: measInputs.hips.value.trim(),
+    chest: measInputs.chest.value.trim(),
+    thigh: measInputs.thigh.value.trim(),
+    arm: measInputs.arm.value.trim(),
+    savedAt: new Date().toISOString()
+  };
+  setMeasurements(all);
   renderMeasurements();
   alert("Saved!");
 });
 
-document.getElementById("measClearBtn").addEventListener("click", () => {
-  if(!confirm("Clear this week's entries (does not delete history)?")) return;
-  measFields.forEach(f => { document.getElementById("m_"+f).value = ""; });
+measClearBtn?.addEventListener("click", () => {
+  const wk = weekKey(new Date());
+  const all = getMeasurements();
+  if(!all[wk]){
+    Object.values(measInputs).forEach(i => i.value="");
+    return;
+  }
+  if(confirm("Clear this week's saved measurements?")){
+    delete all[wk];
+    setMeasurements(all);
+    renderMeasurements();
+    Object.values(measInputs).forEach(i => i.value="");
+  }
 });
 
 /* =========================
-   Edit Plan modal + picker
-========================= */
+   Edit Plan Modal + Picker
+   ========================= */
 const editPlanBtn = document.getElementById("editPlanBtn");
 const modalBack = document.getElementById("modalBack");
 const editorBody = document.getElementById("editorBody");
@@ -1316,7 +1236,6 @@ let draftPlan = null;
 
 function openEditor(){
   draftPlan = structuredClone(getPlan());
-  if(!draftPlan[selectedDay]) draftPlan[selectedDay] = [];
   renderEditorRows();
   modalBack.style.display = "flex";
 }
@@ -1325,21 +1244,16 @@ function closeEditor(){
   draftPlan = null;
 }
 
-function buildLibrarySelect(){
-  const sel = document.createElement("select");
-  sel.innerHTML = `<option value="">Pick from library…</option>`;
+function buildPickerOptions(){
+  let html = `<option value="">Pick from list…</option>`;
   Object.keys(EXERCISE_LIBRARY).forEach(cat => {
-    const og = document.createElement("optgroup");
-    og.label = cat;
-    EXERCISE_LIBRARY[cat].forEach(item => {
-      const opt = document.createElement("option");
-      opt.value = JSON.stringify(item);
-      opt.textContent = item.name;
-      og.appendChild(opt);
+    html += `<optgroup label="${escapeAttr(cat)}">`;
+    EXERCISE_LIBRARY[cat].forEach(name => {
+      html += `<option value="${escapeAttr(name)}">${escapeHtml(name)}</option>`;
     });
-    sel.appendChild(og);
+    html += `</optgroup>`;
   });
-  return sel;
+  return html;
 }
 
 function renderEditorRows(){
@@ -1349,64 +1263,55 @@ function renderEditorRows(){
   if(list.length === 0){
     const empty = document.createElement("div");
     empty.className = "editRow";
-    empty.innerHTML = `<div style="font-weight:950;">No exercises yet.</div><div style="color:var(--muted);font-weight:650;margin-top:4px;">Click “Add exercise” to create one.</div>`;
+    empty.innerHTML = `<div style="font-weight:900;">No exercises yet.</div>
+      <div style="color:var(--muted);font-weight:650;margin-top:4px;">Click “Add exercise” to create one.</div>`;
     editorBody.appendChild(empty);
     return;
   }
 
+  const pickerOptions = buildPickerOptions();
+
   list.forEach((ex, idx) => {
     const row = document.createElement("div");
     row.className = "editRow";
-
     row.innerHTML = `
       <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap;">
         <div style="font-weight:950;">Exercise ${idx+1}</div>
         <button class="btn danger" type="button">Delete</button>
       </div>
 
-      <div style="margin-top:10px;">
-        <label>Quick pick</label>
-        <div class="pickSlot"></div>
-      </div>
-
       <div class="editGrid">
         <div>
+          <label>Picker</label>
+          <select class="picker">${pickerOptions}</select>
+        </div>
+        <div>
           <label>Name</label>
-          <input type="text" value="${escapeAttr(ex.name || "")}" />
+          <input class="name" type="text" value="${escapeAttr(ex.name || "")}" />
         </div>
         <div>
           <label>Sets</label>
-          <input type="number" min="1" step="1" value="${escapeAttr(ex.sets ?? 3)}" />
+          <input class="sets" type="number" min="1" step="1" value="${escapeAttr(ex.sets ?? 3)}" />
         </div>
         <div>
           <label>Reps</label>
-          <input type="text" value="${escapeAttr(ex.reps || "")}" />
+          <input class="reps" type="text" value="${escapeAttr(ex.reps || "")}" />
         </div>
       </div>
     `;
 
     const delBtn = row.querySelector("button");
-    const [nameInput, setsInput, repsInput] = row.querySelectorAll(".editGrid input");
+    const picker = row.querySelector(".picker");
+    const nameInput = row.querySelector(".name");
+    const setsInput = row.querySelector(".sets");
+    const repsInput = row.querySelector(".reps");
 
-    /* Picker */
-    const pickSlot = row.querySelector(".pickSlot");
-    const picker = buildLibrarySelect();
-    pickSlot.appendChild(picker);
-
-    picker.addEventListener("change", () => {
-      if(!picker.value) return;
-      try{
-        const item = JSON.parse(picker.value);
-        draftPlan[selectedDay][idx].name = item.name;
-        if(!draftPlan[selectedDay][idx].reps || draftPlan[selectedDay][idx].reps === "—"){
-          draftPlan[selectedDay][idx].reps = item.reps || draftPlan[selectedDay][idx].reps;
-        }else{
-          draftPlan[selectedDay][idx].reps = item.reps || draftPlan[selectedDay][idx].reps;
-        }
-        nameInput.value = item.name;
-        repsInput.value = item.reps || repsInput.value;
-      }catch{}
-      picker.value = "";
+    picker.addEventListener("change", (e) => {
+      const val = e.target.value;
+      if(val){
+        nameInput.value = val;
+        draftPlan[selectedDay][idx].name = val;
+      }
     });
 
     nameInput.addEventListener("input", (e) => { draftPlan[selectedDay][idx].name = e.target.value; });
@@ -1429,7 +1334,10 @@ function renderEditorRows(){
 editPlanBtn.addEventListener("click", openEditor);
 closeModalBtn.addEventListener("click", closeEditor);
 cancelEditBtn.addEventListener("click", closeEditor);
-modalBack.addEventListener("click", (e) => { if(e.target === modalBack) closeEditor(); });
+
+modalBack.addEventListener("click", (e) => {
+  if(e.target === modalBack) closeEditor();
+});
 
 addExerciseBtn.addEventListener("click", () => {
   if(!draftPlan[selectedDay]) draftPlan[selectedDay] = [];
@@ -1464,21 +1372,90 @@ saveEditBtn.addEventListener("click", () => {
 });
 
 /* =========================
-   Info modal close
-========================= */
-document.getElementById("infoCloseBtn").addEventListener("click", () => {
-  document.getElementById("infoBack").style.display = "none";
-});
-document.getElementById("infoBack").addEventListener("click", (e) => {
-  if(e.target === document.getElementById("infoBack")){
-    document.getElementById("infoBack").style.display = "none";
-  }
+   Info Modal
+   ========================= */
+const infoBack = document.getElementById("infoBack");
+const infoTitle = document.getElementById("infoTitle");
+const infoSub = document.getElementById("infoSub");
+const infoBody = document.getElementById("infoBody");
+const infoCloseBtn = document.getElementById("infoCloseBtn");
+
+function openInfo(title, html){
+  infoTitle.textContent = title;
+  infoSub.textContent = "Tap outside to close";
+  infoBody.innerHTML = html;
+  infoBack.style.display = "flex";
+}
+function closeInfo(){
+  infoBack.style.display = "none";
+  infoBody.innerHTML = "";
+}
+infoCloseBtn.addEventListener("click", closeInfo);
+infoBack.addEventListener("click", (e) => { if(e.target === infoBack) closeInfo(); });
+
+/* =========================
+   Edit Reset Modal
+   ========================= */
+const editResetBtn = document.getElementById("editResetBtn");
+const resetEditBack = document.getElementById("resetEditBack");
+const resetEditCloseBtn = document.getElementById("resetEditCloseBtn");
+const resetEditCancelBtn = document.getElementById("resetEditCancelBtn");
+const resetEditSaveBtn = document.getElementById("resetEditSaveBtn");
+const resetEditMorning = document.getElementById("resetEditMorning");
+const resetEditSupps = document.getElementById("resetEditSupps");
+const resetEditRules = document.getElementById("resetEditRules");
+
+function serializeReset(items){
+  return (items||[]).map(it => `${it.title} | ${it.sub}`).join("\n");
+}
+function parseReset(text){
+  const lines = String(text||"").split("\n").map(l => l.trim()).filter(Boolean);
+  return lines.map((line, i) => {
+    const parts = line.split("|");
+    const title = (parts[0]||"").trim() || "Item";
+    const sub = (parts.slice(1).join("|")||"").trim() || "";
+    return { key: `k_${i}_${title.toLowerCase().replaceAll(" ","_").slice(0,20)}`, title, sub };
+  });
+}
+
+function openResetEditor(){
+  const t = getResetTemplate();
+  resetEditMorning.value = serializeReset(t.morning);
+  resetEditSupps.value = serializeReset(t.supps);
+  resetEditRules.value = serializeReset(t.rules);
+  resetEditBack.style.display = "flex";
+}
+function closeResetEditor(){
+  resetEditBack.style.display = "none";
+}
+
+editResetBtn.addEventListener("click", openResetEditor);
+resetEditCloseBtn.addEventListener("click", closeResetEditor);
+resetEditCancelBtn.addEventListener("click", closeResetEditor);
+resetEditBack.addEventListener("click", (e) => { if(e.target === resetEditBack) closeResetEditor(); });
+
+resetEditSaveBtn.addEventListener("click", () => {
+  const newT = {
+    morning: parseReset(resetEditMorning.value),
+    supps: parseReset(resetEditSupps.value),
+    rules: parseReset(resetEditRules.value),
+  };
+  setResetTemplate(newT);
+  closeResetEditor();
+  renderReset();
+  alert("Health reset saved!");
 });
 
 /* =========================
    Boot
-========================= */
+   ========================= */
 document.getElementById("dateLine").textContent = prettyDate(today);
+
+// Monday pulse on title
+if(new Date().getDay() === 1){
+  document.getElementById("appTitle").classList.add("mondayPulse");
+}
+
 renderWorkout();
 renderProgress();
 renderWeekSummary();
