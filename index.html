@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Power Up</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#2c7be5" />
@@ -11,8 +11,385 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-  <!-- Keep your styling here -->
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root{
+      --bg:#f5f6f8;
+      --card:#ffffff;
+      --text:#101828;
+      --muted:#667085;
+      --line:#EAECF0;
+      --brand:#2c7be5;
+      --ok:#12B76A;
+      --danger:#e11d48;
+      --shadow:0 12px 34px rgba(16,24,40,.10);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:var(--bg);
+      color:var(--text);
+    }
+    header{
+      max-width:860px;
+      margin:0 auto;
+      padding:22px 16px 12px;
+    }
+    h1{
+      margin:0;
+      font-size:34px;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .titleEmoji{font-size:.85em}
+    .sub{margin:4px 0 6px; color:var(--muted); font-weight:600}
+    .dateLine{color:var(--muted); font-weight:600}
+
+    /* Tabs — cleaner, less “bubbly” */
+    .tabbar{
+      margin-top:16px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:6px;
+      display:flex;
+      gap:6px;
+      box-shadow:0 6px 16px rgba(16,24,40,.06);
+      overflow-x:auto;
+    }
+    .tab{
+      flex:1 0 auto;
+      text-align:center;
+      font-weight:800;
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      user-select:none;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .tab.active{
+      background:var(--brand);
+      color:#fff;
+      box-shadow:0 10px 22px rgba(44,123,229,.20);
+    }
+
+    .wrap{max-width:860px; margin:0 auto; padding:18px 14px 90px;}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:16px;
+      margin-top:14px;
+    }
+    .card h2{margin:0; font-size:22px; font-weight:900;}
+    .hint{margin:6px 0 0; color:var(--muted); font-weight:600}
+
+    .topRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:6px;
+      flex-wrap:wrap;
+    }
+    .rightTools{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn.primary{
+      background:var(--brand);
+      border-color:var(--brand);
+      color:#fff;
+    }
+    .btn.danger{
+      background:rgba(225,29,72,.10);
+      border-color:rgba(225,29,72,.25);
+      color:var(--danger);
+    }
+
+    .allDone{
+      border:1px solid rgba(18,183,106,.25);
+      background:rgba(18,183,106,.10);
+      color:var(--ok);
+      padding:6px 12px;
+      border-radius:999px;
+      font-weight:900;
+      display:none;
+      white-space:nowrap;
+    }
+
+    /* Day chips — smaller + cleaner */
+    .days{
+      display:flex;
+      gap:8px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:800;
+      cursor:pointer;
+      color:var(--muted);
+      user-select:none;
+    }
+    .chip.active{
+      border-color: rgba(44,123,229,.25);
+      background: rgba(44,123,229,.10);
+      color: var(--brand);
+    }
+
+    .ex{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      margin-top:12px;
+      background:#fff;
+    }
+    .exHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .exName{
+      font-weight:950;
+      font-size:18px;
+      margin:0;
+      line-height:1.15;
+    }
+    .exName.clickable{
+      text-decoration: underline dotted;
+      cursor:pointer;
+    }
+    .exMeta{margin:4px 0 0; color:var(--muted); font-weight:700}
+
+    .doneBtn{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .doneBtn.checked{
+      border-color: rgba(44,123,229,.25);
+      background: rgba(44,123,229,.10);
+      color: var(--brand);
+    }
+    .doneBox{
+      width:20px; height:20px;
+      border-radius:6px;
+      border:2px solid #98A2B3;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      color:#fff;
+      background:#fff;
+    }
+    .doneBtn.checked .doneBox{
+      background: var(--brand);
+      border-color: var(--brand);
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width:720px){
+      .grid2{grid-template-columns:1fr;}
+    }
+    label{
+      display:block;
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    input, textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 12px;
+      font-size:14px;
+      font-weight:650;
+      outline:none;
+      background:#fff;
+    }
+    textarea{min-height:48px; resize:vertical;}
+
+    .resetLink{
+      margin-top:14px;
+      color:var(--danger);
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:underline;
+      display:inline-block;
+    }
+
+    .statGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    @media (max-width:720px){
+      .statGrid{grid-template-columns:1fr;}
+    }
+    .stat{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+      background:#fff;
+    }
+    .stat .k{color:var(--muted); font-weight:800; font-size:12px;}
+    .stat .v{font-weight:950; font-size:20px; margin-top:4px;}
+
+    .footerNote{
+      text-align:center;
+      color:var(--muted);
+      font-weight:650;
+      margin-top:18px;
+    }
+
+    .check{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      margin-top:10px;
+    }
+    .check input{
+      width:18px; height:18px; margin-top:2px;
+      accent-color: var(--brand);
+    }
+    .check .t{font-weight:850;}
+    .check .s{margin-top:4px; color:var(--muted); font-weight:650; font-size:13px; line-height:1.35;}
+
+    .subhead{
+      margin:0;
+      font-size:16px;
+      font-weight:950;
+      color:var(--text);
+    }
+
+    /* Modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.35);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:50;
+    }
+    .modal{
+      width:min(860px, 100%);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:0 30px 80px rgba(0,0,0,.22);
+      padding:14px;
+      max-height:85vh;
+      overflow:auto;
+    }
+    .modalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .modal h3{margin:0; font-size:18px; font-weight:950;}
+    .modal p{margin:6px 0 0; color:var(--muted); font-weight:650;}
+    .rowBtns{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .editRow{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      margin-top:10px;
+      background:#fff;
+    }
+    .editGrid{
+      display:grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width:720px){
+      .editGrid{grid-template-columns:1fr;}
+    }
+
+    .infoBody{
+      margin-top:12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      background:#fff;
+      line-height:1.5;
+    }
+    .infoBody h4{margin:10px 0 6px; font-size:15px;}
+    .infoBody ul{margin:6px 0 10px 18px;}
+    .infoBody li{margin:4px 0;}
+
+    .measGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width:720px){
+      .measGrid{grid-template-columns:1fr;}
+    }
+
+    /* Monday pulse (subtle) */
+    @keyframes pulseSoft{
+      0%{transform:scale(1); opacity:1;}
+      50%{transform:scale(1.02); opacity:.95;}
+      100%{transform:scale(1); opacity:1;}
+    }
+    .mondayPulse{
+      animation:pulseSoft 2.5s ease-in-out infinite;
+    }
+  </style>
 </head>
 
 <body>
@@ -36,7 +413,7 @@
       <div class="card">
         <div class="topRow">
           <div>
-            <h2 id="dayTitle"></h2>
+            <h2 id="dayTitle">Monday workout</h2>
             <div class="hint">Tap a day, check off sets, and jot quick notes.</div>
           </div>
 
@@ -52,7 +429,7 @@
         <div class="resetLink" id="resetTodayLink">Reset this day’s progress (today only).</div>
       </div>
 
-      <div class="footerNote">Built by consistency.</div>
+      <div class="footerNote">All data is stored locally in your browser on this device only.</div>
     </section>
 
     <!-- PROGRESS -->
@@ -76,8 +453,6 @@
           </div>
         </div>
       </div>
-
-      <div class="footerNote">Built by consistency.</div>
     </section>
 
     <!-- WEEK SUMMARY -->
@@ -87,15 +462,20 @@
         <div class="hint">A quick overview of each day.</div>
         <div id="weekSummary"></div>
       </div>
-
-      <div class="footerNote">Built by consistency.</div>
     </section>
 
     <!-- HEALTH RESET -->
     <section id="tab-reset" style="display:none;">
       <div class="card">
-        <h2>Health Reset</h2>
-        <div class="hint">Daily checklist (resets each day).</div>
+        <div class="topRow">
+          <div>
+            <h2>Health Reset</h2>
+            <div class="hint">Daily checklist (resets each day).</div>
+          </div>
+          <div class="rightTools">
+            <button class="btn" id="editResetBtn" type="button">Edit reset</button>
+          </div>
+        </div>
 
         <div style="margin-top:10px;">
           <h3 class="subhead">Morning Thyroid Routine</h3>
@@ -113,7 +493,7 @@
         </div>
       </div>
 
-      <div class="footerNote">Built by consistency.</div>
+      <div class="footerNote">These checkmarks reset daily by date.</div>
     </section>
 
     <!-- MEASUREMENTS -->
@@ -123,41 +503,21 @@
         <div class="hint">Track trends, not perfection.</div>
 
         <div class="measGrid">
-          <div>
-            <label>Weight</label>
-            <input id="m_weight" type="text" placeholder="e.g., 160" />
-          </div>
-          <div>
-            <label>Waist</label>
-            <input id="m_waist" type="text" placeholder="inches" />
-          </div>
-          <div>
-            <label>Hips</label>
-            <input id="m_hips" type="text" placeholder="inches" />
-          </div>
-          <div>
-            <label>Chest</label>
-            <input id="m_chest" type="text" placeholder="inches" />
-          </div>
-          <div>
-            <label>Thigh</label>
-            <input id="m_thigh" type="text" placeholder="inches" />
-          </div>
-          <div>
-            <label>Arm</label>
-            <input id="m_arm" type="text" placeholder="inches" />
-          </div>
+          <div><label>Weight</label><input id="m_weight" type="text" placeholder="e.g., 160" /></div>
+          <div><label>Waist</label><input id="m_waist" type="text" placeholder="inches" /></div>
+          <div><label>Hips</label><input id="m_hips" type="text" placeholder="inches" /></div>
+          <div><label>Chest</label><input id="m_chest" type="text" placeholder="inches" /></div>
+          <div><label>Thigh</label><input id="m_thigh" type="text" placeholder="inches" /></div>
+          <div><label>Arm</label><input id="m_arm" type="text" placeholder="inches" /></div>
         </div>
 
         <div class="rowBtns" style="margin-top:12px;">
-          <button class="btn" id="measSaveBtn" type="button">Save this week</button>
+          <button class="btn primary" id="measSaveBtn" type="button">Save this week</button>
           <button class="btn danger" id="measClearBtn" type="button">Clear this week</button>
         </div>
 
         <div id="measHistory" style="margin-top:14px;"></div>
       </div>
-
-      <div class="footerNote">Built by consistency.</div>
     </section>
   </main>
 
@@ -185,7 +545,7 @@
     </div>
   </div>
 
-  <!-- INFO POPUP MODAL -->
+  <!-- INFO POPUP (circuits/mobility) -->
   <div class="modalBack" id="infoBack" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div class="modalTop">
@@ -201,567 +561,103 @@
     </div>
   </div>
 
-  <!-- Your plan data lives here -->
-  <script src="workouts.js"></script>
+  <!-- EDIT RESET MODAL -->
+  <div class="modalBack" id="resetBack" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modalTop">
+        <div>
+          <h3>Edit Health Reset</h3>
+          <p>Format: one item per line as <b>Title | Sub</b></p>
+        </div>
+        <div class="rowBtns" style="justify-content:flex-start;">
+          <button class="btn" id="resetCloseBtn" type="button">Close</button>
+        </div>
+      </div>
 
-  <script>
-    /*************************
-     * Storage keys
-     *************************/
-    const LS = {
-      workoutProgress: "pu_progress_v1",
-      resetChecks: "pu_resetChecks_v1",
-      planOverride: "pu_planOverride_v1",
-      measurements: "pu_measurements_v1"
-    };
+      <div class="editRow">
+        <div style="font-weight:950;">Morning Thyroid Routine</div>
+        <textarea id="resetEditMorning" style="margin-top:8px; min-height:120px;"></textarea>
+      </div>
 
-    /*************************
-     * Helpers
-     *************************/
-    const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-    function pad(n){ return String(n).padStart(2,"0"); }
-    function isoDate(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
-    function prettyDate(d){
-      return d.toLocaleDateString(undefined, { weekday:"long", month:"short", day:"numeric", year:"numeric" });
-    }
-    function currentDayName(){
-      return new Date().toLocaleDateString(undefined, { weekday:"long" });
-    }
-    function load(key, fallback){
-      try{
-        const v = JSON.parse(localStorage.getItem(key));
-        return (v === null || v === undefined) ? fallback : v;
-      }catch{
-        return fallback;
-      }
-    }
-    function save(key, val){
-      localStorage.setItem(key, JSON.stringify(val));
-    }
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-    function escapeAttr(str){
-      return escapeHtml(str).replaceAll("\n"," ");
-    }
+      <div class="editRow">
+        <div style="font-weight:950;">Supplements Schedule</div>
+        <textarea id="resetEditSupps" style="margin-top:8px; min-height:140px;"></textarea>
+      </div>
 
-    /*************************
-     * Data sources
-     *************************/
-    const DEFAULT_PLAN = (window.workoutPlan && typeof window.workoutPlan === "object")
-      ? window.workoutPlan
-      : {};
+      <div class="editRow">
+        <div style="font-weight:950;">2-Week Reset Rules</div>
+        <textarea id="resetEditRules" style="margin-top:8px; min-height:140px;"></textarea>
+      </div>
 
-    // Health Reset content (includes supplement guide)
-    const RESET_MORNING = [
-      { key:"synthroid", title:"6:30 AM: Synthroid (empty stomach)", sub:"Water is fine. Avoid supplements/minerals/fiber for 45–60 minutes." },
-      { key:"coffee", title:"Coffee after your wait window", sub:"Aim for 45–60 minutes after Synthroid." },
-      { key:"salt", title:"Baja Gold salt water after coffee", sub:"Finishing later is the cleanest timing." }
-    ];
+      <div class="rowBtns">
+        <button class="btn danger" id="resetRestoreBtn" type="button">Restore defaults</button>
+        <button class="btn primary" id="resetSaveBtn" type="button">Save reset</button>
+      </div>
+    </div>
+  </div>
 
-    const RESET_SUPPS = [
-      { key:"flatterme", title:"HUM Flatter Me", sub:"With the FIRST bite of heavier/carb meals." },
-      { key:"probiotic", title:"Lunch: Good Girl Probiotic", sub:"Keep consistent." },
-      { key:"omega", title:"Lunch: Omega-3", sub:"With food." },
-      { key:"berberine", title:"Lunch: Berberine (if you’re keeping it)", sub:"With food. If bloating returns, pause and reassess." },
-      { key:"multi", title:"Dinner: MultiComplete", sub:"Keeps minerals away from Synthroid." },
-      { key:"citrucel", title:"Dinner: Citrucel", sub:"Keeps fiber away from Synthroid." },
-      { key:"mag", title:"Bedtime: Magnesium", sub:"Supports sleep + recovery." }
-    ];
+<script>
+/*************************
+ * Default Weekly Plan (your original)
+ *************************/
+const DEFAULT_PLAN = {
+  Monday: [
+    { name: "Incline Dumbbell Press", sets: 3, reps: "10–12" },
+    { name: "Lat Pulldown", sets: 3, reps: "10–12" },
+    { name: "Dumbbell Shoulder Press", sets: 3, reps: "10–12" },
+    { name: "Triceps Rope Pushdown", sets: 3, reps: "12–15" },
+    { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+  ],
+  Tuesday: [
+    { name: "Goblet Squat", sets: 3, reps: "10–12" },
+    { name: "Romanian Deadlift", sets: 3, reps: "10–12" },
+    { name: "Glute Bridge/Hip Thrust", sets: 3, reps: "12–15" },
+    { name: "Calf Raises", sets: 3, reps: "15–20" },
+    { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+  ],
+  Wednesday: [
+    { name: "Push-Ups / Incline Push-Ups", sets: 3, reps: "As many as possible" },
+    { name: "Dumbbell Row", sets: 3, reps: "10–12" },
+    { name: "Lateral Raises", sets: 3, reps: "12–15" },
+    { name: "Biceps Curls", sets: 3, reps: "10–12" },
+    { name: "Core Circuit", sets: 3, reps: "3–4 exercises" }
+  ],
+  Thursday: [
+    { name: "Leg Press or Step-Ups", sets: 3, reps: "10–12" },
+    { name: "Lunges (or split squats)", sets: 3, reps: "10–12/leg" },
+    { name: "Hamstring Curl", sets: 3, reps: "10–12" },
+    { name: "Core Circuit", sets: 3, reps: "3–4 exercises" },
+    { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+  ],
+  Friday: [
+    { name: "Full-Body Circuit", sets: 3, reps: "8–10 exercises" },
+    { name: "Extra Arms / Glutes", sets: 2, reps: "Choose your favs" },
+    { name: "Stretching / Mobility", sets: 1, reps: "10–15 min" },
+    { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+  ],
+  Saturday: [
+    { name: "Optional: Light Walk", sets: 1, reps: "20–40 min" },
+    { name: "Stretching / Yoga", sets: 1, reps: "10–20 min" }
+  ],
+  Sunday: [
+    { name: "Rest / Mobility", sets: 1, reps: "10–20 min" }
+  ]
+};
 
-    const RESET_RULES = [
-      { key:"protein", title:"Protein first at every meal", sub:"Stabilizes appetite and supports fat loss." },
-      { key:"walk", title:"Walk 10–15 min after carb meals", sub:"One of the best belly-fat support habits." },
-      { key:"steady", title:"Steady workouts > punishment HIIT", sub:"Consistency over perfection." }
-    ];
-
-    /*************************
-     * Plan overrides
-     *************************/
-    function getPlan(){
-      const override = load(LS.planOverride, null);
-      if(override && typeof override === "object") return override;
-      return structuredClone(DEFAULT_PLAN);
-    }
-    function setPlan(plan){ save(LS.planOverride, plan); }
-
-    /*************************
-     * App state
-     *************************/
-    const today = new Date();
-    const todayISO = isoDate(today);
-    let selectedDay = DAYS.includes(currentDayName()) ? currentDayName() : "Monday";
-
-    /*************************
-     * Tabs
-     *************************/
-    const tabEls = Array.from(document.querySelectorAll(".tab"));
-    const sections = {
-      workout: document.getElementById("tab-workout"),
-      progress: document.getElementById("tab-progress"),
-      week: document.getElementById("tab-week"),
-      reset: document.getElementById("tab-reset"),
-      measurements: document.getElementById("tab-measurements")
-    };
-
-    tabEls.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
-
-    function setTab(name){
-      tabEls.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
-      Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none");
-      if(name === "workout") renderWorkout();
-      if(name === "progress") renderProgress();
-      if(name === "week") renderWeekSummary();
-      if(name === "reset") renderReset();
-      if(name === "measurements") renderMeasurements();
-    }
-
-    /*************************
-     * Workout progress
-     *************************/
-    const dayTitle = document.getElementById("dayTitle");
-    const allDonePill = document.getElementById("allDonePill");
-    const dayChips = document.getElementById("dayChips");
-    const exerciseList = document.getElementById("exerciseList");
-    const resetTodayLink = document.getElementById("resetTodayLink");
-
-    function getProgress(){ return load(LS.workoutProgress, {}); }
-
-    function setExerciseField(day, idx, field, value){
-      const p = getProgress();
-      p[day] = p[day] || {};
-      p[day][idx] = p[day][idx] || { done:false, weight:"", notes:"" };
-      p[day][idx][field] = value;
-      save(LS.workoutProgress, p);
-    }
-    function getExerciseState(day, idx){
-      const p = getProgress();
-      return (p[day] && p[day][idx]) ? p[day][idx] : { done:false, weight:"", notes:"" };
-    }
-    function resetDayProgress(day){
-      const p = getProgress();
-      delete p[day];
-      save(LS.workoutProgress, p);
-    }
-
-    function renderDayChips(){
-      dayChips.innerHTML = "";
-      DAYS.forEach(d => {
-        const c = document.createElement("div");
-        c.className = "chip" + (d === selectedDay ? " active" : "");
-        c.textContent = d.slice(0,3);
-        c.title = d;
-        c.addEventListener("click", () => { selectedDay = d; renderWorkout(); });
-        dayChips.appendChild(c);
-      });
-    }
-
-    function renderWorkout(){
-      renderDayChips();
-      dayTitle.textContent = `${selectedDay} workout`;
-
-      const plan = getPlan();
-      const exercises = plan[selectedDay] || [];
-      exerciseList.innerHTML = "";
-
-      let doneCount = 0;
-
-      exercises.forEach((ex, idx) => {
-        const st = getExerciseState(selectedDay, idx);
-        if(st.done) doneCount++;
-
-        const wrap = document.createElement("div");
-        wrap.className = "ex";
-        wrap.innerHTML = `
-          <div class="exHead">
-            <div>
-              <p class="exName exercise-name" title="${escapeAttr(ex.description || "")}">
-                ${escapeHtml(ex.name)}
-              </p>
-              <div class="exMeta">${ex.sets} sets • ${escapeHtml(ex.reps)}</div>
-            </div>
-            <button class="doneBtn ${st.done ? "checked" : ""}" type="button">
-              <span class="doneBox">${st.done ? "✓" : ""}</span>
-              Done
-            </button>
-          </div>
-
-          <div class="grid2">
-            <div>
-              <label>Weight / Level</label>
-              <input type="text" placeholder="e.g. 15 lb DBs" value="${escapeAttr(st.weight || "")}" />
-            </div>
-            <div>
-              <label>Notes</label>
-              <textarea placeholder="How it felt, tweaks, etc.">${escapeHtml(st.notes || "")}</textarea>
-            </div>
-          </div>
-        `;
-
-        const doneBtn = wrap.querySelector(".doneBtn");
-        const weightInput = wrap.querySelector("input");
-        const notesArea = wrap.querySelector("textarea");
-
-        doneBtn.addEventListener("click", () => {
-          const cur = getExerciseState(selectedDay, idx);
-          setExerciseField(selectedDay, idx, "done", !cur.done);
-          renderWorkout();
-          renderProgress();
-          renderWeekSummary();
-        });
-
-        weightInput.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "weight", e.target.value));
-        notesArea.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "notes", e.target.value));
-
-        // Popups for circuits/mobility
-        wrap.querySelector(".exName").addEventListener("click", () => {
-          const n = (ex.name || "").toLowerCase();
-          if(n.includes("core circuit")) openInfo("Core Circuit", CORE_CIRCUIT_HTML);
-          if(n.includes("full-body circuit") || n.includes("full body circuit")) openInfo("Full-Body Circuit", FULL_BODY_HTML);
-          if(n.includes("stretching") || n.includes("mobility")) openInfo("Stretching / Mobility", MOBILITY_HTML);
-        });
-
-        exerciseList.appendChild(wrap);
-      });
-
-      const allDone = exercises.length > 0 && doneCount === exercises.length;
-      allDonePill.style.display = allDone ? "inline-block" : "none";
-    }
-
-    resetTodayLink.addEventListener("click", () => {
-      const todayName = currentDayName();
-      if(selectedDay !== todayName){
-        alert("This reset link is for today only. Tap today’s day to reset it.");
-        return;
-      }
-      if(confirm("Reset today’s progress? This clears Done/Weight/Notes for today.")){
-        resetDayProgress(selectedDay);
-        renderWorkout();
-        renderProgress();
-        renderWeekSummary();
-      }
-    });
-
-    /*************************
-     * Progress + Week summary
-     *************************/
-    const statToday = document.getElementById("statToday");
-    const statTodayCount = document.getElementById("statTodayCount");
-    const statWeekDays = document.getElementById("statWeekDays");
-    const weekSummary = document.getElementById("weekSummary");
-
-    function dayCompletion(day){
-      const plan = getPlan();
-      const exercises = plan[day] || [];
-      if(exercises.length === 0) return { done:0, total:0, pct:0 };
-      let done = 0;
-      exercises.forEach((_, idx) => { if(getExerciseState(day, idx).done) done++; });
-      const pct = Math.round((done / exercises.length) * 100);
-      return { done, total: exercises.length, pct };
-    }
-
-    function renderProgress(){
-      const c = dayCompletion(currentDayName());
-      statToday.textContent = `${c.pct}%`;
-      statTodayCount.textContent = `${c.done} / ${c.total}`;
-
-      let completedDays = 0;
-      DAYS.forEach(d => {
-        const dc = dayCompletion(d);
-        if(dc.total > 0 && dc.done === dc.total) completedDays++;
-      });
-      statWeekDays.textContent = String(completedDays);
-    }
-
-    function renderWeekSummary(){
-      weekSummary.innerHTML = "";
-      DAYS.forEach(d => {
-        const c = dayCompletion(d);
-        const row = document.createElement("div");
-        row.className = "ex";
-        row.style.padding = "12px 14px";
-        row.innerHTML = `
-          <div class="exHead">
-            <div>
-              <p class="exName" style="font-size:16px; margin:0;">${d}</p>
-              <div class="exMeta">${c.done} / ${c.total} completed • ${c.pct}%</div>
-            </div>
-            <div class="allDone" style="display:${(c.total>0 && c.done===c.total) ? "inline-block" : "none"};">All done ✓</div>
-          </div>
-        `;
-        weekSummary.appendChild(row);
-      });
-    }
-
-    /*************************
-     * Health Reset (daily by date)
-     *************************/
-    const resetMorningEl = document.getElementById("resetMorning");
-    const resetSuppsEl = document.getElementById("resetSupps");
-    const resetRulesEl = document.getElementById("resetRules");
-
-    function getResetChecks(){ return load(LS.resetChecks, {}); }
-    function getChecksForToday(){
-      const all = getResetChecks();
-      return all[todayISO] || {};
-    }
-    function setCheck(key, val){
-      const all = getResetChecks();
-      const day = all[todayISO] || {};
-      day[key] = !!val;
-      all[todayISO] = day;
-      save(LS.resetChecks, all);
-    }
-    function renderResetSection(container, items){
-      container.innerHTML = "";
-      const checks = getChecksForToday();
-      items.forEach(it => {
-        const row = document.createElement("div");
-        row.className = "check";
-        row.innerHTML = `
-          <input type="checkbox" ${checks[it.key] ? "checked" : ""} />
-          <div>
-            <div class="t">${escapeHtml(it.title)}</div>
-            <div class="s">${escapeHtml(it.sub)}</div>
-          </div>
-        `;
-        row.querySelector("input").addEventListener("change", (e) => setCheck(it.key, e.target.checked));
-        container.appendChild(row);
-      });
-    }
-    function renderReset(){
-      renderResetSection(resetMorningEl, RESET_MORNING);
-      renderResetSection(resetSuppsEl, RESET_SUPPS);
-      renderResetSection(resetRulesEl, RESET_RULES);
-    }
-
-    /*************************
-     * Measurements (weekly)
-     *************************/
-    const measSaveBtn = document.getElementById("measSaveBtn");
-    const measClearBtn = document.getElementById("measClearBtn");
-    const measHistory = document.getElementById("measHistory");
-
-    function weekKey(d=new Date()){
-      const tmp = new Date(d);
-      const day = tmp.getDay(); // 0 Sun..6 Sat
-      const diff = (day === 0 ? -6 : 1) - day; // move to Monday
-      tmp.setDate(tmp.getDate() + diff);
-      return isoDate(tmp);
-    }
-    function getMeas(){ return load(LS.measurements, {}); }
-    function setMeas(all){ save(LS.measurements, all); }
-
-    function renderMeasurements(){
-      const all = getMeas();
-      const wk = weekKey();
-      const cur = all[wk] || {};
-      ["weight","waist","hips","chest","thigh","arm"].forEach(k=>{
-        const el = document.getElementById("m_"+k);
-        if(el) el.value = cur[k] || "";
-      });
-
-      const keys = Object.keys(all).sort().reverse();
-      if(keys.length === 0){
-        measHistory.innerHTML = `<div class="hint" style="margin-top:10px;">No saved weeks yet.</div>`;
-        return;
-      }
-
-      measHistory.innerHTML = keys.map(k=>{
-        const r = all[k] || {};
-        return `
-          <div class="ex" style="padding:12px 14px;">
-            <div class="exHead">
-              <div>
-                <p class="exName" style="font-size:16px;margin:0;">Week of ${escapeHtml(k)}</p>
-                <div class="exMeta">
-                  Wt: ${escapeHtml(r.weight||"—")} • Waist: ${escapeHtml(r.waist||"—")} • Hips: ${escapeHtml(r.hips||"—")}
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    measSaveBtn.addEventListener("click", ()=>{
-      const wk = weekKey();
-      const all = getMeas();
-      all[wk] = {
-        weight: document.getElementById("m_weight").value.trim(),
-        waist: document.getElementById("m_waist").value.trim(),
-        hips: document.getElementById("m_hips").value.trim(),
-        chest: document.getElementById("m_chest").value.trim(),
-        thigh: document.getElementById("m_thigh").value.trim(),
-        arm: document.getElementById("m_arm").value.trim()
-      };
-      setMeas(all);
-      renderMeasurements();
-      alert("Saved this week!");
-    });
-
-    measClearBtn.addEventListener("click", ()=>{
-      const wk = weekKey();
-      const all = getMeas();
-      if(!all[wk]) { alert("Nothing saved for this week yet."); return; }
-      if(!confirm("Clear THIS week’s measurements?")) return;
-      delete all[wk];
-      setMeas(all);
-      renderMeasurements();
-    });
-
-    /*************************
-     * Edit Plan Modal (lightweight)
-     *************************/
-    const editPlanBtn = document.getElementById("editPlanBtn");
-    const modalBack = document.getElementById("modalBack");
-    const editorBody = document.getElementById("editorBody");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const cancelEditBtn = document.getElementById("cancelEditBtn");
-    const saveEditBtn = document.getElementById("saveEditBtn");
-    const addExerciseBtn = document.getElementById("addExerciseBtn");
-    const restoreDefaultsBtn = document.getElementById("restoreDefaultsBtn");
-
-    let draftPlan = null;
-
-    function openEditor(){
-      draftPlan = structuredClone(getPlan());
-      if(!draftPlan[selectedDay]) draftPlan[selectedDay] = [];
-      renderEditorRows();
-      modalBack.style.display = "flex";
-      modalBack.setAttribute("aria-hidden","false");
-    }
-    function closeEditor(){
-      modalBack.style.display = "none";
-      modalBack.setAttribute("aria-hidden","true");
-      draftPlan = null;
-    }
-
-    function renderEditorRows(){
-      editorBody.innerHTML = "";
-      const list = (draftPlan && draftPlan[selectedDay]) ? draftPlan[selectedDay] : [];
-
-      if(list.length === 0){
-        const empty = document.createElement("div");
-        empty.className = "editRow";
-        empty.innerHTML = `<div style="font-weight:900;">No exercises yet.</div><div style="color:var(--muted);font-weight:650;margin-top:4px;">Click “Add exercise” to create one.</div>`;
-        editorBody.appendChild(empty);
-        return;
-      }
-
-      list.forEach((ex, idx)=>{
-        const row = document.createElement("div");
-        row.className = "editRow";
-        row.innerHTML = `
-          <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap;">
-            <div style="font-weight:950;">Exercise ${idx+1}</div>
-            <button class="btn danger" type="button">Delete</button>
-          </div>
-
-          <div class="editGrid">
-            <div>
-              <label>Name</label>
-              <input type="text" value="${escapeAttr(ex.name || "")}" />
-            </div>
-            <div>
-              <label>Sets</label>
-              <input type="number" min="1" step="1" value="${escapeAttr(ex.sets ?? 3)}" />
-            </div>
-            <div>
-              <label>Reps</label>
-              <input type="text" value="${escapeAttr(ex.reps || "")}" />
-            </div>
-          </div>
-        `;
-
-        const delBtn = row.querySelector("button");
-        const [nameInput, setsInput, repsInput] = row.querySelectorAll("input");
-
-        nameInput.addEventListener("input", e => draftPlan[selectedDay][idx].name = e.target.value);
-        setsInput.addEventListener("input", e => {
-          const v = parseInt(e.target.value, 10);
-          draftPlan[selectedDay][idx].sets = Number.isFinite(v) && v > 0 ? v : 1;
-        });
-        repsInput.addEventListener("input", e => draftPlan[selectedDay][idx].reps = e.target.value);
-
-        delBtn.addEventListener("click", ()=>{
-          if(!confirm("Delete this exercise?")) return;
-          draftPlan[selectedDay].splice(idx,1);
-          renderEditorRows();
-        });
-
-        editorBody.appendChild(row);
-      });
-    }
-
-    editPlanBtn.addEventListener("click", openEditor);
-    closeModalBtn.addEventListener("click", closeEditor);
-    cancelEditBtn.addEventListener("click", closeEditor);
-    modalBack.addEventListener("click", (e)=>{ if(e.target === modalBack) closeEditor(); });
-
-    addExerciseBtn.addEventListener("click", ()=>{
-      if(!draftPlan[selectedDay]) draftPlan[selectedDay] = [];
-      draftPlan[selectedDay].push({ name:"New Exercise", sets:3, reps:"10–12", description:"" });
-      renderEditorRows();
-    });
-
-    restoreDefaultsBtn.addEventListener("click", ()=>{
-      if(!confirm("Restore your original default plan for ALL days? (Does not erase notes.)")) return;
-      setPlan(structuredClone(DEFAULT_PLAN));
-      closeEditor();
-      renderWorkout(); renderProgress(); renderWeekSummary();
-      alert("Defaults restored.");
-    });
-
-    saveEditBtn.addEventListener("click", ()=>{
-      const list = draftPlan[selectedDay] || [];
-      for(const ex of list){
-        ex.name = String(ex.name || "").trim() || "Unnamed Exercise";
-        ex.reps = String(ex.reps || "").trim() || "—";
-        const s = parseInt(ex.sets, 10);
-        ex.sets = Number.isFinite(s) && s > 0 ? s : 1;
-      }
-      setPlan(draftPlan);
-      closeEditor();
-      renderWorkout(); renderProgress(); renderWeekSummary();
-      alert("Plan saved!");
-    });
-
-    /*************************
-     * Info popup modal
-     *************************/
-    const infoBack = document.getElementById("infoBack");
-    const infoTitle = document.getElementById("infoTitle");
-    const infoSub = document.getElementById("infoSub");
-    const infoBody = document.getElementById("infoBody");
-    const infoCloseBtn = document.getElementById("infoCloseBtn");
-
-    function openInfo(title, html){
-      infoTitle.textContent = title;
-      infoSub.textContent = "Quick guide";
-      infoBody.innerHTML = html;
-      infoBack.style.display = "flex";
-      infoBack.setAttribute("aria-hidden","false");
-    }
-    function closeInfo(){
-      infoBack.style.display = "none";
-      infoBack.setAttribute("aria-hidden","true");
-    }
-    infoCloseBtn.addEventListener("click", closeInfo);
-    infoBack.addEventListener("click", (e)=>{ if(e.target === infoBack) closeInfo(); });
-
-    const CORE_CIRCUIT_HTML = `
-      <div class="muted">Pick 3–4 moves below. Do them in a loop.</div>
+/*************************
+ * Info popups (your exact text)
+ *************************/
+const INFO_MAP = {
+  "Core Circuit": {
+    title: "Core Circuit (3 sets • pick 3–4 moves)",
+    html: `
+      <p><b>Pick 3–4 moves below.</b> Do them in a loop.</p>
       <ul>
-        <li>Rest 30–45 sec between moves</li>
-        <li>Rest 60–90 sec between rounds</li>
-        <li>Total time: 10–15 min</li>
+        <li>Rest <b>30–45 sec</b> between moves</li>
+        <li>Rest <b>60–90 sec</b> between rounds</li>
+        <li>Total time: <b>10–15 min</b></li>
       </ul>
+
       <h4>Option A (best overall)</h4>
       <ul>
         <li>Dead Bug – 8–10/side</li>
@@ -769,25 +665,30 @@
         <li>Side Plank – 20–30 sec/side</li>
         <li>Glute Bridge – 12–15</li>
       </ul>
+
       <h4>Option B (more “tight waist” feel)</h4>
       <ul>
-        <li>Pallof Press – 10–12/side</li>
+        <li>Pallof Press (band/cable) – 10–12/side</li>
         <li>Plank – 30–45 sec</li>
-        <li>Suitcase Carry – 30–45 sec/side</li>
+        <li>Suitcase Carry (one dumbbell) – 30–45 sec/side</li>
         <li>Reverse Crunch – 10–12 (slow)</li>
       </ul>
-      <div class="muted">👉 Rule: if anything hurts your low back, swap it.</div>
-    `;
 
-    const FULL_BODY_HTML = `
-      <div class="muted">This is a moderate pace circuit, not HIIT.</div>
+      <p><b>👉 Rule:</b> if anything hurts your low back, swap it.</p>
+    `
+  },
+  "Full-Body Circuit": {
+    title: "Full-Body Circuit (3 sets • 8–10 exercises)",
+    html: `
+      <p>This is a <b>moderate pace circuit</b>, not HIIT.</p>
       <ul>
-        <li>Pick 8 exercises (or use the ready-made list)</li>
-        <li>Work 35–45 sec, rest 15–25 sec between exercises</li>
-        <li>Rest 90 sec between rounds</li>
-        <li>Total time: 20–30 min</li>
+        <li>Pick <b>8 exercises</b> (or use the ready-made below)</li>
+        <li>Work <b>35–45 sec</b>, rest <b>15–25 sec</b> between exercises</li>
+        <li>Rest <b>90 sec</b> between rounds</li>
+        <li>Total time: <b>20–30 min</b></li>
       </ul>
-      <h4>Ready-made Full-Body Circuit</h4>
+
+      <h4>Ready-made Full-Body Circuit (fat loss + strength)</h4>
       <ul>
         <li>Goblet Squat</li>
         <li>Dumbbell Row</li>
@@ -797,41 +698,691 @@
         <li>Lateral Raise</li>
         <li>Glute Bridge / Hip Thrust</li>
         <li>Pallof Press or Dead Bug</li>
-        <li class="muted">Optional 9–10: Biceps Curl, Triceps Rope Pushdown</li>
       </ul>
-      <div class="muted">👉 Goal: “sweaty but controlled” with good form.</div>
-    `;
 
-    const MOBILITY_HTML = `
-      <div class="muted">This is your “feel better tomorrow” block.</div>
-      <h4>Quick 10–12 min mobility flow</h4>
+      <h4>Optional 9–10</h4>
+      <ul>
+        <li>Biceps Curl</li>
+        <li>Triceps Rope Pushdown</li>
+      </ul>
+
+      <p><b>👉 Goal:</b> “sweaty but controlled.” Keep weights where form stays clean.</p>
+    `
+  },
+  "Stretching / Mobility": {
+    title: "Stretching / Mobility (10–15 min)",
+    html: `
+      <p>This is your <b>“feel better tomorrow”</b> block.</p>
+
+      <h4>Quick 10–12 minute mobility flow</h4>
       <ul>
         <li>Chest opener (doorway) – 45 sec</li>
         <li>Child’s pose – 45 sec</li>
         <li>Hip flexor stretch – 45 sec/side</li>
-        <li>Figure-4 glute – 45 sec/side</li>
+        <li>Figure-4 glute stretch – 45 sec/side</li>
         <li>Hamstring stretch – 45 sec/side</li>
         <li>Thoracic rotation (“open books”) – 8 reps/side</li>
         <li>Calf stretch – 30–45 sec/side</li>
       </ul>
-      <div class="muted">If knees are cranky: do more hip + upper body, less deep knee bending.</div>
+
+      <p><b>If knees are cranky:</b> do more hip + upper body stretches, less deep knee bending.</p>
+    `
+  }
+};
+
+/*************************
+ * Health Reset defaults (editable via modal)
+ *************************/
+const RESET_DEFAULTS = {
+  morning: [
+    { key:"synthroid", title:"6:30 AM: Synthroid (empty stomach)", sub:"Water is fine. Avoid supplements/minerals/fiber for 45–60 minutes." },
+    { key:"lemon", title:"Warm lemon water at work is OK", sub:"No minerals in lemon = fine with Synthroid timing." },
+    { key:"coffee", title:"Coffee + collagen after your wait window", sub:"Aim for 45–60 minutes after Synthroid." },
+    { key:"salt", title:"Baja Gold salt water after coffee", sub:"Small sips earlier are fine; finishing later is cleanest." }
+  ],
+  supps: [
+    { key:"lunch_berberine", title:"Lunch: Berberine (if keeping it)", sub:"With food. If it ever bloats you again, pause and reassess." },
+    { key:"lunch_probiotic", title:"Lunch: Good Girl Probiotic", sub:"Keep consistent." },
+    { key:"lunch_omega", title:"Lunch: Omega-3", sub:"With food." },
+    { key:"dinner_multi", title:"Dinner: MultiComplete", sub:"Keeps minerals away from Synthroid." },
+    { key:"dinner_citrucel", title:"Dinner: Citrucel", sub:"Keeps fiber away from Synthroid window." },
+    { key:"bed_mag", title:"Bedtime: Magnesium", sub:"Supports sleep + insulin sensitivity." },
+    { key:"asneeded_flatter", title:"As needed: HUM Flatter Me", sub:"With the FIRST bite of heavier/carb meals." }
+  ],
+  rules: [
+    { key:"protein", title:"Protein first at every meal", sub:"This stabilizes insulin and reduces cravings." },
+    { key:"carb_once", title:"Carbs once per day", sub:"Pick the meal you want them most." },
+    { key:"portion", title:"Heavy-carb meals: cut portion in half", sub:"Eat protein first, then carbs. Stop at satisfied." },
+    { key:"walk", title:"Walk 10–15 minutes after carb meals", sub:"This is a game-changer for glucose control." },
+    { key:"no_hiit", title:"No punishment HIIT", sub:"Keep cortisol lower for better fat loss." }
+  ]
+};
+
+/*************************
+ * LocalStorage keys
+ *************************/
+const LS = {
+  workoutProgress: "pu_progress_v2",        // { dayName: { exIndex: {done, weight, notes} } }
+  resetChecks: "pu_resetChecks_v2",         // { "YYYY-MM-DD": { key: true } }
+  planOverride: "pu_planOverride_v2",       // full PLAN object override
+  resetOverride: "pu_resetOverride_v2",     // { morning:[], supps:[], rules:[] }
+  measurements: "pu_measurements_v2"        // { weekKey: { ...fields } }
+};
+
+/*************************
+ * Date helpers
+ *************************/
+const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+function pad(n){ return String(n).padStart(2,"0"); }
+function isoDate(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function prettyDate(d){
+  return d.toLocaleDateString(undefined, { weekday:"long", month:"short", day:"numeric", year:"numeric" });
+}
+function currentDayName(){ return new Date().toLocaleDateString(undefined, { weekday:"long" }); }
+function weekKey(d=new Date()){
+  // ISO-ish week key: YYYY-Www (simple Monday-based)
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+  const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1)/7);
+  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
+}
+
+/*************************
+ * Storage helpers
+ *************************/
+function load(key, fallback){
+  try{
+    const v = JSON.parse(localStorage.getItem(key));
+    return (v === null || v === undefined) ? fallback : v;
+  }catch{
+    return fallback;
+  }
+}
+function save(key, val){
+  localStorage.setItem(key, JSON.stringify(val));
+}
+
+/*************************
+ * Plan source
+ *************************/
+function getPlan(){
+  const override = load(LS.planOverride, null);
+  if(override && typeof override === "object") return override;
+  return DEFAULT_PLAN;
+}
+function setPlan(plan){
+  save(LS.planOverride, plan);
+}
+
+/*************************
+ * Reset source (editable)
+ *************************/
+function getResetData(){
+  const o = load(LS.resetOverride, null);
+  if(o && o.morning && o.supps && o.rules) return o;
+  return structuredClone(RESET_DEFAULTS);
+}
+function setResetData(obj){
+  save(LS.resetOverride, obj);
+}
+
+/*************************
+ * App state
+ *************************/
+const today = new Date();
+const todayISO = isoDate(today);
+const defaultSelected = DAYS.includes(currentDayName()) ? currentDayName() : "Monday";
+let selectedDay = defaultSelected;
+
+/*************************
+ * Tabs
+ *************************/
+const tabEls = Array.from(document.querySelectorAll(".tab"));
+const sections = {
+  workout: document.getElementById("tab-workout"),
+  progress: document.getElementById("tab-progress"),
+  week: document.getElementById("tab-week"),
+  reset: document.getElementById("tab-reset"),
+  measurements: document.getElementById("tab-measurements")
+};
+tabEls.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
+
+function setTab(name){
+  tabEls.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+  Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none");
+
+  if(name === "workout") renderWorkout();
+  if(name === "progress") renderProgress();
+  if(name === "week") renderWeekSummary();
+  if(name === "reset") renderReset();
+  if(name === "measurements") renderMeasurements();
+}
+
+/*************************
+ * Workout rendering
+ *************************/
+const dayTitle = document.getElementById("dayTitle");
+const allDonePill = document.getElementById("allDonePill");
+const dayChips = document.getElementById("dayChips");
+const exerciseList = document.getElementById("exerciseList");
+const resetTodayLink = document.getElementById("resetTodayLink");
+
+function getProgress(){ return load(LS.workoutProgress, {}); }
+function setExerciseField(day, idx, field, value){
+  const p = getProgress();
+  p[day] = p[day] || {};
+  p[day][idx] = p[day][idx] || { done:false, weight:"", notes:"" };
+  p[day][idx][field] = value;
+  save(LS.workoutProgress, p);
+}
+function getExerciseState(day, idx){
+  const p = getProgress();
+  return (p[day] && p[day][idx]) ? p[day][idx] : { done:false, weight:"", notes:"" };
+}
+function resetDayProgress(day){
+  const p = getProgress();
+  delete p[day];
+  save(LS.workoutProgress, p);
+}
+
+function renderDayChips(){
+  dayChips.innerHTML = "";
+  DAYS.forEach(d => {
+    const c = document.createElement("div");
+    c.className = "chip" + (d === selectedDay ? " active" : "");
+    c.textContent = d.slice(0,3);
+    c.title = d;
+    c.addEventListener("click", () => {
+      selectedDay = d;
+      renderWorkout();
+    });
+    dayChips.appendChild(c);
+  });
+}
+
+function renderWorkout(){
+  renderDayChips();
+  dayTitle.textContent = `${selectedDay} workout`;
+
+  const plan = getPlan();
+  const exercises = plan[selectedDay] || [];
+  exerciseList.innerHTML = "";
+
+  let doneCount = 0;
+
+  exercises.forEach((ex, idx) => {
+    const st = getExerciseState(selectedDay, idx);
+    if(st.done) doneCount++;
+
+    const isInfo = !!INFO_MAP[ex.name];
+
+    const wrap = document.createElement("div");
+    wrap.className = "ex";
+    wrap.innerHTML = `
+      <div class="exHead">
+        <div>
+          <p class="exName ${isInfo ? "clickable" : ""}">${escapeHtml(ex.name)}</p>
+          <div class="exMeta">${ex.sets} sets • ${escapeHtml(ex.reps)}</div>
+        </div>
+
+        <button class="doneBtn ${st.done ? "checked" : ""}" type="button">
+          <span class="doneBox">${st.done ? "✓" : ""}</span>
+          Done
+        </button>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label>Weight / Level</label>
+          <input type="text" placeholder="e.g. 15 lb DBs" value="${escapeAttr(st.weight || "")}" />
+        </div>
+        <div>
+          <label>Notes</label>
+          <textarea placeholder="How it felt, tweaks, etc.">${escapeHtml(st.notes || "")}</textarea>
+        </div>
+      </div>
     `;
 
-    /*************************
-     * Boot
-     *************************/
-    document.getElementById("dateLine").textContent = prettyDate(today);
+    const doneBtn = wrap.querySelector(".doneBtn");
+    const weightInput = wrap.querySelector("input");
+    const notesArea = wrap.querySelector("textarea");
+    const nameEl = wrap.querySelector(".exName");
 
-    if(new Date().getDay() === 1){
-      document.getElementById("appTitle").classList.add("mondayPulse");
+    doneBtn.addEventListener("click", () => {
+      const cur = getExerciseState(selectedDay, idx);
+      setExerciseField(selectedDay, idx, "done", !cur.done);
+      renderWorkout();
+      renderProgress();
+      renderWeekSummary();
+    });
+
+    weightInput.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "weight", e.target.value));
+    notesArea.addEventListener("input", (e) => setExerciseField(selectedDay, idx, "notes", e.target.value));
+
+    if(isInfo){
+      nameEl.addEventListener("click", () => openInfo(ex.name));
     }
 
+    exerciseList.appendChild(wrap);
+  });
+
+  const allDone = exercises.length > 0 && doneCount === exercises.length;
+  allDonePill.style.display = allDone ? "inline-block" : "none";
+}
+
+resetTodayLink.addEventListener("click", () => {
+  const todayName = currentDayName();
+  if(selectedDay !== todayName){
+    alert("This reset link is for today's day only. Tap today's day to reset it.");
+    return;
+  }
+  if(confirm("Reset today's progress? This will clear Done/Weight/Notes for today.")){
+    resetDayProgress(selectedDay);
     renderWorkout();
     renderProgress();
     renderWeekSummary();
-    renderReset();
-    renderMeasurements();
-    setTab("workout");
-  </script>
+  }
+});
+
+/*************************
+ * Progress + Week summary
+ *************************/
+const statToday = document.getElementById("statToday");
+const statTodayCount = document.getElementById("statTodayCount");
+const statWeekDays = document.getElementById("statWeekDays");
+const weekSummary = document.getElementById("weekSummary");
+
+function dayCompletion(day){
+  const plan = getPlan();
+  const exercises = plan[day] || [];
+  if(exercises.length === 0) return { done:0, total:0, pct:0 };
+  let done = 0;
+  exercises.forEach((_, idx) => { if(getExerciseState(day, idx).done) done++; });
+  const pct = Math.round((done / exercises.length) * 100);
+  return { done, total: exercises.length, pct };
+}
+function renderProgress(){
+  const todayName = currentDayName();
+  const c = dayCompletion(todayName);
+  statToday.textContent = `${c.pct}%`;
+  statTodayCount.textContent = `${c.done} / ${c.total}`;
+
+  let completedDays = 0;
+  DAYS.forEach(d => {
+    const dc = dayCompletion(d);
+    if(dc.total > 0 && dc.done === dc.total) completedDays++;
+  });
+  statWeekDays.textContent = String(completedDays);
+}
+function renderWeekSummary(){
+  weekSummary.innerHTML = "";
+  DAYS.forEach(d => {
+    const c = dayCompletion(d);
+    const row = document.createElement("div");
+    row.className = "ex";
+    row.style.padding = "12px 14px";
+    row.innerHTML = `
+      <div class="exHead">
+        <div>
+          <p class="exName" style="font-size:16px; margin:0;">${d}</p>
+          <div class="exMeta">${c.done} / ${c.total} completed • ${c.pct}%</div>
+        </div>
+        <div class="allDone" style="display:${(c.total>0 && c.done===c.total) ? "inline-block" : "none"};">All done ✓</div>
+      </div>
+    `;
+    weekSummary.appendChild(row);
+  });
+}
+
+/*************************
+ * Health Reset (daily checks by date)
+ *************************/
+const resetMorningEl = document.getElementById("resetMorning");
+const resetSuppsEl = document.getElementById("resetSupps");
+const resetRulesEl = document.getElementById("resetRules");
+
+function getResetChecks(){ return load(LS.resetChecks, {}); }
+function getChecksForToday(){
+  const all = getResetChecks();
+  return all[todayISO] || {};
+}
+function setCheck(key, val){
+  const all = getResetChecks();
+  const day = all[todayISO] || {};
+  day[key] = !!val;
+  all[todayISO] = day;
+  save(LS.resetChecks, all);
+}
+
+function renderResetSection(container, items){
+  container.innerHTML = "";
+  const checks = getChecksForToday();
+
+  items.forEach(it => {
+    const row = document.createElement("div");
+    row.className = "check";
+    row.innerHTML = `
+      <input type="checkbox" ${checks[it.key] ? "checked" : ""} />
+      <div>
+        <div class="t">${escapeHtml(it.title)}</div>
+        <div class="s">${escapeHtml(it.sub)}</div>
+      </div>
+    `;
+    row.querySelector("input").addEventListener("change", (e) => setCheck(it.key, e.target.checked));
+    container.appendChild(row);
+  });
+}
+
+function renderReset(){
+  const r = getResetData();
+  renderResetSection(resetMorningEl, r.morning);
+  renderResetSection(resetSuppsEl, r.supps);
+  renderResetSection(resetRulesEl, r.rules);
+}
+
+/*************************
+ * Measurements (weekly)
+ *************************/
+const measFields = ["weight","waist","hips","chest","thigh","arm"];
+const measSaveBtn = document.getElementById("measSaveBtn");
+const measClearBtn = document.getElementById("measClearBtn");
+const measHistory = document.getElementById("measHistory");
+
+function getMeasurements(){ return load(LS.measurements, {}); }
+function setMeasurements(obj){ save(LS.measurements, obj); }
+
+function renderMeasurements(){
+  const wk = weekKey(new Date());
+  const all = getMeasurements();
+  const cur = all[wk] || {};
+
+  measFields.forEach(f => {
+    const el = document.getElementById("m_"+f);
+    if(el) el.value = cur[f] || "";
+  });
+
+  // history
+  measHistory.innerHTML = "";
+  const keys = Object.keys(all).sort().reverse();
+  if(keys.length === 0){
+    measHistory.innerHTML = `<div class="hint" style="margin-top:10px;">No saved weeks yet.</div>`;
+    return;
+  }
+
+  keys.forEach(k => {
+    const v = all[k] || {};
+    const row = document.createElement("div");
+    row.className = "ex";
+    row.style.padding = "12px 14px";
+    row.innerHTML = `
+      <div style="font-weight:950;">${escapeHtml(k)}</div>
+      <div class="exMeta" style="margin-top:6px;">
+        Weight: <b>${escapeHtml(v.weight || "—")}</b> •
+        Waist: <b>${escapeHtml(v.waist || "—")}</b> •
+        Hips: <b>${escapeHtml(v.hips || "—")}</b> •
+        Chest: <b>${escapeHtml(v.chest || "—")}</b> •
+        Thigh: <b>${escapeHtml(v.thigh || "—")}</b> •
+        Arm: <b>${escapeHtml(v.arm || "—")}</b>
+      </div>
+    `;
+    measHistory.appendChild(row);
+  });
+}
+
+measSaveBtn?.addEventListener("click", () => {
+  const wk = weekKey(new Date());
+  const all = getMeasurements();
+  all[wk] = all[wk] || {};
+  measFields.forEach(f => {
+    const el = document.getElementById("m_"+f);
+    all[wk][f] = (el?.value || "").trim();
+  });
+  setMeasurements(all);
+  alert("Saved!");
+  renderMeasurements();
+});
+measClearBtn?.addEventListener("click", () => {
+  if(!confirm("Clear this week's fields (does not delete your saved history)?")) return;
+  measFields.forEach(f => {
+    const el = document.getElementById("m_"+f);
+    if(el) el.value = "";
+  });
+});
+
+/*************************
+ * Edit Plan Modal
+ *************************/
+const editPlanBtn = document.getElementById("editPlanBtn");
+const modalBack = document.getElementById("modalBack");
+const editorBody = document.getElementById("editorBody");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const cancelEditBtn = document.getElementById("cancelEditBtn");
+const saveEditBtn = document.getElementById("saveEditBtn");
+const addExerciseBtn = document.getElementById("addExerciseBtn");
+const restoreDefaultsBtn = document.getElementById("restoreDefaultsBtn");
+
+let draftPlan = null;
+
+function openEditor(){
+  draftPlan = structuredClone(getPlan());
+  renderEditorRows();
+  modalBack.style.display = "flex";
+}
+function closeEditor(){
+  modalBack.style.display = "none";
+  draftPlan = null;
+}
+function renderEditorRows(){
+  editorBody.innerHTML = "";
+  const list = (draftPlan && draftPlan[selectedDay]) ? draftPlan[selectedDay] : [];
+
+  if(list.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "editRow";
+    empty.innerHTML = `<div style="font-weight:900;">No exercises yet.</div><div style="color:var(--muted);font-weight:650;margin-top:4px;">Click “Add exercise” to create one.</div>`;
+    editorBody.appendChild(empty);
+    return;
+  }
+
+  list.forEach((ex, idx) => {
+    const row = document.createElement("div");
+    row.className = "editRow";
+    row.innerHTML = `
+      <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap;">
+        <div style="font-weight:950;">Exercise ${idx+1}</div>
+        <button class="btn danger" type="button">Delete</button>
+      </div>
+
+      <div class="editGrid">
+        <div>
+          <label>Name</label>
+          <input type="text" value="${escapeAttr(ex.name || "")}" />
+        </div>
+        <div>
+          <label>Sets</label>
+          <input type="number" min="1" step="1" value="${escapeAttr(ex.sets ?? 3)}" />
+        </div>
+        <div>
+          <label>Reps</label>
+          <input type="text" value="${escapeAttr(ex.reps || "")}" />
+        </div>
+      </div>
+    `;
+
+    const delBtn = row.querySelector("button");
+    const [nameInput, setsInput, repsInput] = row.querySelectorAll("input");
+
+    nameInput.addEventListener("input", (e) => { draftPlan[selectedDay][idx].name = e.target.value; });
+    setsInput.addEventListener("input", (e) => {
+      const v = parseInt(e.target.value, 10);
+      draftPlan[selectedDay][idx].sets = Number.isFinite(v) && v > 0 ? v : 1;
+    });
+    repsInput.addEventListener("input", (e) => { draftPlan[selectedDay][idx].reps = e.target.value; });
+
+    delBtn.addEventListener("click", () => {
+      if(!confirm("Delete this exercise?")) return;
+      draftPlan[selectedDay].splice(idx, 1);
+      renderEditorRows();
+    });
+
+    editorBody.appendChild(row);
+  });
+}
+
+editPlanBtn.addEventListener("click", openEditor);
+closeModalBtn.addEventListener("click", closeEditor);
+cancelEditBtn.addEventListener("click", closeEditor);
+
+modalBack.addEventListener("click", (e) => { if(e.target === modalBack) closeEditor(); });
+
+addExerciseBtn.addEventListener("click", () => {
+  if(!draftPlan[selectedDay]) draftPlan[selectedDay] = [];
+  draftPlan[selectedDay].push({ name:"New Exercise", sets:3, reps:"10–12" });
+  renderEditorRows();
+});
+
+restoreDefaultsBtn.addEventListener("click", () => {
+  if(!confirm("Restore your original default plan for ALL days? (This does not erase your workout notes.)")) return;
+  setPlan(structuredClone(DEFAULT_PLAN));
+  closeEditor();
+  renderWorkout();
+  renderProgress();
+  renderWeekSummary();
+  alert("Defaults restored.");
+});
+
+saveEditBtn.addEventListener("click", () => {
+  const list = draftPlan[selectedDay] || [];
+  for(const ex of list){
+    ex.name = String(ex.name || "").trim() || "Unnamed Exercise";
+    ex.reps = String(ex.reps || "").trim() || "—";
+    const s = parseInt(ex.sets, 10);
+    ex.sets = Number.isFinite(s) && s > 0 ? s : 1;
+  }
+  setPlan(draftPlan);
+  closeEditor();
+  renderWorkout();
+  renderProgress();
+  renderWeekSummary();
+  alert("Plan saved!");
+});
+
+/*************************
+ * Info popup modal
+ *************************/
+const infoBack = document.getElementById("infoBack");
+const infoTitle = document.getElementById("infoTitle");
+const infoSub = document.getElementById("infoSub");
+const infoBody = document.getElementById("infoBody");
+const infoCloseBtn = document.getElementById("infoCloseBtn");
+
+function openInfo(name){
+  const d = INFO_MAP[name];
+  if(!d) return;
+  infoTitle.textContent = d.title;
+  infoSub.textContent = "Tap Close when you’re done.";
+  infoBody.innerHTML = d.html;
+  infoBack.style.display = "flex";
+}
+function closeInfo(){ infoBack.style.display = "none"; }
+infoCloseBtn.addEventListener("click", closeInfo);
+infoBack.addEventListener("click", (e) => { if(e.target === infoBack) closeInfo(); });
+
+/*************************
+ * Edit Reset modal
+ *************************/
+const editResetBtn = document.getElementById("editResetBtn");
+const resetBack = document.getElementById("resetBack");
+const resetCloseBtn = document.getElementById("resetCloseBtn");
+const resetSaveBtn = document.getElementById("resetSaveBtn");
+const resetRestoreBtn = document.getElementById("resetRestoreBtn");
+const resetEditMorning = document.getElementById("resetEditMorning");
+const resetEditSupps = document.getElementById("resetEditSupps");
+const resetEditRules = document.getElementById("resetEditRules");
+
+function linesFromItems(items){
+  return items.map(it => `${it.title} | ${it.sub}`).join("\n");
+}
+function itemsFromLines(text, prefix){
+  const lines = String(text || "").split("\n").map(s => s.trim()).filter(Boolean);
+  return lines.map((line, i) => {
+    const parts = line.split("|");
+    const title = (parts[0] || "").trim();
+    const sub = (parts.slice(1).join("|") || "").trim();
+    return {
+      key: `${prefix}_${i}_${title.toLowerCase().replace(/\W+/g,"_").slice(0,30)}`,
+      title: title || "Untitled",
+      sub: sub || ""
+    };
+  });
+}
+
+function openResetEditor(){
+  const r = getResetData();
+  resetEditMorning.value = linesFromItems(r.morning);
+  resetEditSupps.value = linesFromItems(r.supps);
+  resetEditRules.value = linesFromItems(r.rules);
+  resetBack.style.display = "flex";
+}
+function closeResetEditor(){ resetBack.style.display = "none"; }
+
+editResetBtn.addEventListener("click", openResetEditor);
+resetCloseBtn.addEventListener("click", closeResetEditor);
+resetBack.addEventListener("click", (e) => { if(e.target === resetBack) closeResetEditor(); });
+
+resetRestoreBtn.addEventListener("click", () => {
+  if(!confirm("Restore default reset text?")) return;
+  setResetData(structuredClone(RESET_DEFAULTS));
+  renderReset();
+  alert("Reset defaults restored.");
+  closeResetEditor();
+});
+
+resetSaveBtn.addEventListener("click", () => {
+  const obj = {
+    morning: itemsFromLines(resetEditMorning.value, "morning"),
+    supps: itemsFromLines(resetEditSupps.value, "supps"),
+    rules: itemsFromLines(resetEditRules.value, "rules")
+  };
+  setResetData(obj);
+  renderReset();
+  alert("Reset saved!");
+  closeResetEditor();
+});
+
+/*************************
+ * Escapes
+ *************************/
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function escapeAttr(str){
+  return escapeHtml(str).replaceAll("\n"," ");
+}
+
+/*************************
+ * Boot
+ *************************/
+document.getElementById("dateLine").textContent = prettyDate(today);
+
+// Monday pulse
+if(new Date().getDay() === 1){
+  document.getElementById("appTitle").classList.add("mondayPulse");
+}
+
+renderWorkout();
+renderProgress();
+renderWeekSummary();
+renderReset();
+renderMeasurements();
+setTab("workout");
+</script>
 </body>
 </html>
