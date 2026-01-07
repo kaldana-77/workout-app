@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Ever Strong</title>
+  <title>💧🏋️ Ever Strong</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
@@ -32,6 +32,7 @@
     .app {
       max-width: 480px;
       margin: 0 auto;
+      padding-bottom: 70px; /* space for bottom tabs */
     }
 
     header {
@@ -98,6 +99,14 @@
       font-size: 0.85rem;
       color: var(--muted);
       margin-bottom: 4px;
+      gap: 8px;
+    }
+
+    .workout-summary .left {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
     }
 
     .badge {
@@ -105,6 +114,8 @@
       border-radius: 999px;
       font-size: 0.75rem;
       border: 1px solid var(--border);
+      background:#fff;
+      white-space: nowrap;
     }
 
     .badge-complete {
@@ -115,6 +126,20 @@
     .badge-incomplete {
       color: var(--danger);
       border-color: var(--danger);
+    }
+
+    .tiny-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .tiny-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
     }
 
     .exercise {
@@ -147,7 +172,7 @@
 
     .exercise-controls {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 6px;
       flex-wrap: wrap;
     }
@@ -165,12 +190,15 @@
     }
 
     .form-group input,
-    .form-group textarea {
+    .form-group textarea,
+    .form-group select {
       font-size: 0.8rem;
       padding: 4px 6px;
       border-radius: 6px;
       border: 1px solid var(--border);
       width: 100%;
+      background:#fff;
+      color: var(--text);
     }
 
     .form-group textarea {
@@ -208,6 +236,24 @@
       padding: 0;
     }
 
+    /* Circuit explanation link */
+    .circuit-link {
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-decoration: underline;
+      cursor: pointer;
+      width: fit-content;
+      margin-top: 2px;
+    }
+    .circuit-help {
+      display:none;
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px dashed var(--border);
+      padding-top: 6px;
+      margin-top: 6px;
+    }
+
     /* Scrollbar styling for day tabs (mobile-safe) */
     .day-tabs::-webkit-scrollbar {
       height: 4px;
@@ -216,37 +262,288 @@
       background: var(--border);
       border-radius: 999px;
     }
+
+    /* ===== Bottom App Tabs (kept sleek: same style as day tabs) ===== */
+    .app-tabs {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(247,247,247,0.98);
+      border-top: 1px solid var(--border);
+      padding: 8px 10px 10px;
+    }
+    .app-tabs-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap; /* can go to 2 rows */
+      justify-content: center;
+    }
+    .app-tab {
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      background: #fff;
+      white-space: nowrap;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .app-tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ===== Modals (minimal, not bubbly) ===== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      z-index: 1000;
+    }
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+    .modal-header {
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .modal-header strong {
+      font-size: 0.9rem;
+    }
+    .modal-body {
+      padding: 10px;
+      max-height: 70vh;
+      overflow: auto;
+    }
+    .modal-footer {
+      padding: 10px;
+      border-top: 1px solid var(--border);
+      display:flex;
+      justify-content: flex-end;
+      gap: 8px;
+      background: #fff;
+    }
+    .row {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 8px;
+      background: #fff;
+    }
+    .row-top {
+      display:flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items:flex-end;
+    }
+    .row-actions {
+      margin-top: 6px;
+      display:flex;
+      justify-content: flex-end;
+    }
+
+    .hidden { display:none; }
   </style>
 </head>
+
 <body>
   <div class="app">
     <header>
-      <h1>Ever Strong</h1>
+      <h1>💧🏋️ Ever Strong</h1>
       <p>Strength for Today, Health for Tomorrow.</p>
       <div class="date-label" id="currentDateLabel"></div>
     </header>
 
     <div class="day-tabs" id="dayTabs"></div>
 
-    <div class="card">
-      <div class="workout-summary">
-        <span id="currentDayLabel"></span>
-        <span class="badge" id="completionBadge"></span>
+    <!-- ===== WORKOUT TAB ===== -->
+    <div id="tab-workout">
+      <div class="card">
+        <div class="workout-summary">
+          <div class="left">
+            <span id="currentDayLabel"></span>
+            <button class="tiny-btn" id="editPlanBtn" type="button">Edit plan</button>
+          </div>
+          <span class="badge" id="completionBadge"></span>
+        </div>
+        <div id="exerciseList"></div>
+        <button class="reset-btn" id="resetDayBtn" type="button">
+          Reset this day’s progress
+        </button>
       </div>
-      <div id="exerciseList"></div>
-      <button class="reset-btn" id="resetDayBtn" type="button">
-        Reset this day’s progress
-      </button>
+
+      <div class="footer-note">
+        Ever Strong: Define your Strong.
+      </div>
     </div>
 
-    <div class="footer-note">
-      Ever Strong: Define your Strong.
+    <!-- ===== PROGRESS TAB ===== -->
+    <div id="tab-progress" class="hidden">
+      <div class="card">
+        <div class="workout-summary">
+          <span>Progress</span>
+          <span class="badge" id="progressBadge">—</span>
+        </div>
+        <div class="exercise" style="gap:6px;">
+          <div class="exercise-name" style="font-size:0.9rem;">This week</div>
+          <div class="exercise-info" id="weekSummary">—</div>
+        </div>
+        <div class="exercise" style="gap:6px;">
+          <div class="exercise-name" style="font-size:0.9rem;">Streak</div>
+          <div class="exercise-info" id="streakSummary">—</div>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        Ever Strong: Define your Strong.
+      </div>
+    </div>
+
+    <!-- ===== MEASUREMENTS TAB ===== -->
+    <div id="tab-measurements" class="hidden">
+      <div class="card">
+        <div class="workout-summary">
+          <span>Measurements</span>
+          <span class="badge" id="measBadge">Saved</span>
+        </div>
+
+        <div class="exercise-controls">
+          <div class="form-group" style="flex:1 1 140px;">
+            <label>Date</label>
+            <input type="date" id="mDate">
+          </div>
+          <div class="form-group">
+            <label>Weight</label>
+            <input type="text" id="mWeight" placeholder="e.g. 160">
+          </div>
+          <div class="form-group">
+            <label>Waist</label>
+            <input type="text" id="mWaist" placeholder="in">
+          </div>
+          <div class="form-group">
+            <label>Hips</label>
+            <input type="text" id="mHips" placeholder="in">
+          </div>
+          <div class="form-group">
+            <label>Chest</label>
+            <input type="text" id="mChest" placeholder="in">
+          </div>
+          <div class="form-group" style="flex:1 1 220px;">
+            <label>Notes</label>
+            <input type="text" id="mNotes" placeholder="how you felt">
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:8px; justify-content:flex-end;">
+          <button class="tiny-btn" id="viewMeasurementsBtn" type="button">View saved</button>
+          <button class="tiny-btn" id="saveMeasurementBtn" type="button">Save</button>
+        </div>
+
+        <div id="measurementsList" class="row hidden" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="footer-note">
+        Ever Strong: Define your Strong.
+      </div>
+    </div>
+
+    <!-- ===== HEALTH RESET TAB ===== -->
+    <div id="tab-reset" class="hidden">
+      <div class="card">
+        <div class="workout-summary">
+          <div class="left">
+            <span>Health Reset</span>
+            <button class="tiny-btn" id="editResetBtn" type="button">Edit</button>
+          </div>
+          <span class="badge" id="resetBadge">—</span>
+        </div>
+
+        <div id="resetList"></div>
+
+        <button class="reset-btn" id="resetResetBtn" type="button">
+          Reset Health Reset (today)
+        </button>
+      </div>
+
+      <div class="footer-note">
+        Ever Strong: Define your Strong.
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Tabs -->
+  <div class="app-tabs" aria-label="App Tabs">
+    <div class="app-tabs-inner">
+      <button class="app-tab active" data-tab="workout" type="button">Workout</button>
+      <button class="app-tab" data-tab="progress" type="button">Progress</button>
+      <button class="app-tab" data-tab="measurements" type="button">Measurements</button>
+      <button class="app-tab" data-tab="reset" type="button">Health Reset</button>
+    </div>
+  </div>
+
+  <!-- Edit Workout Modal -->
+  <div class="modal-backdrop" id="editPlanModal">
+    <div class="modal">
+      <div class="modal-header">
+        <strong id="editPlanTitle">Edit Plan</strong>
+        <button class="tiny-btn" id="closeEditPlan" type="button">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="exercise-info" style="margin-bottom:8px;">
+          Tip: pick from the dropdown or choose “Custom…” to type your own.
+        </div>
+        <div id="editRows"></div>
+        <button class="tiny-btn" id="addRowBtn" type="button">Add exercise</button>
+      </div>
+      <div class="modal-footer">
+        <button class="tiny-btn" id="savePlanBtn" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Health Reset Modal -->
+  <div class="modal-backdrop" id="editResetModal">
+    <div class="modal">
+      <div class="modal-header">
+        <strong>Edit Health Reset</strong>
+        <button class="tiny-btn" id="closeEditReset" type="button">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>One item per line</label>
+          <textarea id="resetItemsText" placeholder="Supplements (AM)&#10;Supplements (PM)&#10;Water&#10;Protein..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="tiny-btn" id="saveResetItemsBtn" type="button">Save</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // ==== 1. Define your weekly workout plan here ====
-    // You can customize exercises, sets, reps, etc.
+    // =========================
+    // 1) Weekly workout plan
+    // =========================
     const workoutPlan = {
       Monday: [
         { name: "Incline Dumbbell Press", sets: 3, reps: "10–12" },
@@ -267,7 +564,7 @@
         { name: "Dumbbell Row", sets: 3, reps: "10–12" },
         { name: "Lateral Raises", sets: 3, reps: "12–15" },
         { name: "Biceps Curls", sets: 3, reps: "10–12" },
-        { name: "Core Circuit", sets: 3, reps: "3–4 exercises" }
+        { name: "Core Circuit", sets: 3, reps: "3–4 exercises" } // circuit link auto appears
       ],
       Thursday: [
         { name: "Leg Press or Step-Ups", sets: 3, reps: "10–12" },
@@ -291,10 +588,61 @@
       ]
     };
 
-    // ==== 2. State & helpers ====
+    // =========================
+    // 2) Exercise picker list
+    // =========================
+    const EXERCISE_LIBRARY = [
+      "Incline Dumbbell Press",
+      "Dumbbell Bench Press",
+      "Push-Ups",
+      "Incline Push-Ups",
+      "Lat Pulldown",
+      "Seated Cable Row",
+      "Dumbbell Row",
+      "Bent-Over Row",
+      "Dumbbell Shoulder Press",
+      "Lateral Raises",
+      "Front Raises",
+      "Biceps Curls",
+      "Hammer Curls",
+      "Triceps Rope Pushdown",
+      "Overhead Triceps Extension",
+      "Goblet Squat",
+      "Romanian Deadlift",
+      "Glute Bridge/Hip Thrust",
+      "Calf Raises",
+      "Leg Press",
+      "Step-Ups",
+      "Lunges",
+      "Split Squats",
+      "Hamstring Curl",
+      "Walking Treadmill",
+      "Stretching / Mobility",
+      "Core Circuit",
+      "Full-Body Circuit"
+    ];
+
+    // =========================
+    // 3) Health Reset defaults
+    // (includes supplements)
+    // =========================
+    const DEFAULT_RESET_ITEMS = [
+      "Supplements (AM)",
+      "Supplements (PM)",
+      "Water (goal)",
+      "Protein at each meal",
+      "Fiber / veggies",
+      "Electrolytes",
+      "10–20 min walk",
+      "Early bedtime"
+    ];
+
+    // =========================
+    // 4) State & helpers
+    // =========================
     const days = Object.keys(workoutPlan);
     const today = new Date();
-    const todayDateStr = today.toISOString().slice(0, 10); // e.g. "2025-12-11"
+    const todayDateStr = today.toISOString().slice(0, 10);
 
     const dayTabsEl = document.getElementById("dayTabs");
     const currentDayLabelEl = document.getElementById("currentDayLabel");
@@ -303,36 +651,161 @@
     const completionBadgeEl = document.getElementById("completionBadge");
     const resetDayBtn = document.getElementById("resetDayBtn");
 
+    // tabs
+    const tabWorkout = document.getElementById("tab-workout");
+    const tabProgress = document.getElementById("tab-progress");
+    const tabMeasurements = document.getElementById("tab-measurements");
+    const tabReset = document.getElementById("tab-reset");
+    const appTabs = Array.from(document.querySelectorAll(".app-tab"));
+
+    // progress
+    const progressBadge = document.getElementById("progressBadge");
+    const weekSummary = document.getElementById("weekSummary");
+    const streakSummary = document.getElementById("streakSummary");
+
+    // measurements
+    const mDate = document.getElementById("mDate");
+    const mWeight = document.getElementById("mWeight");
+    const mWaist = document.getElementById("mWaist");
+    const mHips = document.getElementById("mHips");
+    const mChest = document.getElementById("mChest");
+    const mNotes = document.getElementById("mNotes");
+    const measBadge = document.getElementById("measBadge");
+    const saveMeasurementBtn = document.getElementById("saveMeasurementBtn");
+    const viewMeasurementsBtn = document.getElementById("viewMeasurementsBtn");
+    const measurementsList = document.getElementById("measurementsList");
+
+    // health reset
+    const resetList = document.getElementById("resetList");
+    const resetBadge = document.getElementById("resetBadge");
+    const resetResetBtn = document.getElementById("resetResetBtn");
+    const editResetBtn = document.getElementById("editResetBtn");
+
+    // edit plan modal
+    const editPlanBtn = document.getElementById("editPlanBtn");
+    const editPlanModal = document.getElementById("editPlanModal");
+    const editPlanTitle = document.getElementById("editPlanTitle");
+    const closeEditPlan = document.getElementById("closeEditPlan");
+    const editRows = document.getElementById("editRows");
+    const addRowBtn = document.getElementById("addRowBtn");
+    const savePlanBtn = document.getElementById("savePlanBtn");
+
+    // edit reset modal
+    const editResetModal = document.getElementById("editResetModal");
+    const closeEditReset = document.getElementById("closeEditReset");
+    const resetItemsText = document.getElementById("resetItemsText");
+    const saveResetItemsBtn = document.getElementById("saveResetItemsBtn");
+
     let currentDay = getDefaultDay();
+    let activeMainTab = loadMainTab() || "workout";
 
     function getDefaultDay() {
-      // Monday = 1, Sunday = 0
       const weekday = today.getDay();
       const map = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
       return map[weekday] || "Monday";
     }
 
-    function getStorageKey(day) {
+    // ===== Storage keys (keeps your existing workout progress intact) =====
+    function getWorkoutProgressKey(day) {
       return "workoutProgress_" + day + "_" + todayDateStr;
     }
-
-    function loadProgress(day) {
-      const key = getStorageKey(day);
-      const raw = localStorage.getItem(key);
-      if (!raw) return {};
-      try {
-        return JSON.parse(raw);
-      } catch {
-        return {};
-      }
+    function getPlanKey(day){
+      return "everStrong_plan_" + day; // stores edited weekly plan per day
+    }
+    function getResetItemsKey(){
+      return "everStrong_resetItems";
+    }
+    function getResetStateKey(){
+      return "everStrong_resetState_" + todayDateStr;
+    }
+    function getMeasurementsKey(){
+      return "everStrong_measurements";
+    }
+    function getMainTabKey(){
+      return "everStrong_mainTab";
     }
 
+    function loadMainTab(){
+      return localStorage.getItem(getMainTabKey());
+    }
+    function saveMainTab(name){
+      localStorage.setItem(getMainTabKey(), name);
+    }
+
+    // ===== Workout progress (your current system) =====
+    function loadProgress(day) {
+      const key = getWorkoutProgressKey(day);
+      const raw = localStorage.getItem(key);
+      if (!raw) return {};
+      try { return JSON.parse(raw); } catch { return {}; }
+    }
     function saveProgress(day, progress) {
-      const key = getStorageKey(day);
+      const key = getWorkoutProgressKey(day);
       localStorage.setItem(key, JSON.stringify(progress));
     }
 
-    // ==== 3. Render UI ====
+    // ===== Plan overrides (weekly plan edits) =====
+    function loadPlanOverride(day){
+      const raw = localStorage.getItem(getPlanKey(day));
+      if(!raw) return null;
+      try { return JSON.parse(raw); } catch { return null; }
+    }
+    function savePlanOverride(day, planArr){
+      localStorage.setItem(getPlanKey(day), JSON.stringify(planArr));
+    }
+    function getPlanForDay(day){
+      return loadPlanOverride(day) || workoutPlan[day] || [];
+    }
+
+    // ===== Health Reset items + state =====
+    function loadResetItems(){
+      const raw = localStorage.getItem(getResetItemsKey());
+      if(!raw) return DEFAULT_RESET_ITEMS.slice();
+      try {
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) && arr.length ? arr : DEFAULT_RESET_ITEMS.slice();
+      } catch {
+        return DEFAULT_RESET_ITEMS.slice();
+      }
+    }
+    function saveResetItems(arr){
+      localStorage.setItem(getResetItemsKey(), JSON.stringify(arr));
+    }
+
+    function loadResetState(){
+      const raw = localStorage.getItem(getResetStateKey());
+      if(!raw) {
+        const items = loadResetItems();
+        return { checks: items.map(()=>false), notes: "" };
+      }
+      try {
+        const st = JSON.parse(raw);
+        return st && typeof st === "object" ? st : { checks: [], notes: "" };
+      } catch {
+        const items = loadResetItems();
+        return { checks: items.map(()=>false), notes: "" };
+      }
+    }
+    function saveResetState(st){
+      localStorage.setItem(getResetStateKey(), JSON.stringify(st));
+    }
+
+    // ===== Measurements =====
+    function loadMeasurements(){
+      const raw = localStorage.getItem(getMeasurementsKey());
+      if(!raw) return [];
+      try {
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr : [];
+      } catch { return []; }
+    }
+    function saveMeasurements(arr){
+      localStorage.setItem(getMeasurementsKey(), JSON.stringify(arr));
+    }
+
+    // =========================
+    // 5) Render helpers
+    // =========================
     function renderDateLabel() {
       const opts = { weekday: "long", year: "numeric", month: "short", day: "numeric" };
       currentDateLabelEl.textContent = today.toLocaleDateString(undefined, opts);
@@ -343,7 +816,7 @@
       days.forEach(day => {
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.textContent = day.slice(0, 3); // Mon, Tue...
+        btn.textContent = day.slice(0, 3);
         btn.className = "day-tab" + (day === currentDay ? " active" : "");
         btn.addEventListener("click", () => {
           currentDay = day;
@@ -353,8 +826,12 @@
       });
     }
 
+    function isCircuitExercise(name){
+      return /circuit/i.test(name || "");
+    }
+
     function renderExercises() {
-      const exercises = workoutPlan[currentDay] || [];
+      const exercises = getPlanForDay(currentDay);
       const progress = loadProgress(currentDay);
       exerciseListEl.innerHTML = "";
 
@@ -402,7 +879,6 @@
         weightInput.type = "text";
         weightInput.value = exState.weight || "";
         weightInput.placeholder = "e.g. 15 lb DBs";
-
         weightGroup.appendChild(weightLabel);
         weightGroup.appendChild(weightInput);
 
@@ -413,14 +889,12 @@
         const notesInput = document.createElement("textarea");
         notesInput.value = exState.notes || "";
         notesInput.placeholder = "How it felt, tweaks, etc.";
-
         notesGroup.appendChild(notesLabel);
         notesGroup.appendChild(notesInput);
 
         controls.appendChild(weightGroup);
         controls.appendChild(notesGroup);
 
-        // Wire up events
         function updateState() {
           const newState = loadProgress(currentDay);
           newState[exKey] = {
@@ -439,6 +913,23 @@
 
         wrapper.appendChild(header);
         wrapper.appendChild(controls);
+
+        // Circuit underline explanation (sleek, minimal)
+        if (isCircuitExercise(ex.name)) {
+          const link = document.createElement("div");
+          link.className = "circuit-link";
+          link.textContent = "What does this circuit mean?";
+          const help = document.createElement("div");
+          help.className = "circuit-help";
+          help.textContent =
+            "Do 3–4 exercises back-to-back (10–15 reps each or 30–45 seconds), then rest 60–90 seconds. Repeat for the listed sets.";
+          link.addEventListener("click", () => {
+            help.style.display = (help.style.display === "block") ? "none" : "block";
+          });
+          wrapper.appendChild(link);
+          wrapper.appendChild(help);
+        }
+
         exerciseListEl.appendChild(wrapper);
       });
 
@@ -469,26 +960,411 @@
       }
     }
 
-    function render() {
-      renderDayTabs();
-      currentDayLabelEl.textContent = currentDay + " workout";
-      renderExercises();
+    // =========================
+    // 6) Bottom tabs logic
+    // =========================
+    function setMainTab(name){
+      activeMainTab = name;
+      saveMainTab(name);
+
+      // show/hide
+      tabWorkout.classList.toggle("hidden", name !== "workout");
+      tabProgress.classList.toggle("hidden", name !== "progress");
+      tabMeasurements.classList.toggle("hidden", name !== "measurements");
+      tabReset.classList.toggle("hidden", name !== "reset");
+
+      // active button
+      appTabs.forEach(b => b.classList.toggle("active", b.dataset.tab === name));
+
+      // render appropriate tab
+      if(name === "workout") render();
+      if(name === "progress") renderProgress();
+      if(name === "measurements") renderMeasurements();
+      if(name === "reset") renderHealthReset();
     }
 
-    // Reset button
+    appTabs.forEach(btn => btn.addEventListener("click", () => setMainTab(btn.dataset.tab)));
+
+    // =========================
+    // 7) Progress tab (simple)
+    // =========================
+    function renderProgress(){
+      // total done today + streak
+      const todayPlan = getPlanForDay(currentDay);
+      const prog = loadProgress(currentDay);
+      const total = todayPlan.length;
+      const done = countCompleted(total, prog);
+      progressBadge.textContent = total ? `${done}/${total} today` : "—";
+
+      // weekly summary: count all days
+      let weekTotal = 0, weekDone = 0;
+      days.forEach(d => {
+        const plan = getPlanForDay(d);
+        const p = loadProgress(d);
+        weekTotal += plan.length;
+        weekDone += countCompleted(plan.length, p);
+      });
+      weekSummary.textContent = weekTotal ? `${weekDone} of ${weekTotal} exercises completed (based on this week's plan).` : "—";
+
+      // streak (consecutive days from today backwards with all done)
+      // NOTE: since your original storage is per-day per-date (today only), true multi-day streak
+      // would require date navigation. We'll keep it “today streak” as a placeholder:
+      if(total && done === total) {
+        streakSummary.textContent = "Today complete ✔";
+      } else {
+        streakSummary.textContent = "—";
+      }
+    }
+
+    // =========================
+    // 8) Measurements tab
+    // =========================
+    function renderMeasurements(){
+      measBadge.textContent = "Saved";
+      mDate.value = mDate.value || todayDateStr;
+      measurementsList.classList.add("hidden");
+      measurementsList.innerHTML = "";
+    }
+
+    saveMeasurementBtn.addEventListener("click", () => {
+      const rec = {
+        date: mDate.value || todayDateStr,
+        weight: mWeight.value || "",
+        waist: mWaist.value || "",
+        hips: mHips.value || "",
+        chest: mChest.value || "",
+        notes: mNotes.value || ""
+      };
+      const arr = loadMeasurements();
+      arr.unshift(rec);
+      saveMeasurements(arr);
+
+      measBadge.textContent = "Saved ✔";
+      mWeight.value = "";
+      mWaist.value = "";
+      mHips.value = "";
+      mChest.value = "";
+      mNotes.value = "";
+    });
+
+    viewMeasurementsBtn.addEventListener("click", () => {
+      const arr = loadMeasurements();
+      if(!arr.length){
+        measurementsList.classList.remove("hidden");
+        measurementsList.textContent = "No saved measurements yet.";
+        return;
+      }
+      const lines = arr.slice(0, 25).map(r => {
+        return `${r.date} | wt:${r.weight} waist:${r.waist} hips:${r.hips} chest:${r.chest}${r.notes ? " | " + r.notes : ""}`;
+      });
+      measurementsList.classList.remove("hidden");
+      measurementsList.textContent = lines.join("\n");
+      measurementsList.style.whiteSpace = "pre-wrap";
+      measurementsList.style.fontSize = "0.8rem";
+      measurementsList.style.color = "var(--muted)";
+    });
+
+    // =========================
+    // 9) Health Reset tab + edit
+    // =========================
+    function renderHealthReset(){
+      const items = loadResetItems();
+      let st = loadResetState();
+
+      // ensure checks length matches items length
+      if(!Array.isArray(st.checks)) st.checks = [];
+      if(st.checks.length !== items.length){
+        const next = items.map((_, i) => !!st.checks[i]);
+        st.checks = next;
+        saveResetState(st);
+      }
+
+      resetList.innerHTML = "";
+
+      let done = 0;
+      items.forEach((txt, idx) => {
+        const row = document.createElement("div");
+        row.className = "exercise";
+
+        const header = document.createElement("div");
+        header.className = "exercise-header";
+
+        const name = document.createElement("div");
+        name.className = "exercise-name";
+        name.textContent = txt;
+
+        const doneDiv = document.createElement("label");
+        doneDiv.className = "done-toggle";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = !!st.checks[idx];
+        const sp = document.createElement("span");
+        sp.textContent = "Done";
+        doneDiv.appendChild(cb);
+        doneDiv.appendChild(sp);
+
+        header.appendChild(name);
+        header.appendChild(doneDiv);
+
+        cb.addEventListener("change", () => {
+          const st2 = loadResetState();
+          st2.checks[idx] = cb.checked;
+          saveResetState(st2);
+          renderHealthReset();
+        });
+
+        row.appendChild(header);
+        resetList.appendChild(row);
+
+        if(cb.checked) done++;
+      });
+
+      resetBadge.textContent = `${done}/${items.length}`;
+
+      // Notes box (optional)
+      const notesWrap = document.createElement("div");
+      notesWrap.className = "exercise";
+      const notesLabel = document.createElement("div");
+      notesLabel.className = "exercise-name";
+      notesLabel.style.fontSize = "0.9rem";
+      notesLabel.textContent = "Notes";
+      const notesBox = document.createElement("textarea");
+      notesBox.style.fontSize = "0.8rem";
+      notesBox.style.border = "1px solid var(--border)";
+      notesBox.style.borderRadius = "6px";
+      notesBox.style.padding = "6px";
+      notesBox.style.minHeight = "50px";
+      notesBox.placeholder = "How you feel, wins, symptoms, etc.";
+      notesBox.value = st.notes || "";
+      notesBox.addEventListener("blur", () => {
+        const st2 = loadResetState();
+        st2.notes = notesBox.value || "";
+        saveResetState(st2);
+      });
+      notesWrap.appendChild(notesLabel);
+      notesWrap.appendChild(notesBox);
+      resetList.appendChild(notesWrap);
+    }
+
+    resetResetBtn.addEventListener("click", () => {
+      if (!confirm("Reset Health Reset for today?")) return;
+      const items = loadResetItems();
+      saveResetState({ checks: items.map(()=>false), notes: "" });
+      renderHealthReset();
+    });
+
+    editResetBtn.addEventListener("click", () => {
+      const items = loadResetItems();
+      resetItemsText.value = items.join("\n");
+      openModal(editResetModal);
+    });
+
+    saveResetItemsBtn.addEventListener("click", () => {
+      const lines = resetItemsText.value
+        .split("\n")
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      const finalItems = lines.length ? lines : DEFAULT_RESET_ITEMS.slice();
+      saveResetItems(finalItems);
+
+      // update today's reset state length
+      const st = loadResetState();
+      st.checks = finalItems.map((_, i) => !!st.checks[i]);
+      saveResetState(st);
+
+      closeModal(editResetModal);
+      renderHealthReset();
+    });
+
+    // =========================
+    // 10) Edit Plan modal (dropdown picker)
+    // =========================
+    function openEditPlan(){
+      editPlanTitle.textContent = `Edit Plan: ${currentDay}`;
+      editRows.innerHTML = "";
+
+      const plan = JSON.parse(JSON.stringify(getPlanForDay(currentDay)));
+
+      function makeRow(item){
+        const row = document.createElement("div");
+        row.className = "row";
+
+        const top = document.createElement("div");
+        top.className = "row-top";
+
+        const fg1 = document.createElement("div");
+        fg1.className = "form-group";
+        fg1.style.flex = "1 1 220px";
+        const l1 = document.createElement("label");
+        l1.textContent = "Exercise";
+        const sel = document.createElement("select");
+
+        const optCustom = document.createElement("option");
+        optCustom.value = "__CUSTOM__";
+        optCustom.textContent = "Custom…";
+        sel.appendChild(optCustom);
+
+        EXERCISE_LIBRARY.forEach(n => {
+          const o = document.createElement("option");
+          o.value = n;
+          o.textContent = n;
+          sel.appendChild(o);
+        });
+
+        const customInput = document.createElement("input");
+        customInput.type = "text";
+        customInput.placeholder = "Type exercise name";
+        customInput.value = "";
+
+        // set initial
+        const inLib = EXERCISE_LIBRARY.includes(item.name);
+        sel.value = inLib ? item.name : "__CUSTOM__";
+        customInput.value = inLib ? "" : (item.name || "");
+        customInput.style.display = inLib ? "none" : "block";
+
+        sel.addEventListener("change", () => {
+          if(sel.value === "__CUSTOM__"){
+            customInput.style.display = "block";
+            customInput.focus();
+            item.name = customInput.value || "";
+          } else {
+            customInput.style.display = "none";
+            item.name = sel.value;
+          }
+        });
+        customInput.addEventListener("input", () => {
+          item.name = customInput.value || "";
+        });
+
+        fg1.appendChild(l1);
+        fg1.appendChild(sel);
+        fg1.appendChild(customInput);
+
+        const fg2 = document.createElement("div");
+        fg2.className = "form-group";
+        fg2.style.flex = "0 0 80px";
+        const l2 = document.createElement("label");
+        l2.textContent = "Sets";
+        const sets = document.createElement("input");
+        sets.type = "text";
+        sets.value = item.sets ?? "";
+        sets.addEventListener("input", () => item.sets = sets.value);
+        fg2.appendChild(l2);
+        fg2.appendChild(sets);
+
+        const fg3 = document.createElement("div");
+        fg3.className = "form-group";
+        fg3.style.flex = "1 1 140px";
+        const l3 = document.createElement("label");
+        l3.textContent = "Reps";
+        const reps = document.createElement("input");
+        reps.type = "text";
+        reps.value = item.reps ?? "";
+        reps.addEventListener("input", () => item.reps = reps.value);
+        fg3.appendChild(l3);
+        fg3.appendChild(reps);
+
+        top.appendChild(fg1);
+        top.appendChild(fg2);
+        top.appendChild(fg3);
+
+        const actions = document.createElement("div");
+        actions.className = "row-actions";
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "tiny-btn";
+        remove.textContent = "Remove";
+        remove.addEventListener("click", () => {
+          const idx = plan.indexOf(item);
+          if(idx >= 0) plan.splice(idx, 1);
+          openEditPlan(); // rebuild
+        });
+        actions.appendChild(remove);
+
+        row.appendChild(top);
+        row.appendChild(actions);
+
+        // keep reference alive
+        row._item = item;
+        return row;
+      }
+
+      plan.forEach(item => editRows.appendChild(makeRow(item)));
+
+      addRowBtn.onclick = () => {
+        plan.push({ name: "Custom exercise", sets: 3, reps: "10–12" });
+        openEditPlan();
+      };
+
+      savePlanBtn.onclick = () => {
+        // sanitize
+        const cleaned = plan
+          .map(x => ({
+            name: (x.name || "").trim(),
+            sets: x.sets || 3,
+            reps: (x.reps || "").trim()
+          }))
+          .filter(x => x.name);
+
+        savePlanOverride(currentDay, cleaned);
+
+        // also reset progress mapping (optional prompt)
+        // We won't auto-wipe your workout progress unless you want it.
+        closeModal(editPlanModal);
+        render();
+      };
+
+      openModal(editPlanModal);
+    }
+
+    editPlanBtn.addEventListener("click", openEditPlan);
+    closeEditPlan.addEventListener("click", () => closeModal(editPlanModal));
+
+    // =========================
+    // 11) Reset button (workout)
+    // =========================
     resetDayBtn.addEventListener("click", () => {
       if (!confirm(`Reset all progress for ${currentDay} (today only)?`)) return;
       saveProgress(currentDay, {});
       renderExercises();
     });
 
+    // =========================
+    // 12) Modal helpers
+    // =========================
+    function openModal(el){
+      el.style.display = "flex";
+    }
+    function closeModal(el){
+      el.style.display = "none";
+    }
+    // click outside modal to close
+    [editPlanModal, editResetModal].forEach(backdrop => {
+      backdrop.addEventListener("click", (e) => {
+        if(e.target === backdrop) closeModal(backdrop);
+      });
+    });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape"){
+        closeModal(editPlanModal);
+        closeModal(editResetModal);
+      }
+    });
+
+    // =========================
+    // 13) Main render (workout tab)
+    // =========================
+    function render() {
+      renderDayTabs();
+      currentDayLabelEl.textContent = currentDay + " workout";
+      renderExercises();
+    }
+
     // Initial render
     renderDateLabel();
-    render();
+    setMainTab(activeMainTab); // shows correct tab and renders it
+    render(); // ensures workout tab stays correct on load
   </script>
 </body>
 </html>
-
-
-
-
