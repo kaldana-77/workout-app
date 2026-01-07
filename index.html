@@ -903,14 +903,21 @@ const sections = {
 tabEls.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
 
 function setTab(name){
-  tabEls.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
-  Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none";
+  tabEls.forEach(t =>
+    t.classList.toggle("active", t.dataset.tab === name)
+  );
+
+  Object.keys(sections).forEach(k => {
+    sections[k].style.display = (k === name) ? "" : "none";
+  });
+
   if(name === "workout") renderWorkout();
   if(name === "progress") renderProgress();
   if(name === "week") renderWeekSummary();
   if(name === "reset") renderReset();
   if(name === "measurements") renderMeasurements();
 }
+
 
 /***********************
  * Workout Progress
@@ -1571,3 +1578,4 @@ function escapeAttr(str){
 </script>
 </body>
 </html>
+
