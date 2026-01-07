@@ -2,492 +2,1527 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Ever Strong</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💧🏋️ Ever Strong</title>
+
+  <!-- PWA / App meta -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#2c7be5" />
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
   <style>
-    :root {
-      --bg: #f7f7f7;
-      --card: #ffffff;
-      --accent: #2c7be5;
-      --accent-soft: #e1edff;
-      --text: #222222;
-      --muted: #777777;
-      --border: #dddddd;
-      --danger: #e55353;
-      --success: #28a745;
+    :root{
+      --bg:#f5f5f7;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --blue:#2c7be5;
+      --blue2:#1f66c7;
+      --danger:#d64545;
+      --ok:#1f9d55;
+
+      /* keep the tighter/sleeker feel */
+      --radius:14px;
+      --shadow:0 8px 18px rgba(0,0,0,.06);
+      --shadow2:0 2px 8px rgba(0,0,0,.05);
+      --pad:14px;
+      --gap:12px;
+      --font: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
     }
 
-    * {
-      box-sizing: border-box;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:var(--bg);
+      color:var(--text);
     }
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      padding: 10px;
+    /* App shell */
+    .wrap{
+      max-width:820px;
+      margin:0 auto;
+      padding:14px 12px 92px; /* space for bottom tabs */
     }
 
-    .app {
-      max-width: 480px;
-      margin: 0 auto;
+    header{
+      text-align:center;
+      padding:10px 8px 6px;
+    }
+    .title{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      margin:0;
+      font-size:34px;
+      line-height:1.1;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .subtitle{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:18px;
+      font-weight:500;
+    }
+    .dateLine{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:18px;
+      font-weight:500;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 12px;
+    /* Day chips */
+    .dayRow{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:nowrap;          /* keep one line */
+      overflow-x:auto;
+      padding:10px 2px 6px;
+      -webkit-overflow-scrolling:touch;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      padding:10px 16px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:18px;
+      box-shadow:var(--shadow2);
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .chip.active{
+      background:var(--blue);
+      border-color:var(--blue);
+      color:#fff;
     }
 
-    header h1 {
-      font-size: 1.4rem;
-      margin: 0 0 4px 0;
+    /* Section card */
+    .panel{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(0,0,0,.04);
+      padding:0;
+      overflow:hidden;
+    }
+    .panelHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+    }
+    .panelHead h2{
+      margin:0;
+      font-size:20px;
+      font-weight:800;
+      color:var(--muted);
+    }
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:16px;
+      border:2px solid #f0b4b4;
+      color:var(--danger);
+      background:#fff;
+      white-space:nowrap;
     }
 
-    header p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--muted);
+    /* Exercise cards */
+    .list{
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .exercise{
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
     }
 
-    .date-label {
-      margin-top: 4px;
-      font-size: 0.85rem;
-      color: var(--muted);
+    .exerciseTop{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:10px;
+      align-items:start;
+      padding:12px 12px 10px;
+    }
+    .exName{
+      margin:0;
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+    .exMeta{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:18px;
+      font-weight:600;
+    }
+    .doneBox{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:20px;
+      font-weight:800;
+      color:var(--muted);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .doneBox input{
+      width:26px;height:26px;
+      accent-color:var(--blue);
+      cursor:pointer;
     }
 
-    .day-tabs {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      gap: 6px;
-      margin: 10px 0 8px 0;
-      padding-bottom: 4px;
+    /* inputs row: Weight/Level + Notes on ONE line */
+    .exInputs{
+      padding:0 12px 12px;
+      display:grid;
+      grid-template-columns: 1fr 1.2fr; /* both on one row */
+      gap:12px;
+    }
+    label{
+      display:block;
+      font-size:18px;
+      color:var(--muted);
+      font-weight:700;
+      margin:0 0 6px;
+    }
+    input[type="text"], textarea, select, input[type="date"], input[type="number"]{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-size:18px;
+      outline:none;
+    }
+    textarea{min-height:44px; resize:vertical}
+
+    /* Circuit explanation underline like before */
+    .circuitHelp{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:0 12px 12px;
+      margin-top:-4px;
+    }
+    .circuitHelp a{
+      color:var(--blue2);
+      font-weight:800;
+      text-decoration:underline;
+      cursor:pointer;
+      font-size:16px;
+    }
+    .helpText{
+      display:none;
+      padding:10px 12px 12px;
+      color:var(--muted);
+      font-size:16px;
+      border-top:1px dashed var(--line);
+      background:#fbfbfc;
+    }
+    .exercise[data-kind="circuit"].open .helpText{display:block;}
+
+    /* Reset link */
+    .resetLink{
+      color:#c04a4a;
+      text-decoration:underline;
+      padding:10px 14px 14px;
+      font-size:18px;
+      font-weight:700;
+      cursor:pointer;
     }
 
-    .day-tab {
-      border-radius: 99px;
-      border: 1px solid var(--border);
-      padding: 6px 10px;
-      font-size: 0.85rem;
-      background: #fff;
-      white-space: nowrap;
-      cursor: pointer;
-      flex: 0 0 auto;
+    /* Small top actions (kept minimal so structure stays) */
+    .actionsRow{
+      display:flex;
+      justify-content:flex-start;
+      padding:0 12px 12px;
+      gap:10px;
+    }
+    .btn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:var(--shadow2);
+    }
+    .btn.primary{
+      background:var(--blue);
+      color:#fff;
+      border-color:var(--blue);
+    }
+    .btn.danger{
+      background:#fff;
+      color:#b42323;
+      border-color:#f0b4b4;
     }
 
-    .day-tab.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-      font-weight: 600;
+    /* Bottom tabs */
+    .tabs{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      background:rgba(245,245,247,.92);
+      backdrop-filter:saturate(180%) blur(10px);
+      border-top:1px solid var(--line);
+      padding:10px 10px 14px;
+    }
+    .tabsInner{
+      max-width:820px;
+      margin:0 auto;
+      display:flex;
+      flex-wrap:wrap; /* allow 2 rows */
+      gap:10px;
+      justify-content:center;
+    }
+    .tabBtn{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:18px; /* keep same size as you like */
+      cursor:pointer;
+      box-shadow:var(--shadow2);
+      user-select:none;
+    }
+    .tabBtn.active{
+      background:var(--blue);
+      border-color:var(--blue);
+      color:#fff;
     }
 
-    .card {
-      background: var(--card);
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      margin-bottom: 12px;
+    /* Modal (Edit screens) */
+    .modalBack{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.35);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:14px;
+      z-index:50;
+    }
+    .modal{
+      width:min(760px, 100%);
+      background:#fff;
+      border-radius:18px;
+      box-shadow:0 24px 60px rgba(0,0,0,.20);
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.08);
+    }
+    .modalHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+    }
+    .modalHead h3{margin:0; font-size:20px; font-weight:900;}
+    .modalBody{padding:14px; display:flex; flex-direction:column; gap:12px;}
+    .modalGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .6fr .9fr;
+      gap:10px;
+      align-items:end;
+    }
+    .rowCard{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+    }
+    .modalFoot{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      padding:12px 14px 14px;
+      border-top:1px solid var(--line);
+      background:#fafafa;
     }
 
-    .workout-summary {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 4px;
+    /* Footer text inside each tab screen */
+    .footer{
+      text-align:center;
+      color:var(--muted);
+      font-weight:700;
+      margin:12px 0 0;
+      font-size:14px;
     }
 
-    .badge {
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      border: 1px solid var(--border);
+    /* Confetti canvas */
+    #confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:60;
     }
 
-    .badge-complete {
-      color: var(--success);
-      border-color: var(--success);
-    }
-
-    .badge-incomplete {
-      color: var(--danger);
-      border-color: var(--danger);
-    }
-
-    .exercise {
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      padding: 8px;
-      margin-bottom: 8px;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .exercise-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .exercise-name {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .exercise-info {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .exercise-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 100px;
-    }
-
-    .form-group label {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      font-size: 0.8rem;
-      padding: 4px 6px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      width: 100%;
-    }
-
-    .form-group textarea {
-      min-height: 40px;
-      resize: vertical;
-    }
-
-    .done-toggle {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.8rem;
-    }
-
-    .done-toggle input {
-      width: 18px;
-      height: 18px;
-    }
-
-    .footer-note {
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 8px;
-    }
-
-    .reset-btn {
-      margin-top: 4px;
-      font-size: 0.75rem;
-      background: none;
-      border: none;
-      color: var(--danger);
-      text-decoration: underline;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    /* Scrollbar styling for day tabs (mobile-safe) */
-    .day-tabs::-webkit-scrollbar {
-      height: 4px;
-    }
-    .day-tabs::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 999px;
+    @media (max-width:560px){
+      .title{font-size:32px}
+      .subtitle,.dateLine{font-size:17px}
+      .chip{font-size:18px; padding:10px 14px}
+      .exInputs{grid-template-columns: 1fr 1fr}
+      .exName{font-size:26px}
     }
   </style>
 </head>
 <body>
-  <div class="app">
+  <canvas id="confetti"></canvas>
+
+  <div class="wrap">
     <header>
-      <h1>Ever Strong</h1>
-      <p>Strength for Today, Health for Tomorrow.</p>
-      <div class="date-label" id="currentDateLabel"></div>
+      <h1 class="title"><span aria-hidden="true">💧🏋️</span> Ever Strong</h1>
+      <div class="subtitle">Strength for Today, Health for Tomorrow.</div>
+      <div class="dateLine" id="dateLine"></div>
     </header>
 
-    <div class="day-tabs" id="dayTabs"></div>
+    <!-- Workouts day chips (one line) -->
+    <div class="dayRow" id="dayRow"></div>
 
-    <div class="card">
-      <div class="workout-summary">
-        <span id="currentDayLabel"></span>
-        <span class="badge" id="completionBadge"></span>
+    <!-- WORKOUT TAB -->
+    <section class="section" id="section-workout">
+      <div class="panel">
+        <div class="panelHead">
+          <h2 id="workoutTitle">Wednesday workout</h2>
+          <div class="badge" id="doneBadge">0/0 done</div>
+        </div>
+
+        <div class="actionsRow">
+          <button class="btn" id="btnEditWorkout">Edit plan</button>
+          <button class="btn" id="btnPickDate">Calendar</button>
+          <input type="date" id="datePicker" style="display:none;" />
+        </div>
+
+        <div class="list" id="exerciseList"></div>
+
+        <div class="resetLink" id="resetDay">Reset this day’s progress</div>
       </div>
-      <div id="exerciseList"></div>
-      <button class="reset-btn" id="resetDayBtn" type="button">
-        Reset this day’s progress
-      </button>
-    </div>
 
-    <div class="footer-note">
-      Ever Strong: Define your Strong.
+      <div class="footer">Ever Strong: Define your strong.</div>
+    </section>
+
+    <!-- PROGRESS TAB -->
+    <section class="section" id="section-progress" style="display:none;">
+      <div class="panel">
+        <div class="panelHead">
+          <h2>Progress</h2>
+          <div class="badge" id="progressBadge">0% complete</div>
+        </div>
+
+        <div class="list" style="gap:12px;">
+          <div class="rowCard">
+            <div style="display:flex; justify-content:space-between; gap:10px; align-items:center;">
+              <div style="font-weight:900; font-size:18px;">This week</div>
+              <div style="color:var(--muted); font-weight:800;" id="weekRange"></div>
+            </div>
+            <div style="margin-top:10px; color:var(--muted); font-weight:700; font-size:16px;" id="weekSummary">
+              —
+            </div>
+          </div>
+
+          <div class="rowCard">
+            <div style="font-weight:900; font-size:18px;">Streak</div>
+            <div style="margin-top:8px; color:var(--muted); font-weight:800;" id="streakLine">—</div>
+          </div>
+
+          <div class="rowCard">
+            <div style="font-weight:900; font-size:18px;">Notes highlights</div>
+            <div style="margin-top:8px; color:var(--muted); font-weight:700;" id="notesHighlights">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">Ever Strong: Define your strong.</div>
+    </section>
+
+    <!-- MEASUREMENTS TAB -->
+    <section class="section" id="section-measurements" style="display:none;">
+      <div class="panel">
+        <div class="panelHead">
+          <h2>Measurements</h2>
+          <div class="badge" id="measBadge">Saved</div>
+        </div>
+
+        <div class="list" style="gap:12px;">
+          <div class="rowCard">
+            <div class="modalGrid" style="grid-template-columns:1fr 1fr 1fr;">
+              <div>
+                <label for="mDate">Date</label>
+                <input type="date" id="mDate">
+              </div>
+              <div>
+                <label for="mWeight">Weight</label>
+                <input type="number" id="mWeight" inputmode="decimal" placeholder="e.g. 160">
+              </div>
+              <div>
+                <label for="mWaist">Waist</label>
+                <input type="number" id="mWaist" inputmode="decimal" placeholder="inches">
+              </div>
+            </div>
+            <div class="modalGrid" style="grid-template-columns:1fr 1fr 1fr; margin-top:10px;">
+              <div>
+                <label for="mHips">Hips</label>
+                <input type="number" id="mHips" inputmode="decimal" placeholder="inches">
+              </div>
+              <div>
+                <label for="mChest">Chest</label>
+                <input type="number" id="mChest" inputmode="decimal" placeholder="inches">
+              </div>
+              <div>
+                <label for="mNotes">Notes</label>
+                <input type="text" id="mNotes" placeholder="how you felt">
+              </div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:12px;">
+              <button class="btn primary" id="saveMeasurement">Save measurement</button>
+              <button class="btn" id="viewMeasurements">View saved</button>
+            </div>
+          </div>
+
+          <div class="rowCard" id="measList" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div class="footer">Ever Strong: Define your strong.</div>
+    </section>
+
+    <!-- HEALTH RESET TAB -->
+    <section class="section" id="section-reset" style="display:none;">
+      <div class="panel">
+        <div class="panelHead">
+          <h2>Health Reset</h2>
+          <div class="badge" id="resetBadge">0/0</div>
+        </div>
+
+        <div class="actionsRow">
+          <button class="btn" id="btnEditReset">Edit</button>
+          <button class="btn danger" id="btnResetReset">Reset</button>
+        </div>
+
+        <div class="list" id="resetList" style="gap:10px;"></div>
+      </div>
+
+      <div class="footer">Ever Strong: Define your strong.</div>
+    </section>
+  </div>
+
+  <!-- Bottom Tabs (same font/size; can wrap into 2 rows) -->
+  <nav class="tabs" aria-label="Primary">
+    <div class="tabsInner">
+      <button class="tabBtn active" data-tab="workout">Workout</button>
+      <button class="tabBtn" data-tab="progress">Progress</button>
+      <button class="tabBtn" data-tab="measurements">Measurements</button>
+      <button class="tabBtn" data-tab="reset">Health Reset</button>
+    </div>
+  </nav>
+
+  <!-- Edit Workout Modal -->
+  <div class="modalBack" id="editWorkoutBack" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal">
+      <div class="modalHead">
+        <h3>Edit Workout (for selected day)</h3>
+        <button class="btn" id="closeEditWorkout">Close</button>
+      </div>
+      <div class="modalBody" id="editWorkoutBody"></div>
+      <div class="modalFoot">
+        <button class="btn" id="addExerciseRow">Add exercise</button>
+        <button class="btn primary" id="saveWorkoutPlan">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Health Reset Modal -->
+  <div class="modalBack" id="editResetBack" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal">
+      <div class="modalHead">
+        <h3>Edit Health Reset</h3>
+        <button class="btn" id="closeEditReset">Close</button>
+      </div>
+      <div class="modalBody">
+        <div class="rowCard">
+          <label for="resetItemsText">One item per line</label>
+          <textarea id="resetItemsText" placeholder="Hydrate&#10;Protein at each meal&#10;10-min walk&#10;Early bedtime"></textarea>
+        </div>
+      </div>
+      <div class="modalFoot">
+        <button class="btn primary" id="saveResetItems">Save</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // ==== 1. Define your weekly workout plan here ====
-    // You can customize exercises, sets, reps, etc.
-    const workoutPlan = {
-      Monday: [
-        { name: "Incline Dumbbell Press", sets: 3, reps: "10–12" },
-        { name: "Lat Pulldown", sets: 3, reps: "10–12" },
-        { name: "Dumbbell Shoulder Press", sets: 3, reps: "10–12" },
-        { name: "Triceps Rope Pushdown", sets: 3, reps: "12–15" },
-        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+    /***********************
+     * Storage helpers
+     ************************/
+    const LS_KEY = "everStrong_v1";
+    const todayISO = () => new Date().toISOString().slice(0,10);
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        if(raw) return JSON.parse(raw);
+      }catch(e){}
+      return null;
+    }
+    function saveState(){
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
+    }
+
+    /***********************
+     * Exercise library (used by Edit dropdown)
+     ************************/
+    const EXERCISE_LIBRARY = [
+      "Push-Ups",
+      "Incline Push-Ups",
+      "Dumbbell Row",
+      "Bent-Over Row",
+      "Lat Pulldown",
+      "Seated Cable Row",
+      "Lateral Raises",
+      "Front Raises",
+      "Biceps Curls",
+      "Hammer Curls",
+      "Triceps Pushdown",
+      "Overhead Triceps Extension",
+      "Goblet Squat",
+      "Split Squat",
+      "Step-Ups",
+      "Romanian Deadlift",
+      "Hip Thrust",
+      "Glute Bridge",
+      "Plank",
+      "Dead Bug",
+      "Bird Dog",
+      "Pallof Press",
+      "Core Circuit",
+      "Upper Body Circuit",
+      "Lower Body Circuit"
+    ];
+
+    /***********************
+     * Default plans (structure matches your current look)
+     ************************/
+    const DEFAULT_PLANS_BY_DAY = {
+      Mon: [
+        { name:"Push-Ups / Incline Push-Ups", sets:"3", reps:"As many as possible", kind:"normal" },
+        { name:"Dumbbell Row", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Lateral Raises", sets:"3", reps:"12–15", kind:"normal" },
+        { name:"Biceps Curls", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Core Circuit", sets:"3", reps:"3–4 exercises", kind:"circuit", help:"Pick 3–4 core moves (e.g., plank, dead bug, bird dog, pallof press). Do each for 30–45 seconds, rest 45–60 seconds, repeat." }
       ],
-      Tuesday: [
-        { name: "Goblet Squat", sets: 3, reps: "10–12" },
-        { name: "Romanian Deadlift", sets: 3, reps: "10–12" },
-        { name: "Glute Bridge/Hip Thrust", sets: 3, reps: "12–15" },
-        { name: "Calf Raises", sets: 3, reps: "15–20" },
-        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+      Tue: [
+        { name:"Goblet Squat", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Romanian Deadlift", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Hip Thrust", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Step-Ups", sets:"3", reps:"10/leg", kind:"normal" },
+        { name:"Core Circuit", sets:"3", reps:"3–4 exercises", kind:"circuit", help:"Same format: 3–4 core moves, 30–45s each, minimal rest, repeat." }
       ],
-      Wednesday: [
-        { name: "Push-Ups / Incline Push-Ups", sets: 3, reps: "As many as possible" },
-        { name: "Dumbbell Row", sets: 3, reps: "10–12" },
-        { name: "Lateral Raises", sets: 3, reps: "12–15" },
-        { name: "Biceps Curls", sets: 3, reps: "10–12" },
-        { name: "Core Circuit", sets: 3, reps: "3–4 exercises" }
+      Wed: [
+        { name:"Push-Ups / Incline Push-Ups", sets:"3", reps:"As many as possible", kind:"normal" },
+        { name:"Dumbbell Row", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Lateral Raises", sets:"3", reps:"12–15", kind:"normal" },
+        { name:"Biceps Curls", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Core Circuit", sets:"3", reps:"3–4 exercises", kind:"circuit", help:"Choose 3–4 exercises; move through them with steady form. Keep it controlled and back-friendly." }
       ],
-      Thursday: [
-        { name: "Leg Press or Step-Ups", sets: 3, reps: "10–12" },
-        { name: "Lunges (or split squats)", sets: 3, reps: "10–12/leg" },
-        { name: "Hamstring Curl", sets: 3, reps: "10–12" },
-        { name: "Core Circuit", sets: 3, reps: "3–4 exercises" },
-        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+      Thu: [
+        { name:"Lat Pulldown", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Seated Cable Row", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Triceps Pushdown", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Lateral Raises", sets:"3", reps:"12–15", kind:"normal" },
+        { name:"Upper Body Circuit", sets:"3", reps:"3–4 exercises", kind:"circuit", help:"Pick 3–4 upper-body moves; do each for 10–12 reps. Rest 60–90s between rounds." }
       ],
-      Friday: [
-        { name: "Full-Body Circuit", sets: 3, reps: "8–10 exercises" },
-        { name: "Extra Arms / Glutes", sets: 2, reps: "Choose your favs" },
-        { name: "Stretching / Mobility", sets: 1, reps: "10–15 min" },
-        { name: "Walking Treadmill", sets: 1, reps: "20–30 min" }
+      Fri: [
+        { name:"Split Squat", sets:"3", reps:"8–10/leg", kind:"normal" },
+        { name:"Glute Bridge", sets:"3", reps:"12–15", kind:"normal" },
+        { name:"Romanian Deadlift", sets:"3", reps:"10–12", kind:"normal" },
+        { name:"Step-Ups", sets:"3", reps:"10/leg", kind:"normal" },
+        { name:"Lower Body Circuit", sets:"3", reps:"3–4 exercises", kind:"circuit", help:"3–4 lower-body moves; keep knees happy (short range if needed). Smooth tempo > heavy weight." }
       ],
-      Saturday: [
-        { name: "Optional: Light Walk", sets: 1, reps: "20–40 min" },
-        { name: "Stretching / Yoga", sets: 1, reps: "10–20 min" }
-      ],
-      Sunday: [
-        { name: "Rest / Mobility", sets: 1, reps: "10–20 min" }
-      ]
+      Sat: [],
+      Sun: []
     };
 
-    // ==== 2. State & helpers ====
-    const days = Object.keys(workoutPlan);
-    const today = new Date();
-    const todayDateStr = today.toISOString().slice(0, 10); // e.g. "2025-12-11"
+    const DEFAULT_RESET_ITEMS = [
+      "Hydrate (at least 80 oz)",
+      "Protein at each meal",
+      "10–20 min walk",
+      "Veggies (2+ servings)",
+      "Early bedtime"
+    ];
 
-    const dayTabsEl = document.getElementById("dayTabs");
-    const currentDayLabelEl = document.getElementById("currentDayLabel");
-    const currentDateLabelEl = document.getElementById("currentDateLabel");
-    const exerciseListEl = document.getElementById("exerciseList");
-    const completionBadgeEl = document.getElementById("completionBadge");
-    const resetDayBtn = document.getElementById("resetDayBtn");
+    /***********************
+     * App State
+     ************************/
+    let state = loadState() || {
+      selectedDate: todayISO(),
+      activeTab: "workout",
+      // plansByDow: { Mon:[...], Tue:[...], ... }
+      plansByDow: JSON.parse(JSON.stringify(DEFAULT_PLANS_BY_DAY)),
+      // entries keyed by date ISO
+      entries: {
+        // "2026-01-07": { items:[{done, weight, notes}], reset:{...} }
+      },
+      measurements: [],
+      resetItems: DEFAULT_RESET_ITEMS.slice()
+    };
 
-    let currentDay = getDefaultDay();
+    /***********************
+     * DOM
+     ************************/
+    const dateLine = document.getElementById("dateLine");
+    const dayRow = document.getElementById("dayRow");
+    const workoutTitle = document.getElementById("workoutTitle");
+    const doneBadge = document.getElementById("doneBadge");
+    const exerciseList = document.getElementById("exerciseList");
+    const resetDay = document.getElementById("resetDay");
 
-    function getDefaultDay() {
-      // Monday = 1, Sunday = 0
-      const weekday = today.getDay();
-      const map = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
-      return map[weekday] || "Monday";
+    const tabs = Array.from(document.querySelectorAll(".tabBtn"));
+    const sections = {
+      workout: document.getElementById("section-workout"),
+      progress: document.getElementById("section-progress"),
+      measurements: document.getElementById("section-measurements"),
+      reset: document.getElementById("section-reset")
+    };
+
+    const btnEditWorkout = document.getElementById("btnEditWorkout");
+    const btnPickDate = document.getElementById("btnPickDate");
+    const datePicker = document.getElementById("datePicker");
+
+    const editWorkoutBack = document.getElementById("editWorkoutBack");
+    const editWorkoutBody = document.getElementById("editWorkoutBody");
+    const closeEditWorkout = document.getElementById("closeEditWorkout");
+    const addExerciseRow = document.getElementById("addExerciseRow");
+    const saveWorkoutPlan = document.getElementById("saveWorkoutPlan");
+
+    const resetList = document.getElementById("resetList");
+    const resetBadge = document.getElementById("resetBadge");
+    const btnEditReset = document.getElementById("btnEditReset");
+    const btnResetReset = document.getElementById("btnResetReset");
+
+    const editResetBack = document.getElementById("editResetBack");
+    const closeEditReset = document.getElementById("closeEditReset");
+    const resetItemsText = document.getElementById("resetItemsText");
+    const saveResetItems = document.getElementById("saveResetItems");
+
+    const progressBadge = document.getElementById("progressBadge");
+    const weekRange = document.getElementById("weekRange");
+    const weekSummary = document.getElementById("weekSummary");
+    const streakLine = document.getElementById("streakLine");
+    const notesHighlights = document.getElementById("notesHighlights");
+
+    const mDate = document.getElementById("mDate");
+    const mWeight = document.getElementById("mWeight");
+    const mWaist = document.getElementById("mWaist");
+    const mHips = document.getElementById("mHips");
+    const mChest = document.getElementById("mChest");
+    const mNotes = document.getElementById("mNotes");
+    const saveMeasurement = document.getElementById("saveMeasurement");
+    const viewMeasurements = document.getElementById("viewMeasurements");
+    const measList = document.getElementById("measList");
+
+    /***********************
+     * Date + Day helpers
+     ************************/
+    const DOWS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    function parseISO(iso){
+      const [y,m,d] = iso.split("-").map(Number);
+      return new Date(y, m-1, d);
+    }
+    function formatLongDate(iso){
+      const dt = parseISO(iso);
+      const opts = { weekday:"long", year:"numeric", month:"short", day:"numeric" };
+      return dt.toLocaleDateString(undefined, opts);
+    }
+    function getDowShort(iso){
+      return DOWS[parseISO(iso).getDay()];
     }
 
-    function getStorageKey(day) {
-      return "workoutProgress_" + day + "_" + todayDateStr;
-    }
-
-    function loadProgress(day) {
-      const key = getStorageKey(day);
-      const raw = localStorage.getItem(key);
-      if (!raw) return {};
-      try {
-        return JSON.parse(raw);
-      } catch {
-        return {};
+    function ensureEntryForDate(iso){
+      if(!state.entries[iso]){
+        const dow = getDowShort(iso);
+        const plan = state.plansByDow[dow] || [];
+        state.entries[iso] = {
+          items: plan.map(x => ({
+            name: x.name,
+            sets: x.sets,
+            reps: x.reps,
+            kind: x.kind || "normal",
+            help: x.help || "",
+            done:false,
+            weight:"",
+            notes:""
+          })),
+          reset: {
+            checks: state.resetItems.map(() => false),
+            notes: ""
+          }
+        };
+        saveState();
+      } else {
+        // if plan changed later, keep existing entries as-is to avoid surprises
       }
     }
 
-    function saveProgress(day, progress) {
-      const key = getStorageKey(day);
-      localStorage.setItem(key, JSON.stringify(progress));
+    /***********************
+     * Tabs
+     ************************/
+    function setTab(name){
+      state.activeTab = name;
+      saveState();
+      tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+      Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none");
+      render();
     }
 
-    // ==== 3. Render UI ====
-    function renderDateLabel() {
-      const opts = { weekday: "long", year: "numeric", month: "short", day: "numeric" };
-      currentDateLabelEl.textContent = today.toLocaleDateString(undefined, opts);
-    }
+    tabs.forEach(btn => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
 
-    function renderDayTabs() {
-      dayTabsEl.innerHTML = "";
-      days.forEach(day => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.textContent = day.slice(0, 3); // Mon, Tue...
-        btn.className = "day-tab" + (day === currentDay ? " active" : "");
-        btn.addEventListener("click", () => {
-          currentDay = day;
+    /***********************
+     * Day chips
+     ************************/
+    function renderDayChips(){
+      const selDow = getDowShort(state.selectedDate);
+      dayRow.innerHTML = "";
+      ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].forEach(d => {
+        const b = document.createElement("button");
+        b.className = "chip" + (d === selDow ? " active" : "");
+        b.textContent = d;
+        b.addEventListener("click", () => {
+          // move selectedDate to the next matching weekday (keeps “this week” feel)
+          const current = parseISO(state.selectedDate);
+          const currentDow = current.getDay(); // 0..6
+          const targetDow = (d === "Sun") ? 0 : (["Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(d) + 1);
+          const delta = (targetDow - currentDow + 7) % 7;
+          const next = new Date(current);
+          next.setDate(current.getDate() + delta);
+          state.selectedDate = next.toISOString().slice(0,10);
+          saveState();
           render();
         });
-        dayTabsEl.appendChild(btn);
+        dayRow.appendChild(b);
       });
     }
 
-    function renderExercises() {
-      const exercises = workoutPlan[currentDay] || [];
-      const progress = loadProgress(currentDay);
-      exerciseListEl.innerHTML = "";
+    /***********************
+     * Workout rendering (keeps structure)
+     ************************/
+    function renderWorkout(){
+      const iso = state.selectedDate;
+      ensureEntryForDate(iso);
 
-      let completedCount = 0;
+      dateLine.textContent = formatLongDate(iso);
 
-      exercises.forEach((ex, index) => {
-        const exKey = String(index);
-        const exState = progress[exKey] || { done: false, weight: "", notes: "" };
-        if (exState.done) completedCount++;
+      const dowLong = parseISO(iso).toLocaleDateString(undefined, { weekday:"long" });
+      workoutTitle.textContent = `${dowLong} workout`;
 
-        const wrapper = document.createElement("div");
-        wrapper.className = "exercise";
+      const entry = state.entries[iso];
+      const total = entry.items.length;
+      const done = entry.items.filter(i => i.done).length;
+      doneBadge.textContent = `${done}/${total} done`;
 
-        const header = document.createElement("div");
-        header.className = "exercise-header";
+      exerciseList.innerHTML = "";
+      entry.items.forEach((it, idx) => {
+        const card = document.createElement("div");
+        card.className = "exercise";
+        card.dataset.kind = it.kind || "normal";
 
-        const nameDiv = document.createElement("div");
-        nameDiv.innerHTML = `
-          <div class="exercise-name">${ex.name}</div>
-          <div class="exercise-info">${ex.sets} sets • ${ex.reps}</div>
-        `;
+        const top = document.createElement("div");
+        top.className = "exerciseTop";
 
-        const doneDiv = document.createElement("label");
-        doneDiv.className = "done-toggle";
-        const doneCheckbox = document.createElement("input");
-        doneCheckbox.type = "checkbox";
-        doneCheckbox.checked = !!exState.done;
-        const doneSpan = document.createElement("span");
-        doneSpan.textContent = "Done";
+        const left = document.createElement("div");
+        const h = document.createElement("h3");
+        h.className = "exName";
+        h.textContent = it.name;
 
-        doneDiv.appendChild(doneCheckbox);
-        doneDiv.appendChild(doneSpan);
+        const meta = document.createElement("div");
+        meta.className = "exMeta";
+        meta.textContent = `${it.sets} sets • ${it.reps}`;
 
-        header.appendChild(nameDiv);
-        header.appendChild(doneDiv);
+        left.appendChild(h);
+        left.appendChild(meta);
 
-        const controls = document.createElement("div");
-        controls.className = "exercise-controls";
+        const doneWrap = document.createElement("label");
+        doneWrap.className = "doneBox";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = !!it.done;
+        cb.addEventListener("change", () => {
+          it.done = cb.checked;
+          saveState();
+          renderWorkout(); // update badge immediately
 
-        const weightGroup = document.createElement("div");
-        weightGroup.className = "form-group";
-        const weightLabel = document.createElement("label");
-        weightLabel.textContent = "Weight / Level";
-        const weightInput = document.createElement("input");
-        weightInput.type = "text";
-        weightInput.value = exState.weight || "";
-        weightInput.placeholder = "e.g. 15 lb DBs";
+          // confetti ONLY when the whole day is complete
+          const nowDone = state.entries[iso].items.filter(x => x.done).length;
+          if(total > 0 && nowDone === total){
+            fireConfetti();
+          }
+        });
+        const doneText = document.createElement("span");
+        doneText.textContent = "Done";
+        doneWrap.appendChild(cb);
+        doneWrap.appendChild(doneText);
 
-        weightGroup.appendChild(weightLabel);
-        weightGroup.appendChild(weightInput);
+        top.appendChild(left);
+        top.appendChild(doneWrap);
 
-        const notesGroup = document.createElement("div");
-        notesGroup.className = "form-group";
-        const notesLabel = document.createElement("label");
-        notesLabel.textContent = "Notes";
-        const notesInput = document.createElement("textarea");
-        notesInput.value = exState.notes || "";
-        notesInput.placeholder = "How it felt, tweaks, etc.";
+        const inputs = document.createElement("div");
+        inputs.className = "exInputs";
 
-        notesGroup.appendChild(notesLabel);
-        notesGroup.appendChild(notesInput);
+        // Weight / Level
+        const wWrap = document.createElement("div");
+        const wLab = document.createElement("label");
+        wLab.textContent = "Weight / Level";
+        const wIn = document.createElement("input");
+        wIn.type = "text";
+        wIn.placeholder = "e.g. 15 lb DBs";
+        wIn.value = it.weight || "";
+        wIn.addEventListener("input", () => {
+          it.weight = wIn.value;
+          saveState();
+        });
+        wWrap.appendChild(wLab);
+        wWrap.appendChild(wIn);
 
-        controls.appendChild(weightGroup);
-        controls.appendChild(notesGroup);
+        // Notes
+        const nWrap = document.createElement("div");
+        const nLab = document.createElement("label");
+        nLab.textContent = "Notes";
+        const nIn = document.createElement("textarea");
+        nIn.placeholder = "How it felt, tweaks, etc.";
+        nIn.value = it.notes || "";
+        nIn.addEventListener("input", () => {
+          it.notes = nIn.value;
+          saveState();
+        });
+        nWrap.appendChild(nLab);
+        nWrap.appendChild(nIn);
 
-        // Wire up events
-        function updateState() {
-          const newState = loadProgress(currentDay);
-          newState[exKey] = {
-            done: doneCheckbox.checked,
-            weight: weightInput.value || "",
-            notes: notesInput.value || ""
-          };
-          saveProgress(currentDay, newState);
-          updateCompletionBadge(exercises.length, countCompleted(exercises.length, newState));
+        inputs.appendChild(wWrap);
+        inputs.appendChild(nWrap);
+
+        card.appendChild(top);
+        card.appendChild(inputs);
+
+        // Circuit underline explanation (just as before)
+        if((it.kind || "").toLowerCase() === "circuit"){
+          const helpRow = document.createElement("div");
+          helpRow.className = "circuitHelp";
+          const a = document.createElement("a");
+          a.href = "javascript:void(0)";
+          a.textContent = "What does this circuit mean?";
+          a.addEventListener("click", () => {
+            card.classList.toggle("open");
+          });
+          helpRow.appendChild(a);
+
+          const helpText = document.createElement("div");
+          helpText.className = "helpText";
+          helpText.textContent = it.help || "A circuit is 3–4 exercises done back-to-back, then rest, repeat for the number of rounds.";
+
+          card.appendChild(helpRow);
+          card.appendChild(helpText);
         }
 
-        doneCheckbox.addEventListener("change", updateState);
-        weightInput.addEventListener("change", updateState);
-        notesInput.addEventListener("change", updateState);
-        notesInput.addEventListener("blur", updateState);
-
-        wrapper.appendChild(header);
-        wrapper.appendChild(controls);
-        exerciseListEl.appendChild(wrapper);
+        exerciseList.appendChild(card);
       });
-
-      updateCompletionBadge(exercises.length, completedCount);
     }
 
-    function countCompleted(total, progressObj) {
-      let c = 0;
-      for (let i = 0; i < total; i++) {
-        const st = progressObj[String(i)];
-        if (st && st.done) c++;
-      }
-      return c;
-    }
-
-    function updateCompletionBadge(total, completed) {
-      if (total === 0) {
-        completionBadgeEl.textContent = "No workout set";
-        completionBadgeEl.className = "badge badge-incomplete";
-        return;
-      }
-      if (completed >= total) {
-        completionBadgeEl.textContent = "All done ✔";
-        completionBadgeEl.className = "badge badge-complete";
-      } else {
-        completionBadgeEl.textContent = `${completed}/${total} done`;
-        completionBadgeEl.className = "badge badge-incomplete";
-      }
-    }
-
-    function render() {
-      renderDayTabs();
-      currentDayLabelEl.textContent = currentDay + " workout";
-      renderExercises();
-    }
-
-    // Reset button
-    resetDayBtn.addEventListener("click", () => {
-      if (!confirm(`Reset all progress for ${currentDay} (today only)?`)) return;
-      saveProgress(currentDay, {});
-      renderExercises();
+    /***********************
+     * Reset day progress
+     ************************/
+    resetDay.addEventListener("click", () => {
+      const iso = state.selectedDate;
+      ensureEntryForDate(iso);
+      const entry = state.entries[iso];
+      entry.items.forEach(i => { i.done=false; i.weight=""; i.notes=""; });
+      saveState();
+      renderWorkout();
     });
 
-    // Initial render
-    renderDateLabel();
+    /***********************
+     * Calendar button
+     ************************/
+    btnPickDate.addEventListener("click", () => {
+      datePicker.value = state.selectedDate;
+      datePicker.style.display = "";
+      datePicker.showPicker?.();
+      datePicker.focus();
+    });
+    datePicker.addEventListener("change", () => {
+      if(datePicker.value){
+        state.selectedDate = datePicker.value;
+        saveState();
+        datePicker.style.display = "none";
+        render();
+      }
+    });
+    datePicker.addEventListener("blur", () => {
+      setTimeout(()=> datePicker.style.display="none", 200);
+    });
+
+    /***********************
+     * Edit Workout (dropdown exercise picker)
+     ************************/
+    btnEditWorkout.addEventListener("click", () => openEditWorkout());
+    closeEditWorkout.addEventListener("click", () => closeModal(editWorkoutBack));
+
+    function openEditWorkout(){
+      ensureEntryForDate(state.selectedDate);
+      const dow = getDowShort(state.selectedDate);
+      const plan = state.plansByDow[dow] || [];
+      buildWorkoutEditor(plan);
+      openModal(editWorkoutBack);
+    }
+
+    function buildWorkoutEditor(planArr){
+      editWorkoutBody.innerHTML = "";
+      if(planArr.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "rowCard";
+        empty.style.color = "var(--muted)";
+        empty.style.fontWeight = "800";
+        empty.textContent = "No exercises for this day. Tap “Add exercise”.";
+        editWorkoutBody.appendChild(empty);
+      } else {
+        planArr.forEach((p, idx) => editWorkoutBody.appendChild(buildPlanRow(p, idx)));
+      }
+    }
+
+    function buildPlanRow(p, idx){
+      const wrap = document.createElement("div");
+      wrap.className = "rowCard";
+
+      const grid = document.createElement("div");
+      grid.className = "modalGrid";
+
+      // Exercise dropdown (pick from list OR type custom)
+      const exWrap = document.createElement("div");
+      const exLab = document.createElement("label");
+      exLab.textContent = "Exercise";
+      const exSel = document.createElement("select");
+      const opts = ["(Custom)…", ...EXERCISE_LIBRARY];
+      opts.forEach(v => {
+        const o = document.createElement("option");
+        o.value = v;
+        o.textContent = v;
+        exSel.appendChild(o);
+      });
+
+      // If current name is in library, select it, else custom
+      const inLib = EXERCISE_LIBRARY.includes(p.name);
+      exSel.value = inLib ? p.name : "(Custom)…";
+
+      const exCustom = document.createElement("input");
+      exCustom.type = "text";
+      exCustom.placeholder = "Type exercise name";
+      exCustom.value = inLib ? "" : (p.name || "");
+      exCustom.style.marginTop = "8px";
+      exCustom.style.display = inLib ? "none" : "";
+
+      exSel.addEventListener("change", () => {
+        if(exSel.value === "(Custom)…"){
+          exCustom.style.display = "";
+          exCustom.focus();
+        } else {
+          exCustom.style.display = "none";
+          p.name = exSel.value;
+        }
+      });
+      exCustom.addEventListener("input", () => {
+        p.name = exCustom.value;
+      });
+
+      exWrap.appendChild(exLab);
+      exWrap.appendChild(exSel);
+      exWrap.appendChild(exCustom);
+
+      // Sets
+      const setsWrap = document.createElement("div");
+      const setsLab = document.createElement("label");
+      setsLab.textContent = "Sets";
+      const setsIn = document.createElement("input");
+      setsIn.type = "text";
+      setsIn.value = p.sets ?? "3";
+      setsIn.addEventListener("input", () => p.sets = setsIn.value);
+      setsWrap.appendChild(setsLab);
+      setsWrap.appendChild(setsIn);
+
+      // Reps
+      const repsWrap = document.createElement("div");
+      const repsLab = document.createElement("label");
+      repsLab.textContent = "Reps";
+      const repsIn = document.createElement("input");
+      repsIn.type = "text";
+      repsIn.value = p.reps ?? "";
+      repsIn.addEventListener("input", () => p.reps = repsIn.value);
+      repsWrap.appendChild(repsLab);
+      repsWrap.appendChild(repsIn);
+
+      grid.appendChild(exWrap);
+      grid.appendChild(setsWrap);
+      grid.appendChild(repsWrap);
+
+      // Circuit options
+      const kindRow = document.createElement("div");
+      kindRow.style.display = "grid";
+      kindRow.style.gridTemplateColumns = "1fr 1fr";
+      kindRow.style.gap = "10px";
+      kindRow.style.marginTop = "10px";
+
+      const kindWrap = document.createElement("div");
+      const kindLab = document.createElement("label");
+      kindLab.textContent = "Type";
+      const kindSel = document.createElement("select");
+      [["normal","Normal"],["circuit","Circuit"]].forEach(([v,t]) => {
+        const o = document.createElement("option");
+        o.value = v; o.textContent = t;
+        kindSel.appendChild(o);
+      });
+      kindSel.value = (p.kind || "normal");
+      kindSel.addEventListener("change", () => {
+        p.kind = kindSel.value;
+        helpWrap.style.display = (p.kind === "circuit") ? "" : "none";
+      });
+      kindWrap.appendChild(kindLab);
+      kindWrap.appendChild(kindSel);
+
+      const helpWrap = document.createElement("div");
+      const helpLab = document.createElement("label");
+      helpLab.textContent = "Circuit explanation";
+      const helpIn = document.createElement("input");
+      helpIn.type = "text";
+      helpIn.placeholder = "Short explanation shown underlined";
+      helpIn.value = p.help || "";
+      helpIn.addEventListener("input", () => p.help = helpIn.value);
+      helpWrap.appendChild(helpLab);
+      helpWrap.appendChild(helpIn);
+
+      helpWrap.style.display = (p.kind === "circuit") ? "" : "none";
+
+      kindRow.appendChild(kindWrap);
+      kindRow.appendChild(helpWrap);
+
+      // Remove button
+      const removeBtn = document.createElement("button");
+      removeBtn.className = "btn danger";
+      removeBtn.style.marginTop = "10px";
+      removeBtn.textContent = "Remove";
+      removeBtn.addEventListener("click", () => {
+        const dow = getDowShort(state.selectedDate);
+        state.plansByDow[dow].splice(idx,1);
+        saveState();
+        buildWorkoutEditor(state.plansByDow[dow]);
+      });
+
+      wrap.appendChild(grid);
+      wrap.appendChild(kindRow);
+      wrap.appendChild(removeBtn);
+      return wrap;
+    }
+
+    addExerciseRow.addEventListener("click", () => {
+      const dow = getDowShort(state.selectedDate);
+      if(!state.plansByDow[dow]) state.plansByDow[dow] = [];
+      state.plansByDow[dow].push({ name:"Push-Ups", sets:"3", reps:"10–12", kind:"normal", help:"" });
+      saveState();
+      buildWorkoutEditor(state.plansByDow[dow]);
+    });
+
+    saveWorkoutPlan.addEventListener("click", () => {
+      const dow = getDowShort(state.selectedDate);
+      // sanitize
+      state.plansByDow[dow] = (state.plansByDow[dow] || []).filter(p => (p.name || "").trim() !== "");
+      saveState();
+
+      // Overwrite the CURRENT date entry items to match the new plan (so you see it immediately)
+      const iso = state.selectedDate;
+      state.entries[iso] = {
+        items: (state.plansByDow[dow] || []).map(p => ({
+          name: p.name,
+          sets: p.sets || "3",
+          reps: p.reps || "",
+          kind: p.kind || "normal",
+          help: p.help || "",
+          done:false,
+          weight:"",
+          notes:""
+        })),
+        reset: state.entries[iso]?.reset || { checks: state.resetItems.map(()=>false), notes:"" }
+      };
+      saveState();
+      closeModal(editWorkoutBack);
+      render();
+    });
+
+    /***********************
+     * Health Reset + Edit
+     ************************/
+    function renderReset(){
+      ensureEntryForDate(state.selectedDate);
+      const entry = state.entries[state.selectedDate];
+      const checks = entry.reset.checks;
+      const total = state.resetItems.length;
+      const done = checks.filter(Boolean).length;
+      resetBadge.textContent = `${done}/${total}`;
+
+      resetList.innerHTML = "";
+
+      // checklist
+      state.resetItems.forEach((txt, idx) => {
+        const row = document.createElement("div");
+        row.className = "rowCard";
+        row.style.display = "flex";
+        row.style.alignItems = "center";
+        row.style.justifyContent = "space-between";
+        row.style.gap = "10px";
+
+        const left = document.createElement("div");
+        left.style.fontWeight = "900";
+        left.style.fontSize = "18px";
+        left.textContent = txt;
+
+        const right = document.createElement("label");
+        right.className = "doneBox";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = !!checks[idx];
+        cb.addEventListener("change", () => {
+          checks[idx] = cb.checked;
+          saveState();
+          renderReset();
+        });
+        const t = document.createElement("span");
+        t.textContent = "Done";
+        right.appendChild(cb);
+        right.appendChild(t);
+
+        row.appendChild(left);
+        row.appendChild(right);
+        resetList.appendChild(row);
+      });
+
+      // notes
+      const notesCard = document.createElement("div");
+      notesCard.className = "rowCard";
+      const nl = document.createElement("label");
+      nl.textContent = "Notes";
+      const nt = document.createElement("textarea");
+      nt.placeholder = "How you feel, symptoms, wins, etc.";
+      nt.value = entry.reset.notes || "";
+      nt.addEventListener("input", () => {
+        entry.reset.notes = nt.value;
+        saveState();
+      });
+      notesCard.appendChild(nl);
+      notesCard.appendChild(nt);
+      resetList.appendChild(notesCard);
+    }
+
+    btnResetReset.addEventListener("click", () => {
+      ensureEntryForDate(state.selectedDate);
+      const entry = state.entries[state.selectedDate];
+      entry.reset.checks = state.resetItems.map(()=>false);
+      entry.reset.notes = "";
+      saveState();
+      renderReset();
+    });
+
+    btnEditReset.addEventListener("click", () => {
+      resetItemsText.value = state.resetItems.join("\n");
+      openModal(editResetBack);
+    });
+    closeEditReset.addEventListener("click", () => closeModal(editResetBack));
+    saveResetItems.addEventListener("click", () => {
+      const lines = resetItemsText.value
+        .split("\n")
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      state.resetItems = lines.length ? lines : DEFAULT_RESET_ITEMS.slice();
+
+      // update checks arrays in all existing entries to match new length
+      Object.keys(state.entries).forEach(k => {
+        const e = state.entries[k];
+        if(!e.reset) e.reset = { checks: [], notes:"" };
+        const old = e.reset.checks || [];
+        const next = state.resetItems.map((_, i) => !!old[i]);
+        e.reset.checks = next;
+      });
+
+      saveState();
+      closeModal(editResetBack);
+      renderReset();
+    });
+
+    /***********************
+     * Progress tab
+     ************************/
+    function startOfWeek(iso){
+      // Monday-start week
+      const d = parseISO(iso);
+      const day = d.getDay(); // 0 Sun .. 6 Sat
+      const diff = (day === 0 ? -6 : (1 - day));
+      const s = new Date(d);
+      s.setDate(d.getDate() + diff);
+      return s.toISOString().slice(0,10);
+    }
+    function addDaysISO(iso, n){
+      const d = parseISO(iso);
+      d.setDate(d.getDate()+n);
+      return d.toISOString().slice(0,10);
+    }
+    function renderProgress(){
+      const start = startOfWeek(state.selectedDate);
+      const end = addDaysISO(start, 6);
+      weekRange.textContent = `${start} → ${end}`;
+
+      let totalItems = 0, doneItems = 0;
+      let noteSnips = [];
+
+      for(let i=0;i<7;i++){
+        const iso = addDaysISO(start, i);
+        if(state.entries[iso]){
+          const items = state.entries[iso].items || [];
+          totalItems += items.length;
+          doneItems += items.filter(x=>x.done).length;
+
+          items.forEach(x => {
+            const n = (x.notes || "").trim();
+            if(n) noteSnips.push(`• ${iso}: ${x.name} — ${n}`);
+          });
+        }
+      }
+
+      const pct = totalItems ? Math.round((doneItems/totalItems)*100) : 0;
+      progressBadge.textContent = `${pct}% complete`;
+      weekSummary.textContent = totalItems
+        ? `${doneItems} of ${totalItems} exercises completed this week.`
+        : `No workouts tracked for this week yet.`;
+
+      notesHighlights.textContent = noteSnips.length ? noteSnips.slice(0,6).join("\n") : "—";
+
+      // streak = consecutive days (ending today) with all exercises done (only if the day has items)
+      let streak = 0;
+      let cursor = state.selectedDate;
+      for(;;){
+        const e = state.entries[cursor];
+        if(!e || !e.items || e.items.length === 0) break;
+        const allDone = e.items.every(x => x.done);
+        if(!allDone) break;
+        streak++;
+        cursor = addDaysISO(cursor, -1);
+      }
+      streakLine.textContent = streak ? `${streak} day${streak===1?"":"s"} (all exercises done)` : "—";
+    }
+
+    /***********************
+     * Measurements tab
+     ************************/
+    function renderMeasurements(){
+      mDate.value = mDate.value || state.selectedDate;
+      measList.style.display = "none";
+      measList.innerHTML = "";
+      document.getElementById("measBadge").textContent = "Saved";
+    }
+
+    saveMeasurement.addEventListener("click", () => {
+      const rec = {
+        date: mDate.value || state.selectedDate,
+        weight: mWeight.value || "",
+        waist: mWaist.value || "",
+        hips: mHips.value || "",
+        chest: mChest.value || "",
+        notes: mNotes.value || ""
+      };
+      state.measurements.unshift(rec);
+      saveState();
+      document.getElementById("measBadge").textContent = "Saved ✓";
+      mWeight.value = ""; mWaist.value = ""; mHips.value = ""; mChest.value = ""; mNotes.value = "";
+    });
+
+    viewMeasurements.addEventListener("click", () => {
+      if(measList.style.display === "none"){
+        measList.style.display = "";
+        measList.innerHTML = "";
+        if(state.measurements.length === 0){
+          measList.style.color = "var(--muted)";
+          measList.style.fontWeight = "800";
+          measList.textContent = "No saved measurements yet.";
+          return;
+        }
+        const pre = document.createElement("pre");
+        pre.style.margin = "0";
+        pre.style.whiteSpace = "pre-wrap";
+        pre.style.fontFamily = "var(--font)";
+        pre.style.color = "var(--muted)";
+        pre.style.fontWeight = "700";
+        pre.textContent = state.measurements.slice(0,25).map(r => {
+          return `${r.date}  |  wt:${r.weight}  waist:${r.waist}  hips:${r.hips}  chest:${r.chest}${r.notes ? "  |  " + r.notes : ""}`;
+        }).join("\n");
+        measList.appendChild(pre);
+      } else {
+        measList.style.display = "none";
+      }
+    });
+
+    /***********************
+     * Modal helpers
+     ************************/
+    function openModal(back){
+      back.style.display = "flex";
+      back.setAttribute("aria-hidden","false");
+    }
+    function closeModal(back){
+      back.style.display = "none";
+      back.setAttribute("aria-hidden","true");
+    }
+    editWorkoutBack.addEventListener("click", (e) => { if(e.target === editWorkoutBack) closeModal(editWorkoutBack); });
+    editResetBack.addEventListener("click", (e) => { if(e.target === editResetBack) closeModal(editResetBack); });
+
+    /***********************
+     * Confetti (simple)
+     ************************/
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let confettiPieces = [];
+    let confettiTimer = 0;
+
+    function sizeCanvas(){
+      canvas.width = window.innerWidth * devicePixelRatio;
+      canvas.height = window.innerHeight * devicePixelRatio;
+    }
+    window.addEventListener("resize", sizeCanvas);
+    sizeCanvas();
+
+    function fireConfetti(){
+      confettiPieces = [];
+      const n = 160;
+      for(let i=0;i<n;i++){
+        confettiPieces.push({
+          x: (Math.random()*canvas.width),
+          y: -Math.random()*canvas.height*0.2,
+          r: 3 + Math.random()*6,
+          vx: (-1 + Math.random()*2) * 3.2,
+          vy: 3 + Math.random()*6,
+          rot: Math.random()*Math.PI,
+          vr: (-1 + Math.random()*2) * 0.12,
+          a: 1
+        });
+      }
+      confettiTimer = 120;
+      requestAnimationFrame(tickConfetti);
+    }
+
+    function tickConfetti(){
+      if(confettiTimer <= 0){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        return;
+      }
+      confettiTimer--;
+
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      confettiPieces.forEach(p => {
+        p.x += p.vx * devicePixelRatio;
+        p.y += p.vy * devicePixelRatio;
+        p.rot += p.vr;
+        p.vy += 0.05 * devicePixelRatio;
+        p.a *= 0.995;
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.a);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = "rgba(44,123,229,0.95)";
+        ctx.fillRect(-p.r, -p.r, p.r*2, p.r*2);
+        ctx.restore();
+      });
+
+      confettiPieces = confettiPieces.filter(p => p.y < canvas.height + 40 && p.a > 0.05);
+      requestAnimationFrame(tickConfetti);
+    }
+
+    /***********************
+     * Render
+     ************************/
+    function render(){
+      renderDayChips();
+
+      // show tab
+      setTabSilently(state.activeTab);
+
+      // ensure workout entry exists for selected date
+      ensureEntryForDate(state.selectedDate);
+
+      // render current tab content
+      if(state.activeTab === "workout") renderWorkout();
+      if(state.activeTab === "progress") renderProgress();
+      if(state.activeTab === "measurements") renderMeasurements();
+      if(state.activeTab === "reset") renderReset();
+    }
+
+    // avoid recursion: internal tab switch without re-calling render()
+    function setTabSilently(name){
+      tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+      Object.keys(sections).forEach(k => sections[k].style.display = (k === name) ? "" : "none");
+    }
+
+    /***********************
+     * Init
+     ************************/
+    // Create missing default plans if user has older storage
+    if(!state.plansByDow) state.plansByDow = JSON.parse(JSON.stringify(DEFAULT_PLANS_BY_DAY));
+    if(!state.resetItems) state.resetItems = DEFAULT_RESET_ITEMS.slice();
+    if(!state.entries) state.entries = {};
+    if(!state.measurements) state.measurements = [];
+    if(!state.activeTab) state.activeTab = "workout";
+    if(!state.selectedDate) state.selectedDate = todayISO();
+
+    // Make sure date line matches selected
+    dateLine.textContent = formatLongDate(state.selectedDate);
+
+    // On load, keep active tab
     render();
+
+    // Public-ish: allow keyboard escape to close modals
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape"){
+        closeModal(editWorkoutBack);
+        closeModal(editResetBack);
+        datePicker.style.display = "none";
+      }
+    });
+
+    function setTabFromState(){
+      setTabSilently(state.activeTab);
+      render();
+    }
+
+    // Ensure tab state is applied (without changing structure)
+    // If user clicks a tab, setTab handles it.
+    // If storage had a different tab, apply it here:
+    setTabFromState();
   </script>
 </body>
 </html>
-
-
-
