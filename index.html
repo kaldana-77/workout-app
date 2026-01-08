@@ -412,6 +412,14 @@
           <div class="progress-bar" id="weekProgressBar"></div>
         </div>
         <div class="progress-meta">
+          <span id="weekProgressText">—</span>
+          <span id="weekProgressPct">0%</span>
+        </div>    
+
+        <div class="progress-wrap" aria-label="Weekly progress">
+          <div class="progress-bar" id="weekProgressBar"></div>
+        </div>
+        <div class="progress-meta">
            <span id="weekProgressText">—</span>
            <span id="weekProgressPct">0%</span>
         </div>
@@ -725,6 +733,14 @@
     const progressBadge = document.getElementById("progressBadge");
     const weekSummary = document.getElementById("weekSummary");
     const streakSummary = document.getElementById("streakSummary");
+    const todayProgressBar = document.getElementById("todayProgressBar");
+    const todayProgressText = document.getElementById("todayProgressText");
+    const todayProgressPct = document.getElementById("todayProgressPct");
+
+    const weekProgressBar = document.getElementById("weekProgressBar");
+    const weekProgressText = document.getElementById("weekProgressText");
+    const weekProgressPct = document.getElementById("weekProgressPct");
+
 
     // measurements
     const mDate = document.getElementById("mDate");
@@ -995,28 +1011,48 @@
     // =========================
     // 7) Progress tab (simple)
     // =========================
-    function renderProgress(){
-      const todayPlan = getPlanForDay(currentDay);
-      const prog = loadProgress(currentDay);
-      const total = todayPlan.length;
-      const done = countCompleted(total, prog);
-      progressBadge.textContent = total ? `${done}/${total} today` : "—";
+   function renderProgress(){
+  // ---- TODAY (uses currentDay) ----
+  const todayPlan = getPlanForDay(currentDay);
+  const prog = loadProgress(currentDay);
+  const total = todayPlan.length;
+  const done = countCompleted(total, prog);
 
-      let weekTotal = 0, weekDone = 0;
-      days.forEach(d => {
-        const plan = getPlanForDay(d);
-        const p = loadProgress(d);
-        weekTotal += plan.length;
-        weekDone += countCompleted(plan.length, p);
-      });
-      weekSummary.textContent = weekTotal ? `${weekDone} of ${weekTotal} exercises completed (based on this week's plan).` : "—";
+  progressBadge.textContent = total ? `${done}/${total} today` : "—";
 
-      if(total && done === total) {
-        streakSummary.textContent = "Today complete ✔";
-      } else {
-        streakSummary.textContent = "—";
-      }
-    }
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  todayProgressBar.style.width = pct + "%";
+  todayProgressPct.textContent = pct + "%";
+  todayProgressText.textContent = total ? `Today: ${done} of ${total} completed` : "No workout set for today";
+
+  // ---- WEEK (all days) ----
+  let weekTotal = 0, weekDone = 0;
+  days.forEach(d => {
+    const plan = getPlanForDay(d);
+    const p = loadProgress(d);
+    weekTotal += plan.length;
+    weekDone += countCompleted(plan.length, p);
+  });
+
+  weekSummary.textContent = weekTotal
+    ? `${weekDone} of ${weekTotal} exercises completed (based on this week's plan).`
+    : "—";
+
+  const weekPct = weekTotal ? Math.round((weekDone / weekTotal) * 100) : 0;
+  weekProgressBar.style.width = weekPct + "%";
+  weekProgressPct.textContent = weekPct + "%";
+  weekProgressText.textContent = weekTotal
+    ? `Week: ${weekDone} of ${weekTotal} completed`
+    : "No workouts set this week";
+
+  // ---- STREAK (same placeholder as before) ----
+  if(total && done === total) {
+    streakSummary.textContent = "Today complete ✔";
+  } else {
+    streakSummary.textContent = "—";
+  }
+}
+
 
     // =========================
     // 8) Measurements tab
@@ -1461,6 +1497,7 @@
   </script>
 </body>
 </html>
+
 
 
 
