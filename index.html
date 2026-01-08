@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>💧💪🏼 Ever Strong</title>
+  <title>Ever Strong 💧💪🏼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
@@ -369,7 +369,7 @@
 <body>
   <div class="app">
     <header>
-      <h1>💧💪🏼 Ever Strong</h1>
+      <h1>Ever Strong 💧💪🏼</h1>
       <p>Strength for Today, Health for Tomorrow.</p>
       <div class="date-label" id="currentDateLabel"></div>
     </header>
@@ -407,6 +407,13 @@
         <div class="exercise" style="gap:6px;">
           <div class="exercise-name" style="font-size:0.9rem;">This week</div>
           <div class="exercise-info" id="weekSummary">—</div>
+        </div>
+        <div class="progress-wrap" aria-label="Weekly progress">
+          <div class="progress-bar" id="weekProgressBar"></div>
+        </div>
+        <div class="progress-meta">
+           <span id="weekProgressText">—</span>
+           <span id="weekProgressPct">0%</span>
         </div>
         <div class="exercise" style="gap:6px;">
           <div class="exercise-name" style="font-size:0.9rem;">Streak</div>
@@ -1454,5 +1461,6 @@
   </script>
 </body>
 </html>
+
 
 
