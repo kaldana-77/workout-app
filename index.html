@@ -254,6 +254,31 @@
       margin-top: 6px;
     }
 
+    /* Progress bars (sleek) */
+    .progress-wrap {
+      height: 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+      overflow: hidden;
+      margin: 6px 0 6px 0;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 250ms ease;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
     /* Scrollbar styling for day tabs */
     .day-tabs::-webkit-scrollbar { height: 4px; }
     .day-tabs::-webkit-scrollbar-thumb {
@@ -357,10 +382,9 @@
       display:flex;
       justify-content: flex-end;
     }
-   
-    #resetItemsText {
-    min-height: 280px;
-    }  
+
+    /* Expand Health Reset edit textarea */
+    #resetItemsText { min-height: 280px; }
 
     .hidden { display:none; }
   </style>
@@ -404,7 +428,22 @@
           <span>Progress</span>
           <span class="badge" id="progressBadge">—</span>
         </div>
+
+        <!-- TODAY -->
         <div class="exercise" style="gap:6px;">
+          <div class="exercise-name" style="font-size:0.9rem;">Today</div>
+          <div class="exercise-info" id="todayProgressText">—</div>
+        </div>
+        <div class="progress-wrap" aria-label="Today progress">
+          <div class="progress-bar" id="todayProgressBar"></div>
+        </div>
+        <div class="progress-meta">
+          <span></span>
+          <span id="todayProgressPct">0%</span>
+        </div>
+
+        <!-- THIS WEEK -->
+        <div class="exercise" style="gap:6px; margin-top:10px;">
           <div class="exercise-name" style="font-size:0.9rem;">This week</div>
           <div class="exercise-info" id="weekSummary">—</div>
         </div>
@@ -414,16 +453,10 @@
         <div class="progress-meta">
           <span id="weekProgressText">—</span>
           <span id="weekProgressPct">0%</span>
-        </div>    
+        </div>
 
-        <div class="progress-wrap" aria-label="Weekly progress">
-          <div class="progress-bar" id="weekProgressBar"></div>
-        </div>
-        <div class="progress-meta">
-           <span id="weekProgressText">—</span>
-           <span id="weekProgressPct">0%</span>
-        </div>
-        <div class="exercise" style="gap:6px;">
+        <!-- STREAK -->
+        <div class="exercise" style="gap:6px; margin-top:10px;">
           <div class="exercise-name" style="font-size:0.9rem;">Streak</div>
           <div class="exercise-info" id="streakSummary">—</div>
         </div>
@@ -618,10 +651,9 @@
     };
 
     // =========================
-    // 2) Exercise picker list (includes your plan items)
+    // 2) Exercise picker list
     // =========================
     const EXERCISE_LIBRARY = [
-      // Your current plan (so nothing is missing in the picker)
       "Lateral Raises",
       "Overhead Dumbbell Press",
       "Tricep Rope Pushdowns",
@@ -663,8 +695,6 @@
       "Stretching / Yoga",
       "Rest / Mobility",
       "Optional: Light Walk",
-
-      // Extra common options (nice to have)
       "Incline Dumbbell Press",
       "Dumbbell Bench Press",
       "Push-Ups",
@@ -688,7 +718,7 @@
     ];
 
     // =========================
-    // 3) Mobility help (underline explanation)
+    // 3) Mobility underline help
     // =========================
     const MOBILITY_HELP_HTML = `
       <p><strong>Quick 10–12 minute mobility flow</strong></p>
@@ -736,11 +766,9 @@
     const todayProgressBar = document.getElementById("todayProgressBar");
     const todayProgressText = document.getElementById("todayProgressText");
     const todayProgressPct = document.getElementById("todayProgressPct");
-
     const weekProgressBar = document.getElementById("weekProgressBar");
     const weekProgressText = document.getElementById("weekProgressText");
     const weekProgressPct = document.getElementById("weekProgressPct");
-
 
     // measurements
     const mDate = document.getElementById("mDate");
@@ -849,6 +877,7 @@
         btn.addEventListener("click", () => {
           currentDay = day;
           render();
+          if(activeMainTab === "progress") renderProgress();
         });
         dayTabsEl.appendChild(btn);
       });
@@ -928,6 +957,7 @@
           };
           saveProgress(currentDay, newState);
           updateCompletionBadge(exercises.length, countCompleted(exercises.length, newState));
+          if(activeMainTab === "progress") renderProgress();
         }
 
         doneCheckbox.addEventListener("change", updateState);
@@ -1009,50 +1039,51 @@
     appTabs.forEach(btn => btn.addEventListener("click", () => setMainTab(btn.dataset.tab)));
 
     // =========================
-    // 7) Progress tab (simple)
+    // 7) Progress tab
     // =========================
-   function renderProgress(){
-  // ---- TODAY (uses currentDay) ----
-  const todayPlan = getPlanForDay(currentDay);
-  const prog = loadProgress(currentDay);
-  const total = todayPlan.length;
-  const done = countCompleted(total, prog);
+    function renderProgress(){
+      if (!todayProgressBar || !weekProgressBar) return;
 
-  progressBadge.textContent = total ? `${done}/${total} today` : "—";
+      // ---- TODAY (uses currentDay) ----
+      const todayPlan = getPlanForDay(currentDay);
+      const prog = loadProgress(currentDay);
+      const total = todayPlan.length;
+      const done = countCompleted(total, prog);
 
-  const pct = total ? Math.round((done / total) * 100) : 0;
-  todayProgressBar.style.width = pct + "%";
-  todayProgressPct.textContent = pct + "%";
-  todayProgressText.textContent = total ? `Today: ${done} of ${total} completed` : "No workout set for today";
+      progressBadge.textContent = total ? `${done}/${total} today` : "—";
 
-  // ---- WEEK (all days) ----
-  let weekTotal = 0, weekDone = 0;
-  days.forEach(d => {
-    const plan = getPlanForDay(d);
-    const p = loadProgress(d);
-    weekTotal += plan.length;
-    weekDone += countCompleted(plan.length, p);
-  });
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      todayProgressBar.style.width = pct + "%";
+      todayProgressPct.textContent = pct + "%";
+      todayProgressText.textContent = total ? `Today: ${done} of ${total} completed` : "No workout set for today";
 
-  weekSummary.textContent = weekTotal
-    ? `${weekDone} of ${weekTotal} exercises completed (based on this week's plan).`
-    : "—";
+      // ---- WEEK (all days) ----
+      let weekTotal = 0, weekDone = 0;
+      days.forEach(d => {
+        const plan = getPlanForDay(d);
+        const p = loadProgress(d);
+        weekTotal += plan.length;
+        weekDone += countCompleted(plan.length, p);
+      });
 
-  const weekPct = weekTotal ? Math.round((weekDone / weekTotal) * 100) : 0;
-  weekProgressBar.style.width = weekPct + "%";
-  weekProgressPct.textContent = weekPct + "%";
-  weekProgressText.textContent = weekTotal
-    ? `Week: ${weekDone} of ${weekTotal} completed`
-    : "No workouts set this week";
+      weekSummary.textContent = weekTotal
+        ? `${weekDone} of ${weekTotal} exercises completed (based on this week's plan).`
+        : "—";
 
-  // ---- STREAK (same placeholder as before) ----
-  if(total && done === total) {
-    streakSummary.textContent = "Today complete ✔";
-  } else {
-    streakSummary.textContent = "—";
-  }
-}
+      const weekPct = weekTotal ? Math.round((weekDone / weekTotal) * 100) : 0;
+      weekProgressBar.style.width = weekPct + "%";
+      weekProgressPct.textContent = weekPct + "%";
+      weekProgressText.textContent = weekTotal
+        ? `Week: ${weekDone} of ${weekTotal} completed`
+        : "No workouts set this week";
 
+      // ---- STREAK placeholder ----
+      if(total && done === total) {
+        streakSummary.textContent = "Today complete ✔";
+      } else {
+        streakSummary.textContent = "—";
+      }
+    }
 
     // =========================
     // 8) Measurements tab
@@ -1103,7 +1134,7 @@
     });
 
     // =========================
-    // 9) Health Reset tab + edit (full rewrite)
+    // 9) Health Reset tab + edit
     // =========================
     const RESET_DEFAULTS = {
       morning: [
@@ -1335,7 +1366,7 @@
     closeEditReset.addEventListener("click", () => closeModal(editResetModal));
 
     // =========================
-    // 10) Edit Plan modal (dropdown ONLY)
+    // 10) Edit Plan modal (dropdown only)
     // =========================
     function openEditPlan(){
       editPlanTitle.textContent = `Edit Plan: ${currentDay}`;
@@ -1445,6 +1476,7 @@
         savePlanOverride(currentDay, cleaned);
         closeModal(editPlanModal);
         render();
+        if(activeMainTab === "progress") renderProgress();
       };
 
       openModal(editPlanModal);
@@ -1460,6 +1492,7 @@
       if (!confirm(`Reset all progress for ${currentDay} (today only)?`)) return;
       saveProgress(currentDay, {});
       renderExercises();
+      if(activeMainTab === "progress") renderProgress();
     });
 
     // =========================
@@ -1497,7 +1530,3 @@
   </script>
 </body>
 </html>
-
-
-
-
