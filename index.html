@@ -236,7 +236,7 @@
       padding: 0;
     }
 
-    /* Circuit explanation link */
+    /* Underline explanation link */
     .circuit-link {
       font-size: 0.75rem;
       color: var(--accent);
@@ -254,16 +254,14 @@
       margin-top: 6px;
     }
 
-    /* Scrollbar styling for day tabs (mobile-safe) */
-    .day-tabs::-webkit-scrollbar {
-      height: 4px;
-    }
+    /* Scrollbar styling for day tabs */
+    .day-tabs::-webkit-scrollbar { height: 4px; }
     .day-tabs::-webkit-scrollbar-thumb {
       background: var(--border);
       border-radius: 999px;
     }
 
-    /* ===== Bottom App Tabs (kept sleek: same style as day tabs) ===== */
+    /* Bottom App Tabs */
     .app-tabs {
       position: fixed;
       left: 0;
@@ -278,7 +276,7 @@
       margin: 0 auto;
       display: flex;
       gap: 6px;
-      flex-wrap: wrap; /* can go to 2 rows */
+      flex-wrap: wrap;
       justify-content: center;
     }
     .app-tab {
@@ -298,7 +296,7 @@
       font-weight: 600;
     }
 
-    /* ===== Modals (minimal, not bubbly) ===== */
+    /* Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -327,9 +325,7 @@
       border-bottom: 1px solid var(--border);
       color: var(--text);
     }
-    .modal-header strong {
-      font-size: 0.9rem;
-    }
+    .modal-header strong { font-size: 0.9rem; }
     .modal-body {
       padding: 10px;
       max-height: 70vh;
@@ -376,7 +372,7 @@
 
     <div class="day-tabs" id="dayTabs"></div>
 
-    <!-- ===== WORKOUT TAB ===== -->
+    <!-- WORKOUT TAB -->
     <div id="tab-workout">
       <div class="card">
         <div class="workout-summary">
@@ -397,7 +393,7 @@
       </div>
     </div>
 
-    <!-- ===== PROGRESS TAB ===== -->
+    <!-- PROGRESS TAB -->
     <div id="tab-progress" class="hidden">
       <div class="card">
         <div class="workout-summary">
@@ -419,7 +415,7 @@
       </div>
     </div>
 
-    <!-- ===== MEASUREMENTS TAB ===== -->
+    <!-- MEASUREMENTS TAB -->
     <div id="tab-measurements" class="hidden">
       <div class="card">
         <div class="workout-summary">
@@ -467,7 +463,7 @@
       </div>
     </div>
 
-    <!-- ===== HEALTH RESET TAB ===== -->
+    <!-- HEALTH RESET TAB -->
     <div id="tab-reset" class="hidden">
       <div class="card">
         <div class="workout-summary">
@@ -510,7 +506,7 @@
       </div>
       <div class="modal-body">
         <div class="exercise-info" style="margin-bottom:8px;">
-          Tip: pick from the dropdown or choose “Custom…” to type your own.
+          Tip: choose from the list (no typing needed).
         </div>
         <div id="editRows"></div>
         <button class="tiny-btn" id="addRowBtn" type="button">Add exercise</button>
@@ -530,8 +526,8 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label>One item per line</label>
-          <textarea id="resetItemsText" placeholder="Supplements (AM)&#10;Supplements (PM)&#10;Water&#10;Protein..."></textarea>
+          <label>One item per line (you can keep headers like “— Supplements —”)</label>
+          <textarea id="resetItemsText" placeholder="— Morning —&#10;Take Synthroid...&#10;&#10;— Supplements —&#10;..."></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -546,13 +542,13 @@
     // =========================
     const workoutPlan = {
       Monday: [
-       { name: "Lateral Raises", sets: 3, reps: "12–15", description: "Raise dumbbells out to the sides until shoulder height." },
-       { name: "Overhead Dumbbell Press", sets: 3, reps: "10–12", description: "Press dumbbells overhead from shoulder height." },
-       { name: "Tricep Rope Pushdowns", sets: 3, reps: "12–15", description: "Push the rope attachment down until arms are fully extended." },
-       { name: "Overhead Tricep Extension", sets: 3, reps: "10–12", description: "Extend dumbbell overhead with both hands." },
-       { name: "Face Pulls", sets: 3, reps: "12–15", description: "Pull rope toward face while keeping elbows high." },
-       { name: "Tricep Dips", sets: 3, reps: "15", description: "Lower your body by bending arms and press back up on parallel bars or a bench." },
-       { name: "Finisher: Light Dumbbell Punches", sets: 2, reps: "1 min w/ 1 min rest", description: "Throw light punches continuously for 1 minute. Rest and repeat." }
+        { name: "Lateral Raises", sets: 3, reps: "12–15", description: "Raise dumbbells out to the sides until shoulder height." },
+        { name: "Overhead Dumbbell Press", sets: 3, reps: "10–12", description: "Press dumbbells overhead from shoulder height." },
+        { name: "Tricep Rope Pushdowns", sets: 3, reps: "12–15", description: "Push the rope attachment down until arms are fully extended." },
+        { name: "Overhead Tricep Extension", sets: 3, reps: "10–12", description: "Extend dumbbell overhead with both hands." },
+        { name: "Face Pulls", sets: 3, reps: "12–15", description: "Pull rope toward face while keeping elbows high." },
+        { name: "Tricep Dips", sets: 3, reps: "15", description: "Lower your body by bending arms and press back up on parallel bars or a bench." },
+        { name: "Finisher: Light Dumbbell Punches", sets: 2, reps: "1 min w/ 1 min rest", description: "Throw light punches continuously for 1 minute. Rest and repeat." }
       ],
       Tuesday: [
         { name: "Dead Bugs", sets: 3, reps: "10/side", description: "Extend opposite arm and leg while keeping core braced." },
@@ -590,7 +586,8 @@
         { name: "Bodyweight Squat to Chair", sets: 3, reps: "12", description: "Squat back to touch chair, then rise." },
         { name: "Incline Pushups", sets: 3, reps: "10", description: "Push up from hands on bench or wall." },
         { name: "Banded Rows", sets: 3, reps: "12", description: "Pull resistance band toward body." },
-        { name: "Hip Hinges", sets: 3, reps: "12", description: "Bend at hips while keeping back straight." }
+        { name: "Hip Hinges", sets: 3, reps: "12", description: "Bend at hips while keeping back straight." },
+        { name: "Stretching / Mobility", sets: 1, reps: "10–15 min", description: "Mobility flow" }
       ],
       Saturday: [
         { name: "Optional: Light Walk", sets: 1, reps: "20–40 min" },
@@ -602,81 +599,95 @@
     };
 
     // =========================
-    // 2) Exercise picker list
+    // 2) Exercise picker list (includes your plan items)
     // =========================
     const EXERCISE_LIBRARY = [
+      // Your current plan (so nothing is missing in the picker)
+      "Lateral Raises",
+      "Overhead Dumbbell Press",
+      "Tricep Rope Pushdowns",
+      "Overhead Tricep Extension",
+      "Face Pulls",
+      "Tricep Dips",
+      "Finisher: Light Dumbbell Punches",
+      "Dead Bugs",
+      "Bird Dogs",
+      "Pallof Press",
+      "Glute Bridge",
+      "Side-Lying Leg Lifts",
+      "Hip Thrusts",
+      "Standing Kickbacks",
+      "Clamshells",
+      "Hip Thrusts or Glute Bridges",
+      "Reverse Lunges",
+      "Step-Ups (Low Step)",
+      "Romanian Deadlifts",
+      "Banded Side Steps",
+      "Light Leg Extensions",
+      "Calf Raises",
+      "Lat Pulldowns",
+      "Seated Cable Row",
+      "Single-Arm Dumbbell Row",
+      "Hammer Curls",
+      "Alternating Curls (Slow)",
+      "Rear Delt Flys",
+      "Finisher: Pulse Curls",
+      "Plank",
+      "Side Plank (Modified)",
+      "Standing Woodchoppers",
+      "Glute Bridge March",
+      "Bodyweight Squat to Chair",
+      "Incline Pushups",
+      "Banded Rows",
+      "Hip Hinges",
+      "Stretching / Mobility",
+      "Stretching / Yoga",
+      "Rest / Mobility",
+      "Optional: Light Walk",
+
+      // Extra common options (nice to have)
       "Incline Dumbbell Press",
       "Dumbbell Bench Press",
       "Push-Ups",
       "Incline Push-Ups",
       "Lat Pulldown",
-      "Seated Cable Row",
       "Dumbbell Row",
       "Bent-Over Row",
       "Dumbbell Shoulder Press",
-      "Lateral Raises",
       "Front Raises",
       "Biceps Curls",
-      "Hammer Curls",
       "Triceps Rope Pushdown",
       "Overhead Triceps Extension",
       "Goblet Squat",
-      "Romanian Deadlift",
       "Glute Bridge/Hip Thrust",
-      "Calf Raises",
       "Leg Press",
       "Step-Ups",
       "Lunges",
       "Split Squats",
       "Hamstring Curl",
-      "Walking Treadmill",
-      "Stretching / Mobility",
-      "Core Circuit",
-      "Full-Body Circuit"
+      "Walking Treadmill"
     ];
 
     // =========================
-    // 3) Health Reset defaults
-    // (includes supplements)
+    // 3) Mobility help (underline explanation)
     // =========================
-    const RESET_DEFAULTS = {
-  morning: [
-    "Take Synthroid early morning (empty stomach).",
-    "Wait 45–60 min before food/coffee.",
-    "Hydrate (water)."
-  ],
-  supps: [
-    "Perfect Amino (before 5:30 workout).",
-    "Daily: Good Girl Probiotic.",
-    "Daily: MultiComplete multivitamin.",
-    "Daily: Omega-3.",
-    "Daily: NAD+.",
-    "Daily: HUM.",
-    "Daily: Collagen + Peptides.",
-    "Later in day: Citrucel (separate from Synthroid).",
-    "Before bed: Magnesium."
-  ],
-  rules: [
-    "Protein-forward meals.",
-    "Walk breaks (2 × 15 min).",
-    "Sleep goal: 7+ hours.",
-    "Consistency over perfection."
-  ]
-};
+    const MOBILITY_HELP_HTML = `
+      <p><strong>Quick 10–12 minute mobility flow</strong></p>
+      <ul>
+        <li>Chest opener stretch (doorway) – 45 sec</li>
+        <li>Child’s pose – 45 sec</li>
+        <li>Hip flexor stretch – 45 sec/side</li>
+        <li>Figure-4 glute stretch – 45 sec/side</li>
+        <li>Hamstring stretch – 45 sec/side</li>
+        <li>Thoracic rotation (“open books”) – 8 reps/side</li>
+        <li>Calf stretch – 30–45 sec/side</li>
+      </ul>
+      <p style="margin-top:12px;">If knees are cranky: do hip + upper body stretches more, less deep knee bending.</p>
+    `;
 
-// flatten defaults for storage/editing
-function buildResetDefaultLines() {
-  return [
-    "— Morning —",
-    ...RESET_DEFAULTS.morning,
-    "",
-    "— Supplements —",
-    ...RESET_DEFAULTS.supps,
-    "",
-    "— Rules —",
-    ...RESET_DEFAULTS.rules
-  ].filter(x => x !== undefined);
-}
+    function isMobilityExercise(name){
+      return /mobility/i.test(name || "");
+    }
 
     // =========================
     // 4) State & helpers
@@ -746,46 +757,28 @@ function buildResetDefaultLines() {
       return map[weekday] || "Monday";
     }
 
-    // ===== Storage keys (keeps your existing workout progress intact) =====
-    function getWorkoutProgressKey(day) {
-      return "workoutProgress_" + day + "_" + todayDateStr;
-    }
-    function getPlanKey(day){
-      return "everStrong_plan_" + day; // stores edited weekly plan per day
-    }
-    function getResetItemsKey(){
-      return "everStrong_resetItems";
-    }
-    function getResetStateKey(){
-      return "everStrong_resetState_" + todayDateStr;
-    }
-    function getMeasurementsKey(){
-      return "everStrong_measurements";
-    }
-    function getMainTabKey(){
-      return "everStrong_mainTab";
-    }
+    // ===== Storage keys =====
+    function getWorkoutProgressKey(day) { return "workoutProgress_" + day + "_" + todayDateStr; }
+    function getPlanKey(day){ return "everStrong_plan_" + day; }
+    function getResetItemsKey(){ return "everStrong_resetItems"; }
+    function getResetStateKey(){ return "everStrong_resetState_" + todayDateStr; }
+    function getMeasurementsKey(){ return "everStrong_measurements"; }
+    function getMainTabKey(){ return "everStrong_mainTab"; }
 
-    function loadMainTab(){
-      return localStorage.getItem(getMainTabKey());
-    }
-    function saveMainTab(name){
-      localStorage.setItem(getMainTabKey(), name);
-    }
+    function loadMainTab(){ return localStorage.getItem(getMainTabKey()); }
+    function saveMainTab(name){ localStorage.setItem(getMainTabKey(), name); }
 
-    // ===== Workout progress (your current system) =====
+    // ===== Workout progress =====
     function loadProgress(day) {
-      const key = getWorkoutProgressKey(day);
-      const raw = localStorage.getItem(key);
+      const raw = localStorage.getItem(getWorkoutProgressKey(day));
       if (!raw) return {};
       try { return JSON.parse(raw); } catch { return {}; }
     }
     function saveProgress(day, progress) {
-      const key = getWorkoutProgressKey(day);
-      localStorage.setItem(key, JSON.stringify(progress));
+      localStorage.setItem(getWorkoutProgressKey(day), JSON.stringify(progress));
     }
 
-    // ===== Plan overrides (weekly plan edits) =====
+    // ===== Plan overrides =====
     function loadPlanOverride(day){
       const raw = localStorage.getItem(getPlanKey(day));
       if(!raw) return null;
@@ -796,41 +789,6 @@ function buildResetDefaultLines() {
     }
     function getPlanForDay(day){
       return loadPlanOverride(day) || workoutPlan[day] || [];
-    }
-
-    // ===== Health Reset items + state =====
-    function loadResetItems(){
-     const raw = localStorage.getItem(getResetItemsKey());
-    const defaults = buildResetDefaultLines();
-    if(!raw) return defaults;
-
-    try {
-      const arr = JSON.parse(raw);
-      return Array.isArray(arr) && arr.length ? arr : defaults;
-    } catch {
-      return defaults;
-    }
-  }
-    function saveResetItems(arr){
-      localStorage.setItem(getResetItemsKey(), JSON.stringify(arr));
-    }
-
-    function loadResetState(){
-      const raw = localStorage.getItem(getResetStateKey());
-      if(!raw) {
-        const items = loadResetItems();
-        return { checks: items.map(()=>false), notes: "" };
-      }
-      try {
-        const st = JSON.parse(raw);
-        return st && typeof st === "object" ? st : { checks: [], notes: "" };
-      } catch {
-        const items = loadResetItems();
-        return { checks: items.map(()=>false), notes: "" };
-      }
-    }
-    function saveResetState(st){
-      localStorage.setItem(getResetStateKey(), JSON.stringify(st));
     }
 
     // ===== Measurements =====
@@ -867,10 +825,6 @@ function buildResetDefaultLines() {
         });
         dayTabsEl.appendChild(btn);
       });
-    }
-
-    function isCircuitExercise(name){
-      return /circuit/i.test(name || "");
     }
 
     function renderExercises() {
@@ -957,18 +911,20 @@ function buildResetDefaultLines() {
         wrapper.appendChild(header);
         wrapper.appendChild(controls);
 
-        // Circuit underline explanation (sleek, minimal)
-        if (isCircuitExercise(ex.name)) {
+        // Mobility underline explanation (ONLY for Mobility items)
+        if (isMobilityExercise(ex.name)) {
           const link = document.createElement("div");
           link.className = "circuit-link";
-          link.textContent = "What does this circuit mean?";
+          link.textContent = "What does this mean? (Mobility flow)";
+
           const help = document.createElement("div");
           help.className = "circuit-help";
-          help.textContent =
-            "Do 3–4 exercises back-to-back (10–15 reps each or 30–45 seconds), then rest 60–90 seconds. Repeat for the listed sets.";
+          help.innerHTML = MOBILITY_HELP_HTML;
+
           link.addEventListener("click", () => {
             help.style.display = (help.style.display === "block") ? "none" : "block";
           });
+
           wrapper.appendChild(link);
           wrapper.appendChild(help);
         }
@@ -1010,16 +966,13 @@ function buildResetDefaultLines() {
       activeMainTab = name;
       saveMainTab(name);
 
-      // show/hide
       tabWorkout.classList.toggle("hidden", name !== "workout");
       tabProgress.classList.toggle("hidden", name !== "progress");
       tabMeasurements.classList.toggle("hidden", name !== "measurements");
       tabReset.classList.toggle("hidden", name !== "reset");
 
-      // active button
       appTabs.forEach(b => b.classList.toggle("active", b.dataset.tab === name));
 
-      // render appropriate tab
       if(name === "workout") render();
       if(name === "progress") renderProgress();
       if(name === "measurements") renderMeasurements();
@@ -1032,14 +985,12 @@ function buildResetDefaultLines() {
     // 7) Progress tab (simple)
     // =========================
     function renderProgress(){
-      // total done today + streak
       const todayPlan = getPlanForDay(currentDay);
       const prog = loadProgress(currentDay);
       const total = todayPlan.length;
       const done = countCompleted(total, prog);
       progressBadge.textContent = total ? `${done}/${total} today` : "—";
 
-      // weekly summary: count all days
       let weekTotal = 0, weekDone = 0;
       days.forEach(d => {
         const plan = getPlanForDay(d);
@@ -1049,9 +1000,6 @@ function buildResetDefaultLines() {
       });
       weekSummary.textContent = weekTotal ? `${weekDone} of ${weekTotal} exercises completed (based on this week's plan).` : "—";
 
-      // streak (consecutive days from today backwards with all done)
-      // NOTE: since your original storage is per-day per-date (today only), true multi-day streak
-      // would require date navigation. We'll keep it “today streak” as a placeholder:
       if(total && done === total) {
         streakSummary.textContent = "Today complete ✔";
       } else {
@@ -1108,245 +1056,239 @@ function buildResetDefaultLines() {
     });
 
     // =========================
-    // 9) Health Reset tab + edit
+    // 9) Health Reset tab + edit (full rewrite)
     // =========================
+    const RESET_DEFAULTS = {
+      morning: [
+        "Take Synthroid early morning (empty stomach).",
+        "Wait 45–60 min before food/coffee.",
+        "Hydrate (water)."
+      ],
+      supps: [
+        "5:00 AM: Perfect Amino (before 5:30 workout).",
+        "Daily: Good Girl Probiotic.",
+        "Daily: MultiComplete multivitamin.",
+        "Daily: Omega-3.",
+        "Daily: NAD+.",
+        "Daily: HUM.",
+        "Daily: Collagen + Peptides.",
+        "Later in day: Citrucel (separate from Synthroid).",
+        "Before bed: Magnesium."
+      ],
+      rules: [
+        "Protein-forward meals.",
+        "Walk breaks (2 × 15 min).",
+        "Sleep goal: 7+ hours.",
+        "Consistency over perfection."
+      ]
+    };
 
-    // --- Defaults (your current supplements + timing) ---
-  const RESET_DEFAULTS = {
-  morning: [
-    "Take Synthroid early morning (empty stomach).",
-    "Wait 45–60 min before food/coffee.",
-    "Hydrate (water)."
-  ],
-  supps: [
-    "5:00 AM: Perfect Amino (before 5:30 workout).",
-    "Daily: Good Girl Probiotic.",
-    "Daily: MultiComplete multivitamin.",
-    "Daily: Omega-3.",
-    "Daily: NAD+.",
-    "Daily: HUM.",
-    "Daily: Collagen + Peptides.",
-    "Later in day: Citrucel (separate from Synthroid).",
-    "Before bed: Magnesium."
-  ],
-  rules: [
-    "Protein-forward meals.",
-    "Walk breaks (2 × 15 min).",
-    "Sleep goal: 7+ hours.",
-    "Consistency over perfection."
-  ]
-};
-
-function buildResetDefaultLines() {
-  return [
-    "— Morning —",
-    ...RESET_DEFAULTS.morning,
-    "",
-    "— Supplements —",
-    ...RESET_DEFAULTS.supps,
-    "",
-    "— Rules —",
-    ...RESET_DEFAULTS.rules
-  ];
-}
-
-function isResetHeaderLine(txt) {
-  return /^—\s.*\s—$/.test((txt || "").trim());
-}
-function isResetBlankLine(txt) {
-  return (txt || "").trim() === "";
-}
-function isResetCheckable(txt) {
-  return !isResetHeaderLine(txt) && !isResetBlankLine(txt);
-}
-
-// --- Items + state ---
-function loadResetItems(){
-  const raw = localStorage.getItem(getResetItemsKey());
-  const defaults = buildResetDefaultLines();
-  if(!raw) return defaults;
-
-  try {
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) && arr.length ? arr : defaults;
-  } catch {
-    return defaults;
-  }
-}
-
-function saveResetItems(arr){
-  localStorage.setItem(getResetItemsKey(), JSON.stringify(arr));
-}
-
-function loadResetState(){
-  const raw = localStorage.getItem(getResetStateKey());
-  const items = loadResetItems();
-
-  if(!raw) {
-    return { checks: items.map(() => false), notes: "" };
-  }
-
-  try {
-    const st = JSON.parse(raw);
-    if(!st || typeof st !== "object") throw new Error("bad state");
-    if(!Array.isArray(st.checks)) st.checks = [];
-    if(typeof st.notes !== "string") st.notes = "";
-    // align length
-    if(st.checks.length !== items.length) {
-      st.checks = items.map((txt, i) => (isResetCheckable(txt) ? !!st.checks[i] : false));
-    }
-    return st;
-  } catch {
-    return { checks: items.map(() => false), notes: "" };
-  }
-}
-
-function saveResetState(st){
-  localStorage.setItem(getResetStateKey(), JSON.stringify(st));
-}
-
-// --- Render ---
-function renderHealthReset(){
-  const items = loadResetItems();
-  const st = loadResetState();
-
-  // ensure checks aligned (in case items changed)
-  if(!Array.isArray(st.checks)) st.checks = [];
-  if(st.checks.length !== items.length){
-    st.checks = items.map((txt, i) => (isResetCheckable(txt) ? !!st.checks[i] : false));
-    saveResetState(st);
-  }
-
-  resetList.innerHTML = "";
-
-  let done = 0;
-  let totalCheckable = 0;
-
-  items.forEach((txt, idx) => {
-    const row = document.createElement("div");
-    row.className = "exercise";
-
-    const header = document.createElement("div");
-    header.className = "exercise-header";
-
-    const name = document.createElement("div");
-    name.className = "exercise-name";
-    name.textContent = txt;
-
-    // Header lines
-    if (isResetHeaderLine(txt)) {
-      name.style.fontSize = "0.85rem";
-      name.style.fontWeight = "700";
-      row.style.background = "#fff";
-      header.appendChild(name);
-      row.appendChild(header);
-      resetList.appendChild(row);
-      return;
+    function buildResetDefaultLines() {
+      return [
+        "— Morning —",
+        ...RESET_DEFAULTS.morning,
+        "",
+        "— Supplements —",
+        ...RESET_DEFAULTS.supps,
+        "",
+        "— Rules —",
+        ...RESET_DEFAULTS.rules
+      ];
     }
 
-    // Blank lines (render as spacer)
-    if (isResetBlankLine(txt)) {
-      row.style.border = "none";
-      row.style.background = "transparent";
-      row.style.padding = "2px";
-      row.style.marginBottom = "6px";
-      resetList.appendChild(row);
-      return;
+    function isResetHeaderLine(txt) {
+      return /^—\s.*\s—$/.test((txt || "").trim());
+    }
+    function isResetBlankLine(txt) {
+      return (txt || "").trim() === "";
+    }
+    function isResetCheckable(txt) {
+      return !isResetHeaderLine(txt) && !isResetBlankLine(txt);
     }
 
-    // Checkable lines
-    totalCheckable++;
+    function loadResetItems(){
+      const raw = localStorage.getItem(getResetItemsKey());
+      const defaults = buildResetDefaultLines();
+      if(!raw) return defaults;
 
-    const doneDiv = document.createElement("label");
-    doneDiv.className = "done-toggle";
-    const cb = document.createElement("input");
-    cb.type = "checkbox";
-    cb.checked = !!st.checks[idx];
-    const sp = document.createElement("span");
-    sp.textContent = "Done";
-    doneDiv.appendChild(cb);
-    doneDiv.appendChild(sp);
+      try {
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) && arr.length ? arr : defaults;
+      } catch {
+        return defaults;
+      }
+    }
 
-    header.appendChild(name);
-    header.appendChild(doneDiv);
+    function saveResetItems(arr){
+      localStorage.setItem(getResetItemsKey(), JSON.stringify(arr));
+    }
 
-    cb.addEventListener("change", () => {
-      const st2 = loadResetState();
-      st2.checks[idx] = cb.checked;
-      saveResetState(st2);
+    function loadResetState(){
+      const raw = localStorage.getItem(getResetStateKey());
+      const items = loadResetItems();
+
+      if(!raw) return { checks: items.map(() => false), notes: "" };
+
+      try {
+        const st = JSON.parse(raw);
+        if(!st || typeof st !== "object") throw new Error("bad state");
+        if(!Array.isArray(st.checks)) st.checks = [];
+        if(typeof st.notes !== "string") st.notes = "";
+
+        if(st.checks.length !== items.length) {
+          st.checks = items.map((txt, i) => (isResetCheckable(txt) ? !!st.checks[i] : false));
+        }
+        return st;
+      } catch {
+        return { checks: items.map(() => false), notes: "" };
+      }
+    }
+
+    function saveResetState(st){
+      localStorage.setItem(getResetStateKey(), JSON.stringify(st));
+    }
+
+    function renderHealthReset(){
+      const items = loadResetItems();
+      const st = loadResetState();
+
+      if(!Array.isArray(st.checks)) st.checks = [];
+      if(st.checks.length !== items.length){
+        st.checks = items.map((txt, i) => (isResetCheckable(txt) ? !!st.checks[i] : false));
+        saveResetState(st);
+      }
+
+      resetList.innerHTML = "";
+
+      let done = 0;
+      let totalCheckable = 0;
+
+      items.forEach((txt, idx) => {
+        const row = document.createElement("div");
+        row.className = "exercise";
+
+        // Headers
+        if (isResetHeaderLine(txt)) {
+          row.style.padding = "6px 8px";
+          const t = document.createElement("div");
+          t.className = "exercise-name";
+          t.textContent = txt;
+          t.style.fontSize = "0.85rem";
+          t.style.fontWeight = "700";
+          row.appendChild(t);
+          resetList.appendChild(row);
+          return;
+        }
+
+        // Blank line spacer
+        if (isResetBlankLine(txt)) {
+          row.style.border = "none";
+          row.style.background = "transparent";
+          row.style.padding = "2px";
+          row.style.marginBottom = "6px";
+          resetList.appendChild(row);
+          return;
+        }
+
+        // Checkable
+        totalCheckable++;
+
+        const header = document.createElement("div");
+        header.className = "exercise-header";
+
+        const name = document.createElement("div");
+        name.className = "exercise-name";
+        name.style.fontSize = "0.9rem";
+        name.textContent = txt;
+
+        const doneDiv = document.createElement("label");
+        doneDiv.className = "done-toggle";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = !!st.checks[idx];
+        const sp = document.createElement("span");
+        sp.textContent = "Done";
+        doneDiv.appendChild(cb);
+        doneDiv.appendChild(sp);
+
+        header.appendChild(name);
+        header.appendChild(doneDiv);
+
+        cb.addEventListener("change", () => {
+          const st2 = loadResetState();
+          st2.checks[idx] = cb.checked;
+          saveResetState(st2);
+          renderHealthReset();
+        });
+
+        row.appendChild(header);
+        resetList.appendChild(row);
+
+        if(cb.checked) done++;
+      });
+
+      resetBadge.textContent = `${done}/${totalCheckable}`;
+
+      // Notes box
+      const notesWrap = document.createElement("div");
+      notesWrap.className = "exercise";
+      const notesLabel = document.createElement("div");
+      notesLabel.className = "exercise-name";
+      notesLabel.style.fontSize = "0.9rem";
+      notesLabel.textContent = "Notes";
+      const notesBox = document.createElement("textarea");
+      notesBox.style.fontSize = "0.8rem";
+      notesBox.style.border = "1px solid var(--border)";
+      notesBox.style.borderRadius = "6px";
+      notesBox.style.padding = "6px";
+      notesBox.style.minHeight = "50px";
+      notesBox.placeholder = "How you feel, wins, symptoms, etc.";
+      notesBox.value = st.notes || "";
+      notesBox.addEventListener("blur", () => {
+        const st2 = loadResetState();
+        st2.notes = notesBox.value || "";
+        saveResetState(st2);
+      });
+      notesWrap.appendChild(notesLabel);
+      notesWrap.appendChild(notesBox);
+      resetList.appendChild(notesWrap);
+    }
+
+    resetResetBtn.addEventListener("click", () => {
+      if (!confirm("Reset Health Reset for today?")) return;
+      const items = loadResetItems();
+      saveResetState({ checks: items.map(() => false), notes: "" });
       renderHealthReset();
     });
 
-    row.appendChild(header);
-    resetList.appendChild(row);
+    editResetBtn.addEventListener("click", () => {
+      const items = loadResetItems();
+      resetItemsText.value = items.join("\n");
+      openModal(editResetModal);
+    });
 
-    if(cb.checked) done++;
-  });
+    saveResetItemsBtn.addEventListener("click", () => {
+      const lines = resetItemsText.value
+        .split("\n")
+        .map(s => s.replace(/\s+$/g, "")); // keep blanks + headers
 
-  resetBadge.textContent = `${done}/${totalCheckable}`;
+      const hasAnyContent = lines.some(s => s.trim().length > 0);
+      const finalItems = hasAnyContent ? lines : buildResetDefaultLines();
 
-  // Notes box (optional)
-  const notesWrap = document.createElement("div");
-  notesWrap.className = "exercise";
-  const notesLabel = document.createElement("div");
-  notesLabel.className = "exercise-name";
-  notesLabel.style.fontSize = "0.9rem";
-  notesLabel.textContent = "Notes";
-  const notesBox = document.createElement("textarea");
-  notesBox.style.fontSize = "0.8rem";
-  notesBox.style.border = "1px solid var(--border)";
-  notesBox.style.borderRadius = "6px";
-  notesBox.style.padding = "6px";
-  notesBox.style.minHeight = "50px";
-  notesBox.placeholder = "How you feel, wins, symptoms, etc.";
-  notesBox.value = st.notes || "";
-  notesBox.addEventListener("blur", () => {
-    const st2 = loadResetState();
-    st2.notes = notesBox.value || "";
-    saveResetState(st2);
-  });
-  notesWrap.appendChild(notesLabel);
-  notesWrap.appendChild(notesBox);
-  resetList.appendChild(notesWrap);
-}
+      saveResetItems(finalItems);
 
-// Reset Health Reset (today)
-resetResetBtn.addEventListener("click", () => {
-  if (!confirm("Reset Health Reset for today?")) return;
-  const items = loadResetItems();
-  saveResetState({ checks: items.map(() => false), notes: "" });
-  renderHealthReset();
-});
+      const st = loadResetState();
+      st.checks = finalItems.map((txt, i) => (isResetCheckable(txt) ? !!st.checks[i] : false));
+      saveResetState(st);
 
-// Open edit modal (one item per line)
-editResetBtn.addEventListener("click", () => {
-  const items = loadResetItems();
-  resetItemsText.value = items.join("\n");
-  openModal(editResetModal);
-});
+      closeModal(editResetModal);
+      renderHealthReset();
+    });
 
-// Save edited items (preserve headers + blank lines)
-saveResetItemsBtn.addEventListener("click", () => {
-  const lines = resetItemsText.value
-    .split("\n")
-    .map(s => s.replace(/\s+$/g, "")); // keep blanks/headers
-
-  const hasAnyContent = lines.some(s => s.trim().length > 0);
-  const finalItems = hasAnyContent ? lines : buildResetDefaultLines();
-
-  saveResetItems(finalItems);
-
-  // update today's reset state length (headers/blanks forced false)
-  const st = loadResetState();
-  st.checks = finalItems.map((txt, i) => (isResetCheckable(txt) ? !!st.checks[i] : false));
-  saveResetState(st);
-
-  closeModal(editResetModal);
-  renderHealthReset();
-});
+    closeEditReset.addEventListener("click", () => closeModal(editResetModal));
 
     // =========================
-    // 10) Edit Plan modal (dropdown picker)
+    // 10) Edit Plan modal (dropdown ONLY)
     // =========================
     function openEditPlan(){
       editPlanTitle.textContent = `Edit Plan: ${currentDay}`;
@@ -1368,11 +1310,6 @@ saveResetItemsBtn.addEventListener("click", () => {
         l1.textContent = "Exercise";
         const sel = document.createElement("select");
 
-        const optCustom = document.createElement("option");
-        optCustom.value = "__CUSTOM__";
-        optCustom.textContent = "Custom…";
-        sel.appendChild(optCustom);
-
         EXERCISE_LIBRARY.forEach(n => {
           const o = document.createElement("option");
           o.value = n;
@@ -1380,34 +1317,20 @@ saveResetItemsBtn.addEventListener("click", () => {
           sel.appendChild(o);
         });
 
-        const customInput = document.createElement("input");
-        customInput.type = "text";
-        customInput.placeholder = "Type exercise name";
-        customInput.value = "";
-
-        // set initial
-        const inLib = EXERCISE_LIBRARY.includes(item.name);
-        sel.value = inLib ? item.name : "__CUSTOM__";
-        customInput.value = inLib ? "" : (item.name || "");
-        customInput.style.display = inLib ? "none" : "block";
+        // Set initial selection (fallback to first)
+        if (EXERCISE_LIBRARY.includes(item.name)) {
+          sel.value = item.name;
+        } else {
+          sel.value = EXERCISE_LIBRARY[0] || "";
+          item.name = sel.value;
+        }
 
         sel.addEventListener("change", () => {
-          if(sel.value === "__CUSTOM__"){
-            customInput.style.display = "block";
-            customInput.focus();
-            item.name = customInput.value || "";
-          } else {
-            customInput.style.display = "none";
-            item.name = sel.value;
-          }
-        });
-        customInput.addEventListener("input", () => {
-          item.name = customInput.value || "";
+          item.name = sel.value;
         });
 
         fg1.appendChild(l1);
         fg1.appendChild(sel);
-        fg1.appendChild(customInput);
 
         const fg2 = document.createElement("div");
         fg2.className = "form-group";
@@ -1446,27 +1369,24 @@ saveResetItemsBtn.addEventListener("click", () => {
         remove.addEventListener("click", () => {
           const idx = plan.indexOf(item);
           if(idx >= 0) plan.splice(idx, 1);
-          openEditPlan(); // rebuild
+          openEditPlan();
         });
         actions.appendChild(remove);
 
         row.appendChild(top);
         row.appendChild(actions);
 
-        // keep reference alive
-        row._item = item;
         return row;
       }
 
       plan.forEach(item => editRows.appendChild(makeRow(item)));
 
       addRowBtn.onclick = () => {
-        plan.push({ name: "Custom exercise", sets: 3, reps: "10–12" });
+        plan.push({ name: EXERCISE_LIBRARY[0] || "Lateral Raises", sets: 3, reps: "10–12" });
         openEditPlan();
       };
 
       savePlanBtn.onclick = () => {
-        // sanitize
         const cleaned = plan
           .map(x => ({
             name: (x.name || "").trim(),
@@ -1476,9 +1396,6 @@ saveResetItemsBtn.addEventListener("click", () => {
           .filter(x => x.name);
 
         savePlanOverride(currentDay, cleaned);
-
-        // also reset progress mapping (optional prompt)
-        // We won't auto-wipe your workout progress unless you want it.
         closeModal(editPlanModal);
         render();
       };
@@ -1501,18 +1418,15 @@ saveResetItemsBtn.addEventListener("click", () => {
     // =========================
     // 12) Modal helpers
     // =========================
-    function openModal(el){
-      el.style.display = "flex";
-    }
-    function closeModal(el){
-      el.style.display = "none";
-    }
-    // click outside modal to close
+    function openModal(el){ el.style.display = "flex"; }
+    function closeModal(el){ el.style.display = "none"; }
+
     [editPlanModal, editResetModal].forEach(backdrop => {
       backdrop.addEventListener("click", (e) => {
         if(e.target === backdrop) closeModal(backdrop);
       });
     });
+
     document.addEventListener("keydown", (e) => {
       if(e.key === "Escape"){
         closeModal(editPlanModal);
@@ -1531,11 +1445,8 @@ saveResetItemsBtn.addEventListener("click", () => {
 
     // Initial render
     renderDateLabel();
-    setMainTab(activeMainTab); // shows correct tab and renders it
-    render(); // ensures workout tab stays correct on load
+    setMainTab(activeMainTab);
+    render();
   </script>
 </body>
 </html>
-
-
-
