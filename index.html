@@ -639,16 +639,44 @@
     // 3) Health Reset defaults
     // (includes supplements)
     // =========================
-    const DEFAULT_RESET_ITEMS = [
-      "Supplements (AM)",
-      "Supplements (PM)",
-      "Water (goal)",
-      "Protein at each meal",
-      "Fiber / veggies",
-      "Electrolytes",
-      "10–20 min walk",
-      "Early bedtime"
-    ];
+    const RESET_DEFAULTS = {
+  morning: [
+    "Take Synthroid early morning (empty stomach).",
+    "Wait 45–60 min before food/coffee.",
+    "Hydrate (water)."
+  ],
+  supps: [
+    "Perfect Amino (before 5:30 workout).",
+    "Daily: Good Girl Probiotic.",
+    "Daily: MultiComplete multivitamin.",
+    "Daily: Omega-3.",
+    "Daily: NAD+.",
+    "Daily: HUM.",
+    "Daily: Collagen + Peptides.",
+    "Later in day: Citrucel (separate from Synthroid).",
+    "Before bed: Magnesium."
+  ],
+  rules: [
+    "Protein-forward meals.",
+    "Walk breaks (2 × 15 min).",
+    "Sleep goal: 7+ hours.",
+    "Consistency over perfection."
+  ]
+};
+
+// flatten defaults for storage/editing
+function buildResetDefaultLines() {
+  return [
+    "— Morning —",
+    ...RESET_DEFAULTS.morning,
+    "",
+    "— Supplements —",
+    ...RESET_DEFAULTS.supps,
+    "",
+    "— Rules —",
+    ...RESET_DEFAULTS.rules
+  ].filter(x => x !== undefined);
+}
 
     // =========================
     // 4) State & helpers
@@ -772,15 +800,17 @@
 
     // ===== Health Reset items + state =====
     function loadResetItems(){
-      const raw = localStorage.getItem(getResetItemsKey());
-      if(!raw) return DEFAULT_RESET_ITEMS.slice();
-      try {
-        const arr = JSON.parse(raw);
-        return Array.isArray(arr) && arr.length ? arr : DEFAULT_RESET_ITEMS.slice();
-      } catch {
-        return DEFAULT_RESET_ITEMS.slice();
-      }
+     const raw = localStorage.getItem(getResetItemsKey());
+    const defaults = buildResetDefaultLines();
+    if(!raw) return defaults;
+
+    try {
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) && arr.length ? arr : defaults;
+    } catch {
+      return defaults;
     }
+  }
     function saveResetItems(arr){
       localStorage.setItem(getResetItemsKey(), JSON.stringify(arr));
     }
@@ -1080,115 +1110,240 @@
     // =========================
     // 9) Health Reset tab + edit
     // =========================
-    function renderHealthReset(){
-      const items = loadResetItems();
-      let st = loadResetState();
 
-      // ensure checks length matches items length
-      if(!Array.isArray(st.checks)) st.checks = [];
-      if(st.checks.length !== items.length){
-        const next = items.map((_, i) => !!st.checks[i]);
-        st.checks = next;
-        saveResetState(st);
-      }
+    // --- Defaults (your current supplements + timing) ---
+  const RESET_DEFAULTS = {
+  morning: [
+    "Take Synthroid early morning (empty stomach).",
+    "Wait 45–60 min before food/coffee.",
+    "Hydrate (water)."
+  ],
+  supps: [
+    "5:00 AM: Perfect Amino (before 5:30 workout).",
+    "Daily: Good Girl Probiotic.",
+    "Daily: MultiComplete multivitamin.",
+    "Daily: Omega-3.",
+    "Daily: NAD+.",
+    "Daily: HUM.",
+    "Daily: Collagen + Peptides.",
+    "Later in day: Citrucel (separate from Synthroid).",
+    "Before bed: Magnesium."
+  ],
+  rules: [
+    "Protein-forward meals.",
+    "Walk breaks (2 × 15 min).",
+    "Sleep goal: 7+ hours.",
+    "Consistency over perfection."
+  ]
+};
 
-      resetList.innerHTML = "";
+function buildResetDefaultLines() {
+  return [
+    "— Morning —",
+    ...RESET_DEFAULTS.morning,
+    "",
+    "— Supplements —",
+    ...RESET_DEFAULTS.supps,
+    "",
+    "— Rules —",
+    ...RESET_DEFAULTS.rules
+  ];
+}
 
-      let done = 0;
-      items.forEach((txt, idx) => {
-        const row = document.createElement("div");
-        row.className = "exercise";
+function isResetHeaderLine(txt) {
+  return /^—\s.*\s—$/.test((txt || "").trim());
+}
+function isResetBlankLine(txt) {
+  return (txt || "").trim() === "";
+}
+function isResetCheckable(txt) {
+  return !isResetHeaderLine(txt) && !isResetBlankLine(txt);
+}
 
-        const header = document.createElement("div");
-        header.className = "exercise-header";
+// --- Items + state ---
+function loadResetItems(){
+  const raw = localStorage.getItem(getResetItemsKey());
+  const defaults = buildResetDefaultLines();
+  if(!raw) return defaults;
 
-        const name = document.createElement("div");
-        name.className = "exercise-name";
-        name.textContent = txt;
+  try {
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) && arr.length ? arr : defaults;
+  } catch {
+    return defaults;
+  }
+}
 
-        const doneDiv = document.createElement("label");
-        doneDiv.className = "done-toggle";
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.checked = !!st.checks[idx];
-        const sp = document.createElement("span");
-        sp.textContent = "Done";
-        doneDiv.appendChild(cb);
-        doneDiv.appendChild(sp);
+function saveResetItems(arr){
+  localStorage.setItem(getResetItemsKey(), JSON.stringify(arr));
+}
 
-        header.appendChild(name);
-        header.appendChild(doneDiv);
+function loadResetState(){
+  const raw = localStorage.getItem(getResetStateKey());
+  const items = loadResetItems();
 
-        cb.addEventListener("change", () => {
-          const st2 = loadResetState();
-          st2.checks[idx] = cb.checked;
-          saveResetState(st2);
-          renderHealthReset();
-        });
+  if(!raw) {
+    return { checks: items.map(() => false), notes: "" };
+  }
 
-        row.appendChild(header);
-        resetList.appendChild(row);
+  try {
+    const st = JSON.parse(raw);
+    if(!st || typeof st !== "object") throw new Error("bad state");
+    if(!Array.isArray(st.checks)) st.checks = [];
+    if(typeof st.notes !== "string") st.notes = "";
+    // align length
+    if(st.checks.length !== items.length) {
+      st.checks = items.map((txt, i) => (isResetCheckable(txt) ? !!st.checks[i] : false));
+    }
+    return st;
+  } catch {
+    return { checks: items.map(() => false), notes: "" };
+  }
+}
 
-        if(cb.checked) done++;
-      });
+function saveResetState(st){
+  localStorage.setItem(getResetStateKey(), JSON.stringify(st));
+}
 
-      resetBadge.textContent = `${done}/${items.length}`;
+// --- Render ---
+function renderHealthReset(){
+  const items = loadResetItems();
+  const st = loadResetState();
 
-      // Notes box (optional)
-      const notesWrap = document.createElement("div");
-      notesWrap.className = "exercise";
-      const notesLabel = document.createElement("div");
-      notesLabel.className = "exercise-name";
-      notesLabel.style.fontSize = "0.9rem";
-      notesLabel.textContent = "Notes";
-      const notesBox = document.createElement("textarea");
-      notesBox.style.fontSize = "0.8rem";
-      notesBox.style.border = "1px solid var(--border)";
-      notesBox.style.borderRadius = "6px";
-      notesBox.style.padding = "6px";
-      notesBox.style.minHeight = "50px";
-      notesBox.placeholder = "How you feel, wins, symptoms, etc.";
-      notesBox.value = st.notes || "";
-      notesBox.addEventListener("blur", () => {
-        const st2 = loadResetState();
-        st2.notes = notesBox.value || "";
-        saveResetState(st2);
-      });
-      notesWrap.appendChild(notesLabel);
-      notesWrap.appendChild(notesBox);
-      resetList.appendChild(notesWrap);
+  // ensure checks aligned (in case items changed)
+  if(!Array.isArray(st.checks)) st.checks = [];
+  if(st.checks.length !== items.length){
+    st.checks = items.map((txt, i) => (isResetCheckable(txt) ? !!st.checks[i] : false));
+    saveResetState(st);
+  }
+
+  resetList.innerHTML = "";
+
+  let done = 0;
+  let totalCheckable = 0;
+
+  items.forEach((txt, idx) => {
+    const row = document.createElement("div");
+    row.className = "exercise";
+
+    const header = document.createElement("div");
+    header.className = "exercise-header";
+
+    const name = document.createElement("div");
+    name.className = "exercise-name";
+    name.textContent = txt;
+
+    // Header lines
+    if (isResetHeaderLine(txt)) {
+      name.style.fontSize = "0.85rem";
+      name.style.fontWeight = "700";
+      row.style.background = "#fff";
+      header.appendChild(name);
+      row.appendChild(header);
+      resetList.appendChild(row);
+      return;
     }
 
-    resetResetBtn.addEventListener("click", () => {
-      if (!confirm("Reset Health Reset for today?")) return;
-      const items = loadResetItems();
-      saveResetState({ checks: items.map(()=>false), notes: "" });
+    // Blank lines (render as spacer)
+    if (isResetBlankLine(txt)) {
+      row.style.border = "none";
+      row.style.background = "transparent";
+      row.style.padding = "2px";
+      row.style.marginBottom = "6px";
+      resetList.appendChild(row);
+      return;
+    }
+
+    // Checkable lines
+    totalCheckable++;
+
+    const doneDiv = document.createElement("label");
+    doneDiv.className = "done-toggle";
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = !!st.checks[idx];
+    const sp = document.createElement("span");
+    sp.textContent = "Done";
+    doneDiv.appendChild(cb);
+    doneDiv.appendChild(sp);
+
+    header.appendChild(name);
+    header.appendChild(doneDiv);
+
+    cb.addEventListener("change", () => {
+      const st2 = loadResetState();
+      st2.checks[idx] = cb.checked;
+      saveResetState(st2);
       renderHealthReset();
     });
 
-    editResetBtn.addEventListener("click", () => {
-      const items = loadResetItems();
-      resetItemsText.value = items.join("\n");
-      openModal(editResetModal);
-    });
+    row.appendChild(header);
+    resetList.appendChild(row);
 
-    saveResetItemsBtn.addEventListener("click", () => {
-      const lines = resetItemsText.value
-        .split("\n")
-        .map(s => s.trim())
-        .filter(Boolean);
+    if(cb.checked) done++;
+  });
 
-      const finalItems = lines.length ? lines : DEFAULT_RESET_ITEMS.slice();
-      saveResetItems(finalItems);
+  resetBadge.textContent = `${done}/${totalCheckable}`;
 
-      // update today's reset state length
-      const st = loadResetState();
-      st.checks = finalItems.map((_, i) => !!st.checks[i]);
-      saveResetState(st);
+  // Notes box (optional)
+  const notesWrap = document.createElement("div");
+  notesWrap.className = "exercise";
+  const notesLabel = document.createElement("div");
+  notesLabel.className = "exercise-name";
+  notesLabel.style.fontSize = "0.9rem";
+  notesLabel.textContent = "Notes";
+  const notesBox = document.createElement("textarea");
+  notesBox.style.fontSize = "0.8rem";
+  notesBox.style.border = "1px solid var(--border)";
+  notesBox.style.borderRadius = "6px";
+  notesBox.style.padding = "6px";
+  notesBox.style.minHeight = "50px";
+  notesBox.placeholder = "How you feel, wins, symptoms, etc.";
+  notesBox.value = st.notes || "";
+  notesBox.addEventListener("blur", () => {
+    const st2 = loadResetState();
+    st2.notes = notesBox.value || "";
+    saveResetState(st2);
+  });
+  notesWrap.appendChild(notesLabel);
+  notesWrap.appendChild(notesBox);
+  resetList.appendChild(notesWrap);
+}
 
-      closeModal(editResetModal);
-      renderHealthReset();
-    });
+// Reset Health Reset (today)
+resetResetBtn.addEventListener("click", () => {
+  if (!confirm("Reset Health Reset for today?")) return;
+  const items = loadResetItems();
+  saveResetState({ checks: items.map(() => false), notes: "" });
+  renderHealthReset();
+});
+
+// Open edit modal (one item per line)
+editResetBtn.addEventListener("click", () => {
+  const items = loadResetItems();
+  resetItemsText.value = items.join("\n");
+  openModal(editResetModal);
+});
+
+// Save edited items (preserve headers + blank lines)
+saveResetItemsBtn.addEventListener("click", () => {
+  const lines = resetItemsText.value
+    .split("\n")
+    .map(s => s.replace(/\s+$/g, "")); // keep blanks/headers
+
+  const hasAnyContent = lines.some(s => s.trim().length > 0);
+  const finalItems = hasAnyContent ? lines : buildResetDefaultLines();
+
+  saveResetItems(finalItems);
+
+  // update today's reset state length (headers/blanks forced false)
+  const st = loadResetState();
+  st.checks = finalItems.map((txt, i) => (isResetCheckable(txt) ? !!st.checks[i] : false));
+  saveResetState(st);
+
+  closeModal(editResetModal);
+  renderHealthReset();
+});
 
     // =========================
     // 10) Edit Plan modal (dropdown picker)
@@ -1381,5 +1536,6 @@
   </script>
 </body>
 </html>
+
 
 
