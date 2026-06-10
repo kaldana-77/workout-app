@@ -106,14 +106,8 @@
           ["Incline Walk", "30 min"]
         ]
       },
-      "Sat": {
-        title: "SATURDAY – OPTIONAL WALK/STRETCH",
-        exercises: [["Walk or Stretch", "20+ minutes"]]
-      },
-      "Sun": {
-        title: "SUNDAY – OPTIONAL WALK/STRETCH",
-        exercises: [["Walk or Stretch", "20+ minutes"]]
-      }
+      "Sat": { title: "SATURDAY – OPTIONAL WALK/STRETCH", exercises: [["Walk or Stretch", "20+ minutes"]] },
+      "Sun": { title: "SUNDAY – OPTIONAL WALK/STRETCH", exercises: [["Walk or Stretch", "20+ minutes"]] }
     };
 
     const nav = document.getElementById("nav-buttons");
@@ -136,8 +130,7 @@
           <td>${e[1]}</td>
           <td><input type="checkbox" onchange="updateProgress('${dayKey}')"></td>
           <td><button class="info-btn" onclick="alert('${e[0]}')">ℹ️</button></td>
-        </tr>
-      `).join("");
+        </tr>`).join("");
       area.innerHTML = `
         <div class="day-container" style="display:block">
           <h3 style="color:#2b65e3;">${data.title} <span class="progress" id="progress-${dayKey}">0/${data.exercises.length} done</span></h3>
@@ -151,35 +144,26 @@
     }
 
     function updateProgress(dayKey) {
-      const checks = document.querySelectorAll("input[type='checkbox']");
+      const checks = area.querySelectorAll("input[type='checkbox']");
       const total = workoutData[dayKey].exercises.length;
       let done = 0;
       checks.forEach(c => c.checked && done++);
       document.getElementById(`progress-${dayKey}`).textContent = `${done}/${total} done`;
       if (done === total) {
-        confetti();
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
       }
     }
 
     function resetProgress(dayKey) {
-      const checks = document.querySelectorAll("input[type='checkbox']");
+      const checks = area.querySelectorAll("input[type='checkbox']");
       checks.forEach(c => c.checked = false);
       updateProgress(dayKey);
-    }
-
-    function confetti() {
-      confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
     }
 
     document.getElementById("date-display").textContent = new Date().toLocaleDateString('en-US', {
       weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'
     });
 
-    // Load Monday view by default
     setTimeout(() => nav.children[0].click(), 50);
   </script>
 </body>
