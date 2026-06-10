@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ever Strong 💧💪🏼</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f6f6f6; margin: 0; padding: 0; text-align: center; }
@@ -12,13 +12,23 @@
     .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5em; padding: 1em 0; }
     .nav button { padding: 0.5em 1em; font-size: 1rem; border: none; border-radius: 8px; background: #eee; cursor: pointer; }
     .nav button.active { background: #2b65e3; color: white; }
-    .day-container { max-width: 600px; margin: auto; background: white; padding: 1em; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; }
+    .day-container { max-width: 600px; margin: auto; background: white; padding: 1em; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; text-align: left; }
     table { width: 100%; border-collapse: collapse; margin-top: 1em; }
     th, td { padding: 0.5em; border-bottom: 1px solid #ccc; }
     th { background: #f0f0f0; }
-    .footer { margin: 2em 0 1em; font-size: 0.9em; color: #666; }
+    .footer { margin: 2em 0 1em; font-size: 0.9em; color: #666; text-align: center; }
     .info-btn { cursor: pointer; border: none; background: none; color: #2b65e3; }
     .progress { color: #e32b2b; font-weight: bold; }
+    .section-label { font-weight: bold; padding-top: 1em; }
+    #editModal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center;
+    }
+    #editModalContent {
+      background: white; padding: 2em; border-radius: 10px; max-width: 400px; width: 90%;
+      max-height: 80%; overflow-y: auto; text-align: left;
+    }
+    .edit-btn { background: #2b65e3; color: white; border: none; padding: 0.4em 0.8em; border-radius: 6px; margin-bottom: 0.5em; cursor: pointer; }
     @media (max-width: 600px) {
       .nav { gap: 0.3em; }
       .nav button { font-size: 0.9rem; padding: 0.4em 0.6em; }
@@ -32,12 +42,34 @@
 
   <div class="nav" id="nav-buttons"></div>
 
+  <button class="edit-btn" onclick="openEditModal()">✏️ Edit Plan</button>
+
   <div id="workout-area"></div>
 
   <div class="footer">Sat & Sun are optional active recovery days. Go for a walk, stretch, and take care of your body! 💙</div>
 
+  <div id="editModal">
+    <div id="editModalContent">
+      <h3>Edit Plan</h3>
+      <div id="editList"></div>
+      <br><button onclick="closeEditModal()">OK</button>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script>
+    const descriptions = {
+      "Lat Pulldown": "Pull bar down to chest, squeeze back.",
+      "Seated Cable Row": "Pull handle toward your torso, elbows close.",
+      "One-Arm Dumbbell Row": "Pull dumbbell up toward ribs, pause at top.",
+      "Rear Delt Fly": "Raise arms outward with light weights.",
+      "Hammer Curl": "Curl dumbbells with palms facing each other.",
+      "Dead Bugs": "Opposite arm/leg reach, keep core tight.",
+      "Pallof Press": "Press band straight out, resist rotation.",
+      "Front Plank": "Hold body in straight line on elbows.",
+      "Incline Walk": "Walk on incline for set duration.",
+    };
+
     const workoutData = {
       "Mon": {
         title: "MONDAY – UPPER BODY PULL + CORE",
@@ -55,63 +87,19 @@
       },
       "Tue": {
         title: "TUESDAY – LOWER BODY + CORE",
-        exercises: [
-          ["Leg Press", "3 × 8"],
-          ["Romanian Deadlift", "3 × 8"],
-          ["Heavy Sumo Squat", "3 × 8–10"],
-          ["Banded Side Steps", "2 × 15"],
-          ["Side-Lying Leg Raises", "2 × 15"],
-          ["Calf Raises", "2 × 15"],
-          ["Marching Glute Bridge", "2 × 10/side"],
-          ["Side Plank", "2 × 20–30 sec"],
-          ["Incline Walk", "1 × 20 min"]
-        ]
+        exercises: [["Incline Walk", "1 × 20 min"]]
       },
-      "Wed": {
-        title: "WEDNESDAY – ACTIVE RECOVERY + CORE",
-        exercises: [
-          ["Incline Walk", "1 × 30–40 min OR 1 × 8k–10k steps"],
-          ["Farmer's Carry", "3 rounds × 45 sec"],
-          ["Pallof Press", "2 × 12/side"],
-          ["Dead Bugs", "2 × 10/side"],
-          ["Stretching", "10 minutes"]
-        ]
-      },
-      "Thu": {
-        title: "THURSDAY – UPPER BODY PUSH + CORE",
-        exercises: [
-          ["Chest Press", "3 × 8"],
-          ["Dumbbell Shoulder Press", "3 × 8"],
-          ["Face Pulls", "2 × 12"],
-          ["Lateral Raises", "2 × 12"],
-          ["Tricep Pushdown", "2 × 10–12"],
-          ["Front Plank", "2 × 30–45 sec"],
-          ["Pallof Press", "2 × 12/side"],
-          ["Heel Taps", "2 × 20"],
-          ["Incline Walk", "1 × 20–30 min"]
-        ]
-      },
-      "Fri": {
-        title: "FRIDAY – LOWER BODY SCULPT + CORE",
-        exercises: [
-          ["Goblet Squat", "3 × 10"],
-          ["Hip Thrust", "3 × 8–10"],
-          ["Step-Ups", "2 × 10/leg"],
-          ["Banded Side Steps", "2 × 15"],
-          ["Side-Lying Leg Raises", "2 × 15"],
-          ["Sumo Squat Pulse", "2 × 12"],
-          ["Marching Glute Bridge", "2 × 10/side"],
-          ["Side Plank", "2 × 30 sec/side"],
-          ["Farmer’s Carry", "2 × 45 sec"],
-          ["Incline Walk", "30 min"]
-        ]
-      },
-      "Sat": { title: "SATURDAY – OPTIONAL WALK/STRETCH", exercises: [["Walk or Stretch", "20+ minutes"]] },
-      "Sun": { title: "SUNDAY – OPTIONAL WALK/STRETCH", exercises: [["Walk or Stretch", "20+ minutes"]] }
+      "Wed": { title: "WEDNESDAY – RECOVERY", exercises: [["Stretch", "10 min"]] },
+      "Thu": { title: "THURSDAY – UPPER PUSH", exercises: [["Push-Up", "3 × 12"]] },
+      "Fri": { title: "FRIDAY – LOWER SCULPT", exercises: [["Lunge", "2 × 15/leg"]] },
+      "Sat": { title: "SATURDAY – ACTIVE", exercises: [["Walk or Stretch", "20+ min"]] },
+      "Sun": { title: "SUNDAY – ACTIVE", exercises: [["Walk or Stretch", "20+ min"]] }
     };
 
     const nav = document.getElementById("nav-buttons");
     const area = document.getElementById("workout-area");
+    const modal = document.getElementById("editModal");
+    let currentDay = "Mon";
 
     Object.keys(workoutData).forEach(day => {
       const btn = document.createElement("button");
@@ -121,6 +109,7 @@
     });
 
     function showDay(dayKey, button) {
+      currentDay = dayKey;
       Array.from(nav.children).forEach(b => b.classList.remove("active"));
       button.classList.add("active");
       const data = workoutData[dayKey];
@@ -129,42 +118,70 @@
           <td>${e[0]}</td>
           <td>${e[1]}</td>
           <td><input type="checkbox" onchange="updateProgress('${dayKey}')"></td>
-          <td><button class="info-btn" onclick="alert('${e[0]}')">ℹ️</button></td>
+          <td><button class="info-btn" onclick="showInfo('${e[0]}')">ℹ️</button></td>
         </tr>`).join("");
       area.innerHTML = `
         <div class="day-container" style="display:block">
           <h3 style="color:#2b65e3;">${data.title} <span class="progress" id="progress-${dayKey}">0/${data.exercises.length} done</span></h3>
-          <table>
-            <tr><th>Exercise</th><th>Sets × Reps</th><th>Done</th><th>Info</th></tr>
-            ${rows}
-          </table>
+          <table><tr><th>Exercise</th><th>Sets × Reps</th><th>Done</th><th>Info</th></tr>${rows}</table>
           <p><a href="#" onclick="resetProgress('${dayKey}');return false;">Reset this day's progress</a></p>
         </div>`;
       updateProgress(dayKey);
     }
 
+    function showInfo(name) {
+      alert(`${name} – ${descriptions[name] || 'Form guidance coming soon.'}`);
+    }
+
     function updateProgress(dayKey) {
-      const checks = area.querySelectorAll("input[type='checkbox']");
+      const checks = document.querySelectorAll("input[type='checkbox']");
       const total = workoutData[dayKey].exercises.length;
       let done = 0;
       checks.forEach(c => c.checked && done++);
       document.getElementById(`progress-${dayKey}`).textContent = `${done}/${total} done`;
-      if (done === total) {
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-      }
+      if (done === total && total > 0) confetti();
     }
 
     function resetProgress(dayKey) {
-      const checks = area.querySelectorAll("input[type='checkbox']");
-      checks.forEach(c => c.checked = false);
+      document.querySelectorAll("input[type='checkbox']").forEach(c => c.checked = false);
       updateProgress(dayKey);
+    }
+
+    function confetti() {
+      confettiLib({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    function openEditModal() {
+      const exList = workoutData[currentDay].exercises;
+      const listHTML = exList.map((e, i) => `
+        <label><input type="checkbox" data-index="${i}" checked> ${e[0]}</label><br>`).join("");
+      document.getElementById("editList").innerHTML = listHTML;
+      modal.style.display = "flex";
+    }
+
+    function closeEditModal() {
+      const checks = document.querySelectorAll("#editList input[type='checkbox']");
+      const newList = [];
+      checks.forEach(c => {
+        const idx = parseInt(c.dataset.index);
+        if (c.checked) newList.push(workoutData[currentDay].exercises[idx]);
+      });
+      workoutData[currentDay].exercises = newList;
+      modal.style.display = "none";
+      showDay(currentDay, Array.from(nav.children).find(b => b.textContent === currentDay));
     }
 
     document.getElementById("date-display").textContent = new Date().toLocaleDateString('en-US', {
       weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'
     });
 
+    // Load default view
     setTimeout(() => nav.children[0].click(), 50);
+    const confettiLib = window.confetti;
   </script>
 </body>
 </html>
