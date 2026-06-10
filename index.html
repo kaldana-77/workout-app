@@ -2,183 +2,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ever Strong 💧💪</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ever Strong 💧💪🏼</title>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      background: #f7f7f8;
-      color: #222;
-    }
-    .container {
-      max-width: 760px;
-      margin: auto;
-      padding: 2rem 1rem;
-    }
-    h1 {
-      text-align: center;
-      font-size: 1.8rem;
-      margin-bottom: 0.2rem;
-    }
-    .subtitle {
-      text-align: center;
-      color: #444;
-      margin-bottom: 1.5rem;
-    }
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .tabs button {
-      padding: 0.5rem 1rem;
-      border: none;
-      background: #eee;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .tabs button.active {
-      background: #2b66f1;
-      color: white;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.04);
-      margin-bottom: 1.5rem;
-    }
-    .card h2 {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      color: #1a44a1;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 0.8rem;
-    }
-    th, td {
-      text-align: left;
-      padding: 0.5rem;
-      border-bottom: 1px solid #eee;
-      font-size: 0.95rem;
-    }
-    td:last-child {
-      text-align: center;
-    }
-    .info-icon {
-      cursor: pointer;
-      color: #2b66f1;
-      font-weight: bold;
-    }
-    .confetti {
-      text-align: center;
-      font-size: 1.5rem;
-      padding-bottom: 1rem;
-    }
-    .calendar {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding: 1rem;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-    }
-    .calendar-day {
-      min-width: 100px;
-      text-align: center;
-      font-size: 0.85rem;
-      padding: 0.4rem;
-      border-radius: 8px;
-      background: #f0f2f8;
-    }
-    .calendar-day.today {
-      background: #2b66f1;
-      color: white;
+    body { font-family: Arial, sans-serif; background: #f6f6f6; margin: 0; padding: 0; text-align: center; }
+    h1 { font-size: 1.8rem; margin: 0.5em 0 0.2em; }
+    h2 { font-size: 1.2rem; color: #666; margin: 0 0 1em; }
+    .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5em; padding: 1em 0; }
+    .nav button { padding: 0.5em 1em; font-size: 1rem; border: none; border-radius: 8px; background: #eee; cursor: pointer; }
+    .nav button.active { background: #2b65e3; color: white; }
+    .day-container { max-width: 600px; margin: auto; background: white; padding: 1em; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+    th, td { padding: 0.5em; border-bottom: 1px solid #ccc; }
+    th { background: #f0f0f0; }
+    .footer { margin: 2em 0 1em; font-size: 0.9em; color: #666; }
+    .info-btn { cursor: pointer; border: none; background: none; color: #2b65e3; }
+    .progress { color: #e32b2b; font-weight: bold; }
+    @media (max-width: 600px) {
+      .nav { gap: 0.3em; }
+      .nav button { font-size: 0.9rem; padding: 0.4em 0.6em; }
+      table td, table th { font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="confetti">🎉💪💧</div>
-    <h1>Ever Strong 💧 💪🏼</h1>
-    <div class="subtitle">Strength for Today, Health for Tomorrow.<br>Wednesday, Jun 10, 2026</div>
+  <h1>🎉💪🏼💧<br>Ever Strong 💧💪🏼</h1>
+  <h2>Strength for Today, Health for Tomorrow.<br><span id="date-display"></span></h2>
 
-    <div class="tabs">
-      <button class="active">Mon</button>
-      <button>Tue</button>
-      <button>Wed</button>
-      <button>Thu</button>
-      <button>Fri</button>
-      <button>Sat</button>
-      <button>Sun</button>
-    </div>
+  <div class="nav" id="nav-buttons"></div>
 
-    <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>MONDAY – UPPER BODY PULL + CORE</h2>
-        <span style="color: #f55;">0/13 done</span>
-      </div>
+  <div id="workout-area"></div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Exercise</th>
-            <th>Sets × Reps</th>
-            <th>Done</th>
-            <th>Info</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Lat Pulldown</td><td>3 × 8–10</td><td><input type="checkbox"></td><td class="info-icon">ℹ️</td></tr>
-          <tr><td>Seated Cable Row</td><td>3 × 8–10</td><td><input type="checkbox"></td><td class="info-icon">ℹ️</td></tr>
-          <tr><td>One-Arm Dumbbell Row</td><td>2 × 8–10</td><td><input type="checkbox"></td><td class="info-icon">ℹ️</td></tr>
-          <tr><td>Rear Delt Fly</td><td>2 × 12</td><td><input type="checkbox"></td><td class="info-icon">ℹ️</td></tr>
-          <tr><td>Hammer Curl</td><td>2 × 10</td><td><input type="checkbox"></td><td class="info-icon">ℹ️</td></tr>
-          <tr><td><strong>Core</strong></td><td colspan="3"></td></tr>
-          <tr><td>Dead Bugs</td><td>2 × 10/side</td><td><input type="checkbox"></td><td class="info-icon">ℹ️</td></tr>
-          <tr><td>Pallof Press</td><td>2 × 12/side</td><td><input type="checkbox"></td><td class="info-icon">ℹ️</td></tr>
-          <tr><td>Front Plank</td><td>2 × 30–45 sec</td><td><input type="checkbox"></td><td class="info-icon">ℹ️</td></tr>
-          <tr><td><strong>Cardio</strong></td><td colspan="3"></td></tr>
-          <tr><td>Incline Walk</td><td>1 × 20–30 min</td><td><input type="checkbox"></td><td class="info-icon">ℹ️</td></tr>
-        </tbody>
-      </table>
-      <a href="#" style="font-size: 0.85rem; color: red;">Reset this day's progress</a>
-    </div>
+  <div class="footer">Sat & Sun are optional active recovery days. Go for a walk, stretch, and take care of your body! 💙</div>
 
-    <div class="calendar">
-      <div class="calendar-day">Mon<br><small>Upper Pull<br>0/13</small></div>
-      <div class="calendar-day">Tue<br><small>Lower Body<br>0/11</small></div>
-      <div class="calendar-day today">Wed<br><small>Recovery<br>0/6</small></div>
-      <div class="calendar-day">Thu<br><small>Upper Push<br>0/10</small></div>
-      <div class="calendar-day">Fri<br><small>Lower Sculpt<br>0/13</small></div>
-      <div class="calendar-day">Sat<br><small>Walk or Stretch<br>Optional</small></div>
-      <div class="calendar-day">Sun<br><small>Walk or Stretch<br>Optional</small></div>
-    </div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    const workoutData = {
+      "Mon": {
+        title: "MONDAY – UPPER BODY PULL + CORE",
+        exercises: [
+          ["Lat Pulldown", "3 × 8–10"],
+          ["Seated Cable Row", "3 × 8–10"],
+          ["One-Arm Dumbbell Row", "2 × 8–10"],
+          ["Rear Delt Fly", "2 × 12"],
+          ["Hammer Curl", "2 × 10"],
+          ["Dead Bugs", "2 × 10/side"],
+          ["Pallof Press", "2 × 12/side"],
+          ["Front Plank", "2 × 30–45 sec"],
+          ["Incline Walk", "1 × 20–30 min"]
+        ]
+      },
+      "Tue": {
+        title: "TUESDAY – LOWER BODY + CORE",
+        exercises: [
+          ["Leg Press", "3 × 8"],
+          ["Romanian Deadlift", "3 × 8"],
+          ["Heavy Sumo Squat", "3 × 8–10"],
+          ["Banded Side Steps", "2 × 15"],
+          ["Side-Lying Leg Raises", "2 × 15"],
+          ["Calf Raises", "2 × 15"],
+          ["Marching Glute Bridge", "2 × 10/side"],
+          ["Side Plank", "2 × 20–30 sec"],
+          ["Incline Walk", "1 × 20 min"]
+        ]
+      },
+      "Wed": {
+        title: "WEDNESDAY – ACTIVE RECOVERY + CORE",
+        exercises: [
+          ["Incline Walk", "1 × 30–40 min OR 1 × 8k–10k steps"],
+          ["Farmer's Carry", "3 rounds × 45 sec"],
+          ["Pallof Press", "2 × 12/side"],
+          ["Dead Bugs", "2 × 10/side"],
+          ["Stretching", "10 minutes"]
+        ]
+      },
+      "Thu": {
+        title: "THURSDAY – UPPER BODY PUSH + CORE",
+        exercises: [
+          ["Chest Press", "3 × 8"],
+          ["Dumbbell Shoulder Press", "3 × 8"],
+          ["Face Pulls", "2 × 12"],
+          ["Lateral Raises", "2 × 12"],
+          ["Tricep Pushdown", "2 × 10–12"],
+          ["Front Plank", "2 × 30–45 sec"],
+          ["Pallof Press", "2 × 12/side"],
+          ["Heel Taps", "2 × 20"],
+          ["Incline Walk", "1 × 20–30 min"]
+        ]
+      },
+      "Fri": {
+        title: "FRIDAY – LOWER BODY SCULPT + CORE",
+        exercises: [
+          ["Goblet Squat", "3 × 10"],
+          ["Hip Thrust", "3 × 8–10"],
+          ["Step-Ups", "2 × 10/leg"],
+          ["Banded Side Steps", "2 × 15"],
+          ["Side-Lying Leg Raises", "2 × 15"],
+          ["Sumo Squat Pulse", "2 × 12"],
+          ["Marching Glute Bridge", "2 × 10/side"],
+          ["Side Plank", "2 × 30 sec/side"],
+          ["Farmer’s Carry", "2 × 45 sec"],
+          ["Incline Walk", "30 min"]
+        ]
+      },
+      "Sat": {
+        title: "SATURDAY – OPTIONAL WALK/STRETCH",
+        exercises: [["Walk or Stretch", "20+ minutes"]]
+      },
+      "Sun": {
+        title: "SUNDAY – OPTIONAL WALK/STRETCH",
+        exercises: [["Walk or Stretch", "20+ minutes"]]
+      }
+    };
 
-    <p style="text-align: center; font-size: 0.9rem; margin-top: 1rem; color: #333;">
-      Sat & Sun are optional active recovery days. Go for a walk, stretch, and take care of your body! 💙
-    </p>
-  </div>
+    const nav = document.getElementById("nav-buttons");
+    const area = document.getElementById("workout-area");
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script>
-  function launchConfetti() {
-    confetti({
-      particleCount: 150,
-      spread: 80,
-      origin: { y: 0.6 }
+    Object.keys(workoutData).forEach(day => {
+      const btn = document.createElement("button");
+      btn.textContent = day;
+      btn.onclick = () => showDay(day, btn);
+      nav.appendChild(btn);
     });
-  }
-</script>
-</body>
 
+    function showDay(dayKey, button) {
+      Array.from(nav.children).forEach(b => b.classList.remove("active"));
+      button.classList.add("active");
+      const data = workoutData[dayKey];
+      const rows = data.exercises.map((e, i) => `
+        <tr>
+          <td>${e[0]}</td>
+          <td>${e[1]}</td>
+          <td><input type="checkbox" onchange="updateProgress('${dayKey}')"></td>
+          <td><button class="info-btn" onclick="alert('${e[0]}')">ℹ️</button></td>
+        </tr>
+      `).join("");
+      area.innerHTML = `
+        <div class="day-container" style="display:block">
+          <h3 style="color:#2b65e3;">${data.title} <span class="progress" id="progress-${dayKey}">0/${data.exercises.length} done</span></h3>
+          <table>
+            <tr><th>Exercise</th><th>Sets × Reps</th><th>Done</th><th>Info</th></tr>
+            ${rows}
+          </table>
+          <p><a href="#" onclick="resetProgress('${dayKey}');return false;">Reset this day's progress</a></p>
+        </div>`;
+      updateProgress(dayKey);
+    }
+
+    function updateProgress(dayKey) {
+      const checks = document.querySelectorAll("input[type='checkbox']");
+      const total = workoutData[dayKey].exercises.length;
+      let done = 0;
+      checks.forEach(c => c.checked && done++);
+      document.getElementById(`progress-${dayKey}`).textContent = `${done}/${total} done`;
+      if (done === total) {
+        confetti();
+      }
+    }
+
+    function resetProgress(dayKey) {
+      const checks = document.querySelectorAll("input[type='checkbox']");
+      checks.forEach(c => c.checked = false);
+      updateProgress(dayKey);
+    }
+
+    function confetti() {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    document.getElementById("date-display").textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'
+    });
+
+    // Load Monday view by default
+    setTimeout(() => nav.children[0].click(), 50);
+  </script>
+</body>
 </html>
